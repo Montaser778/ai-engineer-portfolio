@@ -15,13 +15,14 @@
         try {
           tz = ' · Local time here: ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Gaza' });
         } catch (e) {}
-        el.innerHTML =
+        el.innerHTML = '<div class="container">' +
           '<span class="status-dot" aria-hidden="true"></span>' +
           '<span><strong>' + esc(data.capacity) + '</strong></span>' +
           (data.nextStart ? '<span>Next start: <strong>' + esc(data.nextStart) + '</strong></span>' : '') +
           (data.focus ? '<span>Focus: ' + esc(data.focus) + '</span>' : '') +
           (data.timezone ? '<span>' + esc(data.timezone) + tz + '</span>' : '') +
-          (data.updated ? '<span class="status-updated">Last updated ' + esc(data.updated) + '</span>' : '');
+          (data.updated ? '<span class="status-updated">Last updated ' + esc(data.updated) + '</span>' : '') +
+          '</div>';
         el.hidden = false;
       })
       .catch(function () { /* degrade to nothing: strip stays hidden */ });

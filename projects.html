@@ -76,11 +76,16 @@
 
   <section style="padding-top:0">
     <div class="container">
+      <div class="tier-label">Featured</div>
       <div class="grid-2">
 
         <div class="card" data-reveal data-cats="voice,agents" data-tilt>
           <h3 data-i18n="projects.muhawir.h">Muhawir — voice interview practice</h3>
           <p data-i18n="projects.muhawir.p">A bilingual real-time voice agent that runs mock interviews end to end and scores them after the call, keeping evaluation out of the conversation loop.</p>
+          <div class="metrics-band" style="margin:16px 0">
+            <div class="m-cell"><div class="m-num" data-counter="800" data-suffix="ms">0</div><div class="m-lbl">Turn latency</div></div>
+            <div class="m-cell"><div class="m-num" data-counter="2" data-suffix="">0</div><div class="m-lbl">Languages</div></div>
+          </div>
           <div class="chip-row"><span class="tag">Pipecat</span><span class="tag">WebRTC</span><span class="tag">FastAPI</span></div>
           <div class="btn-row"><a class="btn btn-ghost btn-sm" href="project-muhawir.html" data-i18n="projects.casestudy">Case study</a><a class="btn btn-ghost btn-sm" href="https://REPLACE-WITH-YOUR-LIVE-URL" target="_blank" rel="noopener" data-i18n="projects.livedemo">Live demo</a></div>
         </div>
@@ -88,38 +93,22 @@
         <div class="card" data-reveal data-cats="agents" data-tilt>
           <h3 data-i18n="projects.agents.h">Multi-agent business idea analyst</h3>
           <p data-i18n="projects.agents.p">Four specialised agents — research, analysis, risk, writing — run in parallel and reconcile conflicting findings into a single recommendation.</p>
+          <div class="metrics-band" style="margin:16px 0">
+            <div class="m-cell"><div class="m-num" data-counter="4" data-suffix="">0</div><div class="m-lbl">Agents</div></div>
+            <div class="m-cell"><div class="m-num" data-counter="1" data-suffix="">0</div><div class="m-lbl">Synthesis pass</div></div>
+          </div>
           <div class="chip-row"><span class="tag">LangChain</span><span class="tag">Python</span></div>
           <div class="btn-row"><a class="btn btn-ghost btn-sm" href="project-agents.html" data-i18n="home.feat.readcase">Read the case study</a></div>
         </div>
 
-        <div class="card" data-reveal data-cats="backend" data-tilt>
-          <h3 data-i18n="projects.payments.h">Subscription &amp; payment layer</h3>
-          <p data-i18n="projects.payments.p">Idempotent webhook handling for a subscription product, built to survive duplicate delivery without double-charging a customer.</p>
-          <div class="chip-row"><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">Stripe</span></div>
-          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="#" data-i18n="projects.repository">Repository</a></div>
-        </div>
+      </div>
 
-        <div class="card" data-reveal data-cats="voice,backend" data-tilt>
-          <h3 data-i18n="projects.webrtc.h">WebRTC deployment pipeline</h3>
-          <p data-i18n="projects.webrtc.p">Containerised deployment path for a real-time media service, covering TURN configuration, health checks and rolling restarts without dropping calls.</p>
-          <div class="chip-row"><span class="tag">Docker</span><span class="tag">Fly.io</span><span class="tag">WebRTC</span></div>
-          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="#" data-i18n="projects.repository">Repository</a></div>
-        </div>
-
-        <div class="card" data-reveal data-cats="agents,backend" data-tilt>
-          <h3 data-i18n="projects.rubric.h">Automated answer scoring rubric</h3>
-          <p data-i18n="projects.rubric.p">A transparent, explainable scorer for interview answers across five dimensions, built to be auditable rather than a black-box grade.</p>
-          <div class="chip-row"><span class="tag">Python</span><span class="tag">Heuristics</span></div>
-          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="demos.html#demo-scoring" data-i18n="projects.tryitlive">Try it live</a></div>
-        </div>
-
-        <div class="card" data-reveal data-cats="web" data-tilt>
-          <h3 data-i18n="projects.portfolio.h">Portfolio &amp; 3D interfaces</h3>
-          <p data-i18n="projects.portfolio.p">This site: a custom GLSL particle field, a hand-rolled scroll-driven camera, and zero frameworks — vanilla HTML, CSS and JavaScript only.</p>
-          <div class="chip-row"><span class="tag">Three.js</span><span class="tag">GLSL</span></div>
-          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="https://github.com/montaser778" target="_blank" rel="noopener" data-i18n="projects.source">Source</a></div>
-        </div>
-
+      <div class="tier-label" data-cats-tier="also-built">Also built</div>
+      <div class="also-built-list">
+        <a href="#" data-reveal data-cats="backend"><span data-i18n="projects.payments.h">Subscription &amp; payment layer</span><span class="arrow">→</span></a>
+        <a href="#" data-reveal data-cats="voice,backend"><span data-i18n="projects.webrtc.h">WebRTC deployment pipeline</span><span class="arrow">→</span></a>
+        <a href="demos.html#demo-scoring" data-reveal data-cats="agents,backend"><span data-i18n="projects.rubric.h">Automated answer scoring rubric</span><span class="arrow">→</span></a>
+        <a href="https://github.com/montaser778" target="_blank" rel="noopener" data-reveal data-cats="web"><span data-i18n="projects.portfolio.h">Portfolio &amp; 3D interfaces</span><span class="arrow">→</span></a>
       </div>
     </div>
   </section>
