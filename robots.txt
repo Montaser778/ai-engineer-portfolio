@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://montaser778.github.io/sitemap.xml
+Disallow: /docs/
