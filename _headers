@@ -1,0 +1,9 @@
+# Security headers (§31). Honoured by Netlify and Cloudflare Pages.
+# GitHub Pages ignores this file — it is shipped here so headers apply
+# automatically the moment this site migrates to a host that reads it.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+  Permissions-Policy: geolocation=(), camera=(), microphone=(self)

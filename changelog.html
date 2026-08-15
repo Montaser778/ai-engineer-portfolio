@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog — Montaser Hussam</title>
+<meta name="description" content="A dated log of what changed on this site and why.">
+<link rel="canonical" href="https://montaser778.github.io/changelog.html">
+<meta property="og:title" content="Changelog — Montaser Hussam">
+<meta property="og:description" content="The site as a living project.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/changelog.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/changelog.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/changelog.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="grid">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container" style="max-width:760px">
+      <div class="label" data-i18n="changelog.label">Changelog</div>
+      <h1 data-i18n="changelog.h1">What changed, and why</h1>
+      <p class="lede" data-i18n="changelog.lede">This site is maintained, not shipped once and left alone.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container" style="max-width:760px">
+
+      <div class="changelog-entry">
+        <div class="when">15 Aug 2026<span class="ver">v1.1.0</span></div>
+        <div>
+          <ul>
+            <li data-i18n="changelog.v110.li1">Added bilingual EN/AR toggle with full RTL support</li>
+            <li data-i18n="changelog.v110.li2">Added dark/light/system theme, applied to both 3D scenes</li>
+            <li data-i18n="changelog.v110.li3">Added client-side search wired into the command palette</li>
+            <li data-i18n="changelog.v110.li4">Split notes into individual pages, added an RSS feed</li>
+            <li data-i18n="changelog.v110.li5">Added the multi-agent case study as a second full write-up</li>
+            <li data-i18n="changelog.v110.li6">Added a working contact form with honeypot and time-trap spam protection</li>
+            <li data-i18n="changelog.v110.li7">Added booking CTA and a timezone converter</li>
+            <li data-i18n="changelog.v110.li8">Added offline support, security headers and a CI workflow</li>
+          </ul>
+          <p class="why"><span data-i18n="changelog.why">Why:</span> <span data-i18n="changelog.v110.why">a single case study reads as a lucky project; a working form and bilingual support are what turn a browse into a sent brief.</span></p>
+        </div>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="when">2 Jul 2026<span class="ver">v1.0.1</span></div>
+        <div>
+          <ul>
+            <li data-i18n="changelog.v101.li1">Fixed particle point-size formula in the background scene (was rendering as one oversized blob)</li>
+            <li data-i18n="changelog.v101.li2">Added a low-alpha constellation-line layer tracing each shape</li>
+            <li data-i18n="changelog.v101.li3">Restored horizontal padding on the hero and page-head sections</li>
+            <li data-i18n="changelog.v101.li4">Tuned canvas opacity and vignette for text contrast</li>
+          </ul>
+          <p class="why"><span data-i18n="changelog.why">Why:</span> <span data-i18n="changelog.v101.why">the 3D layer should read as a deliberate motif, not compete with body text for attention.</span></p>
+        </div>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="when">18 Jun 2026<span class="ver">v1.0.0</span></div>
+        <div>
+          <ul>
+            <li data-i18n="changelog.v100.li1">Initial launch: ten pages, background particle field, hero workstation model, six live demos</li>
+          </ul>
+          <p class="why"><span data-i18n="changelog.why">Why:</span> <span data-i18n="changelog.v100.why">the baseline site — every page built to move a visitor toward a project brief.</span></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">GitHub</a><a href="#" rel="noopener noreferrer">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

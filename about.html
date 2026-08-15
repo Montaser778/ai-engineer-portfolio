@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — Montaser Hussam</title>
+<meta name="description" content="Working method, experience timeline, skills and stack for Montaser Hussam, AI/ML engineer.">
+<link rel="canonical" href="https://montaser778.github.io/about.html">
+<meta property="og:title" content="About — Montaser Hussam">
+<meta property="og:description" content="Working method, experience timeline, skills and stack.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+.timeline{border-left:1px solid var(--line);padding-left:24px;margin:24px 0}
+.timeline-item{margin-bottom:30px;position:relative}
+.timeline-item::before{content:"";position:absolute;left:-29px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.timeline-item .when{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.tagcloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+</style>
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/about.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/about.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/about.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="helix">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" class="active" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="about.label">About</div>
+      <h1>Montaser Hussam</h1>
+      <p class="lede" data-i18n="about.lede">AI/ML engineer based in Gaza, Palestine, working remotely with teams across time zones.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container sidebar-grid">
+      <div>
+        <h2 data-i18n="about.method.h">Working method</h2>
+        <p data-i18n="about.method.p1">Scope narrow first. A voice or agent feature is broken into the smallest slice that can be demoed end to end, then widened once that slice is measured and working — not designed fully up front and built in one long push.</p>
+        <p data-i18n="about.method.p2">Every architectural choice states its cost. A faster integration that cannot survive a duplicate webhook, or a lower-latency endpointing threshold that misfires in a noisy room, gets named as a trade-off rather than presented as free.</p>
+
+        <h2 style="margin-top:50px" data-i18n="about.looking.h">What he is looking for</h2>
+        <p data-i18n="about.looking.p">Teams building a real-time voice product, an agent-based workflow, or a production LLM feature that needs to survive contact with real users and real network conditions — not a proof of concept that stays a proof of concept.</p>
+
+        <h2 style="margin-top:50px" data-i18n="about.exp.h">Experience</h2>
+        <div class="timeline">
+          <div class="timeline-item"><div class="when">2026 — present</div><h3 data-i18n="about.exp.muhawir.h">Muhawir — Founder &amp; engineer</h3><p data-i18n="about.exp.muhawir.p">Designed and built a bilingual real-time voice interview coach end to end, from the WebRTC transport layer to post-call scoring and billing.</p></div>
+          <div class="timeline-item"><div class="when">2025 — 2026</div><h3 data-i18n="about.exp.indep.h">Independent AI/ML engineer</h3><p data-i18n="about.exp.indep.p">Delivered agent pipelines and LLM-backed features for early-stage products, focused on shipping working systems on realistic timelines.</p></div>
+          <div class="timeline-item"><div class="when">2023</div><h3 data-i18n="about.exp.bsc.h">BSc, with distinction</h3><p data-i18n="about.exp.bsc.p">Undergraduate degree with a focus on software engineering and applied machine learning.</p></div>
+        </div>
+      </div>
+
+      <aside class="card sticky-panel">
+        <h4 data-i18n="about.skills.h">Skills</h4>
+        <div class="skill"><div class="skill-top"><span data-i18n="about.skills.voice">Voice AI / real-time audio</span><span>92%</span></div><div class="skill-track"><div class="skill-fill" data-width="92%"></div></div></div>
+        <div class="skill"><div class="skill-top"><span data-i18n="about.skills.llm">LLM & agent systems</span><span>88%</span></div><div class="skill-track"><div class="skill-fill" data-width="88%"></div></div></div>
+        <div class="skill"><div class="skill-top"><span data-i18n="about.skills.backend">Backend / APIs</span><span>85%</span></div><div class="skill-track"><div class="skill-fill" data-width="85%"></div></div></div>
+        <div class="skill"><div class="skill-top"><span data-i18n="about.skills.deploy">Deployment / infra</span><span>78%</span></div><div class="skill-track"><div class="skill-fill" data-width="78%"></div></div></div>
+        <div class="skill"><div class="skill-top"><span data-i18n="about.skills.data">Data & evaluation</span><span>80%</span></div><div class="skill-track"><div class="skill-fill" data-width="80%"></div></div></div>
+        <div class="skill"><div class="skill-top"><span data-i18n="about.skills.frontend">Front-end / 3D web</span><span>70%</span></div><div class="skill-track"><div class="skill-fill" data-width="70%"></div></div></div>
+
+        <h4 style="margin-top:24px" data-i18n="about.stack.h">Stack</h4>
+        <div class="tagcloud">
+          <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span>
+          <span class="tag">WebRTC</span><span class="tag">Pipecat</span><span class="tag">Docker</span><span class="tag">Fly.io</span>
+          <span class="tag">LangChain</span><span class="tag">JavaScript</span><span class="tag">Three.js</span><span class="tag">Git</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener">GitHub</a><a href="#">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

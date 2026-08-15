@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects — Montaser Hussam</title>
+<meta name="description" content="Voice AI, multi-agent systems, backend and web projects built and shipped by Montaser Hussam.">
+<link rel="canonical" href="https://montaser778.github.io/projects.html">
+<meta property="og:title" content="Projects — Montaser Hussam">
+<meta property="og:description" content="Voice AI, multi-agent systems, backend and web projects.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/projects.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/projects.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/projects.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="grid">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" class="active" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="projects.label">Work</div>
+      <h1 data-i18n="projects.h1">Projects</h1>
+      <p class="lede" data-i18n="projects.lede">Six pieces of shipped or actively worked systems, spanning voice AI, agent architectures, backend and web.</p>
+      <div class="filter-row" role="group" aria-label="Filter projects by category">
+        <button class="filter-pill" data-filter="all" aria-pressed="true" data-i18n="projects.filter.all">All</button>
+        <button class="filter-pill" data-filter="voice" aria-pressed="false" data-i18n="projects.filter.voice">Voice AI</button>
+        <button class="filter-pill" data-filter="agents" aria-pressed="false" data-i18n="projects.filter.agents">Agents &amp; LLM</button>
+        <button class="filter-pill" data-filter="backend" aria-pressed="false" data-i18n="projects.filter.backend">Backend</button>
+        <button class="filter-pill" data-filter="web" aria-pressed="false" data-i18n="projects.filter.web">Web</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container">
+      <div class="grid-2">
+
+        <div class="card" data-reveal data-cats="voice,agents" data-tilt>
+          <h3 data-i18n="projects.muhawir.h">Muhawir — voice interview practice</h3>
+          <p data-i18n="projects.muhawir.p">A bilingual real-time voice agent that runs mock interviews end to end and scores them after the call, keeping evaluation out of the conversation loop.</p>
+          <div class="chip-row"><span class="tag">Pipecat</span><span class="tag">WebRTC</span><span class="tag">FastAPI</span></div>
+          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="project-muhawir.html" data-i18n="projects.casestudy">Case study</a><a class="btn btn-ghost btn-sm" href="https://REPLACE-WITH-YOUR-LIVE-URL" target="_blank" rel="noopener" data-i18n="projects.livedemo">Live demo</a></div>
+        </div>
+
+        <div class="card" data-reveal data-cats="agents" data-tilt>
+          <h3 data-i18n="projects.agents.h">Multi-agent business idea analyst</h3>
+          <p data-i18n="projects.agents.p">Four specialised agents — research, analysis, risk, writing — run in parallel and reconcile conflicting findings into a single recommendation.</p>
+          <div class="chip-row"><span class="tag">LangChain</span><span class="tag">Python</span></div>
+          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="project-agents.html" data-i18n="home.feat.readcase">Read the case study</a></div>
+        </div>
+
+        <div class="card" data-reveal data-cats="backend" data-tilt>
+          <h3 data-i18n="projects.payments.h">Subscription &amp; payment layer</h3>
+          <p data-i18n="projects.payments.p">Idempotent webhook handling for a subscription product, built to survive duplicate delivery without double-charging a customer.</p>
+          <div class="chip-row"><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">Stripe</span></div>
+          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="#" data-i18n="projects.repository">Repository</a></div>
+        </div>
+
+        <div class="card" data-reveal data-cats="voice,backend" data-tilt>
+          <h3 data-i18n="projects.webrtc.h">WebRTC deployment pipeline</h3>
+          <p data-i18n="projects.webrtc.p">Containerised deployment path for a real-time media service, covering TURN configuration, health checks and rolling restarts without dropping calls.</p>
+          <div class="chip-row"><span class="tag">Docker</span><span class="tag">Fly.io</span><span class="tag">WebRTC</span></div>
+          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="#" data-i18n="projects.repository">Repository</a></div>
+        </div>
+
+        <div class="card" data-reveal data-cats="agents,backend" data-tilt>
+          <h3 data-i18n="projects.rubric.h">Automated answer scoring rubric</h3>
+          <p data-i18n="projects.rubric.p">A transparent, explainable scorer for interview answers across five dimensions, built to be auditable rather than a black-box grade.</p>
+          <div class="chip-row"><span class="tag">Python</span><span class="tag">Heuristics</span></div>
+          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="demos.html#demo-scoring" data-i18n="projects.tryitlive">Try it live</a></div>
+        </div>
+
+        <div class="card" data-reveal data-cats="web" data-tilt>
+          <h3 data-i18n="projects.portfolio.h">Portfolio &amp; 3D interfaces</h3>
+          <p data-i18n="projects.portfolio.p">This site: a custom GLSL particle field, a hand-rolled scroll-driven camera, and zero frameworks — vanilla HTML, CSS and JavaScript only.</p>
+          <div class="chip-row"><span class="tag">Three.js</span><span class="tag">GLSL</span></div>
+          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="https://github.com/montaser778" target="_blank" rel="noopener" data-i18n="projects.source">Source</a></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener">GitHub</a><a href="#">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

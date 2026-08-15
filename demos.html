@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Demos — Montaser Hussam</title>
+<meta name="description" content="Six interactive demos: real microphone VAD, answer scoring, a multi-agent pipeline simulation, an architecture explorer, a cost estimator and a live GitHub feed.">
+<link rel="canonical" href="https://montaser778.github.io/demos.html">
+<meta property="og:title" content="Live Demos — Montaser Hussam">
+<meta property="og:description" content="Six interactive engineering demos, each honest about what is real and what is modelled.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+.stage-list{display:flex;flex-direction:column;gap:10px;margin:20px 0}
+.voice-stage{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;opacity:.5}
+.voice-stage.active{opacity:1;border-color:var(--teal)}
+.stage-track{flex:1;height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 12px}
+.stage-fill{height:100%;width:0%;background:var(--teal)}
+.voice-total{font-family:var(--font-mono);font-size:1.4rem;color:var(--sand)}
+.voice-total.below{color:var(--teal)}
+.score-bar{margin-bottom:12px}
+.score-bar-top{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:12px;margin-bottom:6px}
+.score-bar-track{height:6px;background:var(--line);border-radius:4px;overflow:hidden}
+.score-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--violet),var(--teal));transition:width .5s ease}
+.agent-card{border:1px solid var(--line);border-radius:10px;padding:16px;transition:border-color .2s ease}
+.agent-card.running{border-color:var(--amber)}
+.agent-card.done{border-color:var(--teal)}
+.agent-status{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;color:var(--muted)}
+.agent-log{font-family:var(--font-mono);font-size:12.5px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:14px;height:180px;overflow-y:auto;margin:20px 0}
+.arch-nodes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.arch-node{border:1px solid var(--line);border-radius:8px;padding:14px;background:none;color:var(--body);font-family:var(--font-mono);font-size:13px;cursor:pointer;text-align:left}
+.arch-node[aria-pressed="true"]{border-color:var(--violet);color:var(--sand)}
+.arch-panel{margin-top:20px;min-height:90px}
+.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+@media (max-width:860px){.cost-grid{grid-template-columns:1fr}}
+.cost-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-family:var(--font-mono);font-size:12px}
+.cost-bar-track{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.cost-bar-fill{height:100%;width:0%;background:var(--violet)}
+.gh-item{display:block}
+.decision-table td, .decision-table th { font-size: 13px; }
+</style>
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/demos.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/demos.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/demos.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="sphere">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" class="active" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="demos.label">Live demos</div>
+      <h1 data-i18n="demos.h1">Six things you can try right now</h1>
+      <p class="lede" data-i18n="demos.lede">Each demo states plainly what is real and what is modelled. None of them overstate what is running in your browser.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container">
+
+      <div class="demo-block" id="demo-voice">
+        <h2 data-i18n="demos.voice.h">1. Voice pipeline</h2>
+        <div class="demo-scope"><span data-i18n="demos.voice.scope1">Real: microphone capture and RMS-based endpointing run live via</span> <code>getUserMedia</code> <span data-i18n="demos.voice.scope2">and Web Audio. Modelled: the transcription / LLM / synthesis stage timings are simulated, since this page has no backend. Audio never leaves your device — nothing is uploaded or recorded.</span></div>
+        <canvas class="demo-canvas" height="140"></canvas>
+        <div class="btn-row" style="margin-top:16px">
+          <button class="btn btn-ghost voice-start" type="button" data-i18n="demos.voice.startmic">Start microphone</button>
+          <button class="btn btn-ghost voice-simulate" type="button" data-i18n="demos.voice.simulate">Simulate a turn</button>
+        </div>
+        <p class="voice-status form-note" role="status"></p>
+        <div class="stage-list">
+          <div class="voice-stage"><span data-i18n="demos.voice.stage.endpointing">Endpointing</span><div class="stage-track"><div class="stage-fill"></div></div><span class="stage-ms mono">0ms</span></div>
+          <div class="voice-stage"><span data-i18n="demos.voice.stage.transcription">Transcription</span><div class="stage-track"><div class="stage-fill"></div></div><span class="stage-ms mono">0ms</span></div>
+          <div class="voice-stage"><span data-i18n="demos.voice.stage.llm">LLM first token</span><div class="stage-track"><div class="stage-fill"></div></div><span class="stage-ms mono">0ms</span></div>
+          <div class="voice-stage"><span data-i18n="demos.voice.stage.synthesis">Synthesis</span><div class="stage-track"><div class="stage-fill"></div></div><span class="stage-ms mono">0ms</span></div>
+        </div>
+        <p><span data-i18n="demos.voice.totaltime">Total turn time:</span> <span class="voice-total">0ms</span></p>
+      </div>
+
+      <div class="demo-block" id="demo-scoring">
+        <h2 data-i18n="demos.scoring.h">2. Answer scoring</h2>
+        <div class="demo-scope" data-i18n="demos.scoring.scope">Real: a transparent heuristic scorer runs entirely client-side against the text you enter. Modelled: this is a rule-based approximation, not the production LLM-graded rubric.</div>
+        <label for="score-input" data-i18n="demos.scoring.label">Paste an interview answer</label>
+        <textarea id="score-input" placeholder="Type or paste an answer to score it..." data-i18n-placeholder="demos.scoring.placeholder"></textarea>
+        <div class="btn-row" style="margin:14px 0"><button class="btn btn-ghost score-btn" type="button" data-i18n="demos.scoring.btn">Score answer</button></div>
+        <div class="cost-grid">
+          <div>
+            <div class="score-bar"><div class="score-bar-top"><span data-i18n="demos.scoring.relevance">Relevance</span></div><div class="score-bar-track"><div class="score-bar-fill"></div></div></div>
+            <div class="score-bar"><div class="score-bar-top"><span data-i18n="demos.scoring.depth">Technical depth</span></div><div class="score-bar-track"><div class="score-bar-fill"></div></div></div>
+            <div class="score-bar"><div class="score-bar-top"><span data-i18n="demos.scoring.structure">Structure</span></div><div class="score-bar-track"><div class="score-bar-fill"></div></div></div>
+            <div class="score-bar"><div class="score-bar-top"><span data-i18n="demos.scoring.evidence">Evidence</span></div><div class="score-bar-track"><div class="score-bar-fill"></div></div></div>
+            <div class="score-bar"><div class="score-bar-top"><span data-i18n="demos.scoring.concision">Concision</span></div><div class="score-bar-track"><div class="score-bar-fill"></div></div></div>
+            <p class="score-verdict form-note"></p>
+          </div>
+          <canvas class="demo-canvas" height="220" style="height:220px"></canvas>
+        </div>
+      </div>
+
+      <div class="demo-block" id="demo-agents">
+        <h2 data-i18n="demos.agents.h">3. Multi-agent pipeline</h2>
+        <div class="demo-scope" data-i18n="demos.agents.scope">Modelled: this simulates agent timing and message content to illustrate the architecture. It does not call a live LLM.</div>
+        <div class="btn-row" style="margin-bottom:16px"><button class="btn btn-ghost agent-run" type="button" data-i18n="demos.agents.run">Run pipeline</button></div>
+        <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
+          <div class="agent-card" data-agent="research"><h4 data-i18n="demos.agents.research">Research</h4><span class="agent-status" data-i18n="demos.agents.idle">idle</span></div>
+          <div class="agent-card" data-agent="analysis"><h4 data-i18n="demos.agents.analysis">Analysis</h4><span class="agent-status" data-i18n="demos.agents.idle">idle</span></div>
+          <div class="agent-card" data-agent="risk"><h4 data-i18n="demos.agents.risk">Risk</h4><span class="agent-status" data-i18n="demos.agents.idle">idle</span></div>
+          <div class="agent-card" data-agent="writer"><h4 data-i18n="demos.agents.writer">Writer</h4><span class="agent-status" data-i18n="demos.agents.idle">idle</span></div>
+        </div>
+        <div class="agent-log" aria-live="polite"></div>
+        <p class="agent-synthesis" style="color:var(--sand)"></p>
+      </div>
+
+      <div class="demo-block" id="demo-arch">
+        <h2 data-i18n="demos.arch.h">4. Architecture explorer</h2>
+        <div class="demo-scope" data-i18n="demos.arch.scope">Real: this reflects the actual component breakdown used in the voice pipeline projects on this site.</div>
+        <div class="arch-nodes" role="group" aria-label="Architecture components" style="direction:ltr">
+          <button class="arch-node" data-node="transport" aria-pressed="false" data-i18n="demos.arch.transport">Transport</button>
+          <button class="arch-node" data-node="endpointing" aria-pressed="false" data-i18n="demos.arch.endpointing">Endpointing</button>
+          <button class="arch-node" data-node="asr" aria-pressed="false" data-i18n="demos.arch.asr">Speech-to-text</button>
+          <button class="arch-node" data-node="llm" aria-pressed="false" data-i18n="demos.arch.llm">LLM reasoning</button>
+          <button class="arch-node" data-node="tts" aria-pressed="false" data-i18n="demos.arch.tts">Synthesis</button>
+          <button class="arch-node" data-node="scoring" aria-pressed="false" data-i18n="demos.arch.scoring">Scoring</button>
+        </div>
+        <div class="arch-panel card"><p class="form-note" data-i18n="demos.arch.hint">Select a component to see what it does and why it was built that way.</p></div>
+      </div>
+
+      <div class="demo-block" id="demo-cost">
+        <h2 data-i18n="demos.cost.h">5. Cost estimator</h2>
+        <div class="demo-scope" data-i18n="demos.cost.scope">Modelled: illustrative unit costs, not a quote. Real inference pricing varies by provider and changes over time.</div>
+        <div class="cost-grid">
+          <div>
+            <div class="field"><label for="cost-users"><span data-i18n="demos.cost.users">Monthly active users:</span> <span class="cost-users-out mono">500</span></label><input type="range" id="cost-users" name="cost-users" min="10" max="5000" step="10" value="500"></div>
+            <div class="field"><label for="cost-minutes"><span data-i18n="demos.cost.minutes">Avg. voice minutes / user / month:</span> <span class="cost-minutes-out mono">12</span></label><input type="range" id="cost-minutes" name="cost-minutes" min="1" max="60" step="1" value="12"></div>
+            <div class="field"><label for="cost-lang" data-i18n="demos.cost.language">Language</label><select id="cost-lang" name="cost-lang"><option value="en" data-i18n="demos.cost.english">English</option><option value="ar" data-i18n="demos.cost.arabic">Arabic</option></select></div>
+            <div class="field"><label for="cost-voice" data-i18n="demos.cost.voicequality">Voice quality</label><select id="cost-voice" name="cost-voice"><option value="standard" data-i18n="demos.cost.standardtts">Standard TTS</option><option value="premium" data-i18n="demos.cost.premiumtts">Premium TTS</option></select></div>
+          </div>
+          <div class="card">
+            <p class="mono" style="font-size:13px;color:var(--muted)" data-i18n="demos.cost.monthlycost">Monthly inference cost</p>
+            <p class="cost-monthly" style="font-family:var(--font-display);font-size:2.2rem;color:var(--sand)">$0</p>
+            <p class="mono" style="font-size:13px;color:var(--muted)"><span data-i18n="demos.cost.peruser">Cost per user:</span> <span class="cost-peruser">$0</span> · <span data-i18n="demos.cost.expectedlatency">Expected turn latency:</span> <span class="cost-latency">0ms</span></p>
+            <div style="margin-top:16px">
+              <div class="cost-bar-row"><span style="width:70px" data-i18n="demos.cost.asr">ASR</span><div class="cost-bar-track"><div class="cost-bar-fill"></div></div><span class="cost-bar-val">$0</span></div>
+              <div class="cost-bar-row"><span style="width:70px" data-i18n="demos.cost.llm">LLM</span><div class="cost-bar-track"><div class="cost-bar-fill"></div></div><span class="cost-bar-val">$0</span></div>
+              <div class="cost-bar-row"><span style="width:70px" data-i18n="demos.cost.tts">TTS</span><div class="cost-bar-track"><div class="cost-bar-fill"></div></div><span class="cost-bar-val">$0</span></div>
+              <div class="cost-bar-row"><span style="width:70px" data-i18n="demos.cost.infra">Infra</span><div class="cost-bar-track"><div class="cost-bar-fill"></div></div><span class="cost-bar-val">$0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-block" id="gh" data-user="montaser778">
+        <h2 data-i18n="demos.gh.h">6. Live GitHub</h2>
+        <div class="demo-scope" data-i18n="demos.gh.scope">Real: this fetches the six most recently updated public repositories directly from the GitHub REST API at page load.</div>
+        <p class="gh-status form-note" role="status"></p>
+        <div class="grid-3 gh-list"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="demos.decisions.label">Decisions</div><h2 data-i18n="demos.decisions.h2">Provider selection</h2></div>
+      <div class="table-wrap">
+        <table class="decision-table">
+          <thead><tr><th data-i18n="demos.decisions.layer">Layer</th><th data-i18n="demos.decisions.choice">Choice</th><th data-i18n="demos.decisions.tradeoff">Trade-off accepted</th></tr></thead>
+          <tbody>
+            <tr><td data-i18n="demos.decisions.transport">Transport</td><td>WebRTC over WebSockets</td><td data-i18n="demos.decisions.transport.v">More setup complexity for lower, more consistent latency</td></tr>
+            <tr><td data-i18n="demos.decisions.hosting">Hosting</td><td>Fly.io + Pipecat Cloud</td><td data-i18n="demos.decisions.hosting.v">Less control than bare metal, faster time to a reliable region-aware deploy</td></tr>
+            <tr><td data-i18n="demos.decisions.endpointing">Endpointing</td><td data-i18n="demos.decisions.endpointing.choice">RMS threshold over learned VAD</td><td data-i18n="demos.decisions.endpointing.v">Less adaptive to noisy rooms, easier to tune and debug per language</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="demos.liveproduct.label">Live product</div><h2 data-i18n="demos.liveproduct.h2">The deployed system, embedded</h2></div>
+      <div id="liveUrl" data-url="https://REPLACE-WITH-YOUR-LIVE-URL"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener">GitHub</a><a href="#">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/demos.js"></script>
+<script src="assets/js/tools.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

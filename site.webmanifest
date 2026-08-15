@@ -1,0 +1,11 @@
+{
+  "name": "Montaser Hussam — AI/ML Engineer",
+  "short_name": "M. Hussam",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b0f18",
+  "theme_color": "#0b0f18",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

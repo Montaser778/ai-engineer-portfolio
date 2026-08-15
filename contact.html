@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Montaser Hussam</title>
+<meta name="description" content="Send a project brief to Montaser Hussam, AI/ML engineer, for voice AI, agent systems and production LLM work.">
+<link rel="canonical" href="https://montaser778.github.io/contact.html">
+<meta property="og:title" content="Contact — Montaser Hussam">
+<meta property="og:description" content="Send a project brief.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/contact.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/contact.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/contact.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="field">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" class="active" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="contact.label">Contact</div>
+      <h1 data-i18n="contact.h1">Send a project brief</h1>
+      <p class="lede" data-i18n="contact.lede">Submitting opens your email client with the details filled in — no backend, no data stored.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container sidebar-grid">
+      <form id="contact-form" novalidate>
+        <div class="field-row">
+          <div class="field"><label for="c-name" data-i18n="contact.f.name">Name</label><input type="text" id="c-name" name="name" required aria-describedby="c-name-err"></div>
+          <div class="field"><label for="c-company" data-i18n="contact.f.company">Company</label><input type="text" id="c-company" name="company"></div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="c-engagement" data-i18n="contact.f.engagement">Engagement type</label>
+            <select id="c-engagement" name="engagement">
+              <option data-i18n="pricing.sprint.h">Sprint</option><option data-i18n="pricing.build.h">Build</option><option data-i18n="pricing.retainer.h">Retainer</option><option data-i18n="pricing.hourly.h">Hourly advisory</option><option data-i18n="contact.f.notsure">Not sure yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="c-budget" data-i18n="contact.f.budget">Budget range</label>
+            <select id="c-budget" name="budget">
+              <option data-i18n="contact.f.budget1">Under $2,000</option><option data-i18n="contact.f.budget2">$2,000 – $6,000</option><option data-i18n="contact.f.budget3">$6,000 – $15,000</option><option data-i18n="contact.f.budget4">$15,000+</option><option data-i18n="contact.f.budget5">Prefer to discuss</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label for="c-message" data-i18n="contact.f.message">Message</label><textarea id="c-message" name="message" required placeholder="What are you building, and what does the timeline look like?" data-i18n-placeholder="contact.f.messageph" aria-describedby="c-message-err"></textarea></div>
+        <!-- honeypot: hidden from sighted users, bots tend to fill every field -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="c-hp">Leave this field empty</label>
+          <input type="text" id="c-hp" name="hp_field" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn btn-solid" type="submit" data-i18n="contact.f.submit">Send brief</button>
+        <p class="form-status form-note" role="status" data-state=""></p>
+      </form>
+
+      <aside>
+        <div class="card" style="margin-bottom:20px">
+          <h4 data-i18n="contact.details.h">Details</h4>
+          <p class="mono" style="font-size:13px"><span data-i18n="contact.details.email">Email:</span> REPLACE@EMAIL.COM</p>
+          <p class="mono" style="font-size:13px"><span data-i18n="contact.details.github">GitHub:</span> <a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">github.com/montaser778</a></p>
+          <p class="mono" style="font-size:13px"><span data-i18n="contact.details.linkedin">LinkedIn:</span> <a href="#" rel="noopener noreferrer" data-i18n="contact.details.profilelink">profile link</a></p>
+          <p class="mono" style="font-size:13px" data-i18n="contact.details.tz">Time zone: UTC+3 — overlaps EU and US mornings</p>
+          <p class="mono" style="font-size:13px" data-i18n="contact.details.response">Response time: within one business day</p>
+        </div>
+        <div class="card" style="margin-bottom:20px">
+          <h4 data-i18n="contact.bookcall.h">Book a call</h4>
+          <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px" data-i18n="contact.bookcall.p">Prefer to talk it through first? Book a 30-minute scoping call.</p>
+          <a class="btn btn-ghost btn-sm" href="REPLACE_BOOKING_URL" target="_blank" rel="noopener noreferrer" data-i18n="services.book">Book a 30-minute call</a>
+          <div id="tz-widget" class="tz-widget" style="margin-top:16px"></div>
+        </div>
+        <div class="card">
+          <h4 data-i18n="contact.fit.h">Good fit if</h4>
+          <ul style="padding-inline-start:18px;font-size:14px">
+            <li data-i18n="contact.fit.li1">You have a specific voice or agent feature to build, not just an idea</li>
+            <li data-i18n="contact.fit.li2">You can commit to a scoping call before a proposal</li>
+            <li data-i18n="contact.fit.li3">You want milestones you can see working, not one big reveal</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener">GitHub</a><a href="#">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing — Montaser Hussam</title>
+<meta name="description" content="Sprint, Build and Retainer packages, hourly advisory, and USDT payment details.">
+<link rel="canonical" href="https://montaser778.github.io/pricing.html">
+<meta property="og:title" content="Pricing — Montaser Hussam">
+<meta property="og:description" content="Sprint, Build and Retainer packages, priced in USD, settled in USDT.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+.pricing-card{position:relative}
+.pricing-card.featured{border-color:var(--violet)}
+.badge{position:absolute;top:-12px;right:20px;background:var(--violet);color:#fff;font-family:var(--font-mono);font-size:11px;padding:5px 10px;border-radius:999px}
+.price{font-family:var(--font-display);font-size:2.2rem;color:var(--sand);margin:10px 0}
+.pricing-card ul{padding-left:18px;margin:16px 0}
+.pricing-card li{margin-bottom:8px;font-size:14px}
+.network-btn{font-family:var(--font-mono);font-size:12.5px;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:none;color:var(--body);cursor:pointer}
+.network-btn[aria-pressed="true"]{border-color:var(--teal);color:var(--teal)}
+</style>
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/pricing.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/pricing.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/pricing.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="grid">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" class="active" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="pricing.label">Pricing</div>
+      <h1 data-i18n="pricing.h1">Packages</h1>
+      <p class="lede" data-i18n="pricing.lede">All prices in USD. Choose a fixed-scope package or hourly advisory.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container">
+      <div class="grid-3">
+        <div class="card pricing-card" data-tilt>
+          <h3 data-i18n="pricing.sprint.h">Sprint</h3>
+          <div class="price mono"><span data-i18n="pricing.from">from</span> $1,800</div>
+          <p class="mono" style="font-size:12.5px;color:var(--muted)" data-i18n="pricing.sprint.duration">1–2 weeks</p>
+          <ul><li data-i18n="pricing.sprint.li1">One well-defined feature or fix</li><li data-i18n="pricing.sprint.li2">Daily async updates</li><li data-i18n="pricing.sprint.li3">Single milestone delivery</li></ul>
+        </div>
+        <div class="card pricing-card featured" data-tilt>
+          <span class="badge" data-i18n="pricing.mostcommon">Most common</span>
+          <h3 data-i18n="pricing.build.h">Build</h3>
+          <div class="price mono"><span data-i18n="pricing.from">from</span> $6,000</div>
+          <p class="mono" style="font-size:12.5px;color:var(--muted)" data-i18n="pricing.build.duration">4–8 weeks</p>
+          <ul><li data-i18n="pricing.build.li1">A full voice or agent system, end to end</li><li data-i18n="pricing.build.li2">Multiple visible milestones</li><li data-i18n="pricing.build.li3">Deployment included</li><li data-i18n="pricing.build.li4">Post-delivery support window</li></ul>
+        </div>
+        <div class="card pricing-card" data-tilt>
+          <h3 data-i18n="pricing.retainer.h">Retainer</h3>
+          <div class="price mono">$3,500<span style="font-size:1rem;color:var(--muted)" data-i18n="pricing.permo">/mo</span></div>
+          <p class="mono" style="font-size:12.5px;color:var(--muted)" data-i18n="pricing.ongoing">Ongoing</p>
+          <ul><li data-i18n="pricing.retainer.li1">Continuous feature work</li><li data-i18n="pricing.retainer.li2">Priority response time</li><li data-i18n="pricing.retainer.li3">Monthly scope check-in</li></ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:30px">
+        <h3 data-i18n="pricing.hourly.h">Hourly advisory</h3>
+        <p data-i18n="pricing.hourly.p">$65/hour, minimum 5 hours. For architecture review, latency audits, or a second opinion on an existing build.</p>
+      </div>
+      <div class="btn-row" style="margin-top:24px">
+        <a class="btn btn-ghost" href="REPLACE_BOOKING_URL" target="_blank" rel="noopener noreferrer" data-i18n="services.book">Book a 30-minute call</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="pricing.payment.label">Payment</div><h2 data-i18n="pricing.payment.h2">USDT settlement</h2></div>
+      <div class="card">
+        <div class="network-select" role="group" aria-label="Select network">
+          <button class="network-btn" data-network="TRC20" aria-pressed="true">TRC20</button>
+          <button class="network-btn" data-network="ERC20" aria-pressed="false">ERC20</button>
+          <button class="network-btn" data-network="BEP20" aria-pressed="false">BEP20</button>
+        </div>
+        <div class="wallet-row">
+          <div class="wallet-addr" id="wallet-addr">REPLACE_WITH_YOUR_TRC20_ADDRESS</div>
+          <button class="btn btn-ghost btn-sm" id="copy-wallet" type="button" data-i18n="pricing.copy">Copy</button>
+        </div>
+        <p class="form-note" id="fee-note">TRC20 network fee: typically under $1, paid by the client.</p>
+        <div class="warning" data-i18n="pricing.warning">A transfer sent on the wrong network cannot be recovered. Confirm the selected network matches your wallet before sending.</div>
+        <table style="margin-top:20px">
+          <tbody>
+            <tr><td data-i18n="pricing.tbl.pricing">Pricing</td><td data-i18n="pricing.tbl.pricing.v">Priced in USD, settled in USDT</td></tr>
+            <tr><td data-i18n="pricing.tbl.schedule">Schedule</td><td data-i18n="pricing.tbl.schedule.v">50% upfront, 50% on delivery</td></tr>
+            <tr><td data-i18n="pricing.tbl.fee">Network fee</td><td data-i18n="pricing.tbl.fee.v">Paid by the client</td></tr>
+            <tr><td data-i18n="pricing.tbl.receipt">Receipt</td><td data-i18n="pricing.tbl.receipt.v">Transaction hash issued as receipt</td></tr>
+            <tr><td data-i18n="pricing.tbl.refunds">Refunds</td><td data-i18n="pricing.tbl.refunds.v">Unstarted milestones are fully refundable</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card" style="margin-top:24px">
+        <h3 data-i18n="pricing.crypto.h">Prefer not to use crypto?</h3>
+        <p data-i18n="pricing.crypto.p">Bank transfer and freelance-platform contracts (e.g. Upwork) are both available on request — mention it on the scoping call.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener">GitHub</a><a href="#">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script>
+(function () {
+  var WALLETS = {
+    TRC20: { address: 'REPLACE_WITH_YOUR_TRC20_ADDRESS', fee: 'TRC20 network fee: typically under $1, paid by the client.' },
+    ERC20: { address: 'REPLACE_WITH_YOUR_ERC20_ADDRESS', fee: 'ERC20 network fee: variable with Ethereum gas prices, paid by the client.' },
+    BEP20: { address: 'REPLACE_WITH_YOUR_BEP20_ADDRESS', fee: 'BEP20 network fee: typically under $1, paid by the client.' }
+  };
+  var btns = document.querySelectorAll('.network-btn');
+  var addrEl = document.getElementById('wallet-addr');
+  var feeEl = document.getElementById('fee-note');
+  var copyBtn = document.getElementById('copy-wallet');
+
+  function selectNetwork(net, pushUrl) {
+    var btn = document.querySelector('.network-btn[data-network="' + net + '"]');
+    if (!btn || !WALLETS[net]) return;
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    btn.setAttribute('aria-pressed', 'true');
+    var w = WALLETS[net];
+    if (addrEl) addrEl.textContent = w.address;
+    if (feeEl) feeEl.textContent = w.fee;
+    if (pushUrl) {
+      var url = new URL(window.location.href);
+      url.searchParams.set('network', net);
+      history.replaceState(null, '', url);
+    }
+  }
+
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function () { selectNetwork(btn.getAttribute('data-network'), true); });
+  });
+
+  // URL state (§29): ?network=ERC20 restores the selector on load/share
+  var params = new URLSearchParams(window.location.search);
+  var wanted = params.get('network');
+  if (wanted && WALLETS[wanted]) selectNetwork(wanted, false);
+
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      var text = addrEl ? addrEl.textContent : '';
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          copyBtn.textContent = 'Copied';
+          copyBtn.classList.add('copied');
+          setTimeout(function () { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 1500);
+        }).catch(function () {});
+      }
+    });
+  }
+})();
+</script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

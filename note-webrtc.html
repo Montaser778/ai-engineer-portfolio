@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A working local demo says nothing about the network path — Montaser Hussam</title>
+<meta name="description" content="Why a voice agent that works over localhost tells you nothing about NAT traversal, TURN relay cost, or mobile network jitter.">
+<link rel="canonical" href="https://montaser778.github.io/note-webrtc.html">
+<meta property="og:title" content="A working local demo says nothing about the network path">
+<meta property="og:description" content="NAT traversal, TURN relay cost, and mobile network jitter — what a localhost demo can't tell you.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/note-webrtc.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/note-webrtc.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/note-webrtc.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"A working local demo says nothing about the network path","datePublished":"2026-06-09","author":{"@type":"Person","name":"Montaser Hussam"},"wordCount":230}
+</script>
+</head>
+<body data-shape="sphere">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" class="active" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container" style="max-width:760px">
+      <div class="label" data-i18n="note.label">Note</div>
+      <h1 data-i18n="notes.webrtc.h">A working local demo says nothing about the network path</h1>
+      <div class="note-meta"><span>9 Jun 2026</span><span data-i18n="notes.minread4">4 min read</span><span><a href="notes.html" data-i18n="note.allnotes">All notes</a></span></div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container" style="max-width:760px">
+      <div class="toc">
+        <h2 data-i18n="note.contents">Contents</h2>
+        <ol>
+          <li><a href="#localhost-lies" data-i18n="noteWebrtc.toc1">What localhost doesn't tell you</a></li>
+          <li><a href="#the-path" data-i18n="noteWebrtc.toc2">The actual connection path</a></li>
+        </ol>
+      </div>
+
+      <article data-note>
+        <h2 id="localhost-lies" data-i18n="noteWebrtc.toc1">What localhost doesn't tell you</h2>
+        <p data-i18n="noteWebrtc.p1">A voice agent that works perfectly over localhost tells you the model and the application logic are sound. It tells you nothing about NAT traversal, TURN relay cost, or how the connection behaves on a mobile network with variable jitter.</p>
+
+        <h2 id="the-path" data-i18n="noteWebrtc.toc2">The actual connection path</h2>
+        <div class="diagram" role="img" aria-label="Diagram showing browser client connecting through a STUN server for direct peer discovery, falling back to a TURN relay when direct connection fails, then reaching the media server.">
+          <svg viewBox="0 0 640 200" width="100%" height="200">
+            <defs>
+              <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8892a6"/></marker>
+            </defs>
+            <rect x="20" y="80" width="120" height="44" rx="8" fill="none" stroke="#7c5cff"/>
+            <text x="80" y="106" fill="#f2e8d5" font-size="12" text-anchor="middle" font-family="monospace">Browser client</text>
+            <rect x="260" y="20" width="120" height="44" rx="8" fill="none" stroke="#8892a6"/>
+            <text x="320" y="46" fill="#f2e8d5" font-size="12" text-anchor="middle" font-family="monospace">STUN</text>
+            <rect x="260" y="140" width="120" height="44" rx="8" fill="none" stroke="#ffb545" stroke-dasharray="4 3"/>
+            <text x="320" y="166" fill="#f2e8d5" font-size="12" text-anchor="middle" font-family="monospace">TURN relay</text>
+            <rect x="500" y="80" width="120" height="44" rx="8" fill="none" stroke="#22d3c5"/>
+            <text x="560" y="106" fill="#f2e8d5" font-size="12" text-anchor="middle" font-family="monospace">Media server</text>
+            <line x1="140" y1="95" x2="255" y2="45" stroke="#8892a6" marker-end="url(#arrow2)"/>
+            <line x1="140" y1="110" x2="255" y2="160" stroke="#ffb545" stroke-dasharray="4 3" marker-end="url(#arrow2)"/>
+            <line x1="380" y1="45" x2="500" y2="95" stroke="#8892a6" marker-end="url(#arrow2)"/>
+            <line x1="380" y1="160" x2="500" y2="110" stroke="#ffb545" stroke-dasharray="4 3" marker-end="url(#arrow2)"/>
+          </svg>
+        </div>
+        <p data-i18n="noteWebrtc.p2">Direct connection via STUN is the fast path; the dashed TURN relay path is the fallback that only shows up on restrictive networks, which is exactly the class of network a demo laptop on office wifi never tests.</p>
+      </article>
+
+      <nav class="note-pagenav" aria-label="Note navigation">
+        <a href="note-idempotency.html"><span class="dir" data-i18n="note.previous">Previous</span><span data-i18n="notes.idempotency.h">A payment webhook will fire twice</span></a>
+        <a href="note-evaluation.html"><span class="dir" data-i18n="note.next">Next</span><span data-i18n="notes.evaluation.h">An unscored prompt change is a guess</span></a>
+      </nav>
+
+      <p style="margin-top:40px"><a href="contact.html?subject=Discuss%3A%20A%20working%20local%20demo%20says%20nothing%20about%20the%20network%20path" data-i18n="note.discuss">Discuss this note →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">GitHub</a><a href="#" rel="noopener noreferrer">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Montaser Hussam — Engineering Notes</title>
+  <link>https://montaser778.github.io/notes.html</link>
+  <description>Short, specific notes from building voice and agent systems.</description>
+  <language>en</language>
+  <lastBuildDate>Mon, 22 Jun 2026 00:00:00 GMT</lastBuildDate>
+  <item>
+    <title>An unscored prompt change is a guess</title>
+    <link>https://montaser778.github.io/note-evaluation.html</link>
+    <guid>https://montaser778.github.io/note-evaluation.html</guid>
+    <pubDate>Mon, 22 Jun 2026 00:00:00 GMT</pubDate>
+    <description>Eyeballing three example outputs is not measurement — it is a guess wearing the clothes of an experiment.</description>
+  </item>
+  <item>
+    <title>A working local demo says nothing about the network path</title>
+    <link>https://montaser778.github.io/note-webrtc.html</link>
+    <guid>https://montaser778.github.io/note-webrtc.html</guid>
+    <pubDate>Tue, 09 Jun 2026 00:00:00 GMT</pubDate>
+    <description>Localhost tells you the application logic is sound. It tells you nothing about NAT traversal, TURN relay cost, or mobile network jitter.</description>
+  </item>
+  <item>
+    <title>A payment webhook will fire twice</title>
+    <link>https://montaser778.github.io/note-idempotency.html</link>
+    <guid>https://montaser778.github.io/note-idempotency.html</guid>
+    <pubDate>Tue, 26 May 2026 00:00:00 GMT</pubDate>
+    <description>Payment providers retry webhook delivery on any ambiguous response — the idempotency key has to be there from the first handler written.</description>
+  </item>
+  <item>
+    <title>Measure latency where the user feels it</title>
+    <link>https://montaser778.github.io/note-latency.html</link>
+    <guid>https://montaser778.github.io/note-latency.html</guid>
+    <pubDate>Tue, 12 May 2026 00:00:00 GMT</pubDate>
+    <description>The number that predicts how a conversation feels is endpoint-detected-to-first-audible-token, measured on the server.</description>
+  </item>
+</channel>
+</rss>

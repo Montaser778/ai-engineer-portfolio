@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Measure latency where the user feels it — Montaser Hussam</title>
+<meta name="description" content="Why turn latency has to be measured server-side, endpoint-detected to first audible token, to mean the same thing across sessions and languages.">
+<link rel="canonical" href="https://montaser778.github.io/note-latency.html">
+<meta property="og:title" content="Measure latency where the user feels it">
+<meta property="og:description" content="Turn latency measured server-side, endpoint to first audible token.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/note-latency.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/note-latency.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/note-latency.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Measure latency where the user feels it","datePublished":"2026-05-12","author":{"@type":"Person","name":"Montaser Hussam"},"wordCount":210}
+</script>
+</head>
+<body data-shape="sphere">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" class="active" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container" style="max-width:760px">
+      <div class="label" data-i18n="note.label">Note</div>
+      <h1 data-i18n="notes.latency.h">Measure latency where the user feels it</h1>
+      <div class="note-meta"><span>12 May 2026</span><span data-i18n="notes.minread3">3 min read</span><span><a href="notes.html" data-i18n="note.allnotes">All notes</a></span></div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container" style="max-width:760px">
+      <article data-note>
+        <p data-i18n="noteLatency.p1">A client-side timer that starts when the user presses a button and stops when audio plays back measures something real, but it is easy to accidentally measure the wrong interval — for example starting the clock before the network round trip even begins.</p>
+
+        <h2 id="the-number" data-i18n="noteLatency.h2a">The number that predicts how a conversation feels</h2>
+        <p data-i18n="noteLatency.p2">Endpoint-detected-to-first-audible-token, measured on the server where the endpointing decision and the synthesis start both actually happen.</p>
+        <div class="code-window">
+          <div class="code-chrome"><span></span><span></span><span></span></div>
+          <pre><span class="c"># measures the interval that matters: silence detected -> first audio byte sent</span>
+<span class="k">def</span> <span class="f">measure_turn_latency</span>(endpoint_ts: float) -> float:
+    first_audio_ts = wait_for_first_tts_chunk()
+    latency_ms = (first_audio_ts - endpoint_ts) * <span class="n">1000</span>
+    log_latency(<span class="s">"turn_latency_ms"</span>, latency_ms)
+    <span class="k">return</span> latency_ms</pre>
+        </div>
+
+        <h2 id="comparable" data-i18n="noteLatency.h2b">Why this makes p50/p95 comparable</h2>
+        <p data-i18n="noteLatency.p3">Logged this way, the p50 and p95 are directly comparable across sessions and languages, instead of each client computing its own slightly different definition of "latency". Arabic sessions carry a real endpointing penalty from longer pause tolerance — reporting that honestly is part of the measurement, not a caveat to hide.</p>
+      </article>
+
+      <nav class="note-pagenav" aria-label="Note navigation">
+        <span></span>
+        <a href="note-idempotency.html"><span class="dir" data-i18n="note.next">Next</span><span data-i18n="notes.idempotency.h">A payment webhook will fire twice</span></a>
+      </nav>
+
+      <p style="margin-top:40px"><a href="contact.html?subject=Discuss%3A%20Measure%20latency%20where%20the%20user%20feels%20it" data-i18n="note.discuss">Discuss this note →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">GitHub</a><a href="#" rel="noopener noreferrer">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

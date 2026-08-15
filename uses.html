@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uses — Montaser Hussam</title>
+<meta name="description" content="The editor, terminal, machine, AI tooling and hosting Montaser Hussam actually uses, with the reasoning behind each choice.">
+<link rel="canonical" href="https://montaser778.github.io/uses.html">
+<meta property="og:title" content="Uses — Montaser Hussam">
+<meta property="og:description" content="The stack, opinionated and short.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/uses.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/uses.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/uses.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="grid">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container" style="max-width:760px">
+      <div class="label" data-i18n="uses.label">Uses</div>
+      <h1 data-i18n="uses.h1">What I actually use</h1>
+      <p class="lede" data-i18n="uses.lede">Short and opinionated — the reasoning matters more than the list.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container" style="max-width:760px">
+
+      <div class="uses-group">
+        <h2 data-i18n="uses.editor.h">Editor &amp; terminal</h2>
+        <div class="uses-item"><span class="name">VS Code</span><span class="why" data-i18n="uses.editor.vscode">Extension ecosystem for Python and web work outweighs a faster-but-narrower editor for daily client work.</span></div>
+        <div class="uses-item"><span class="name">Windows Terminal + WSL2 / Git Bash</span><span class="why" data-i18n="uses.editor.terminal">Linux tooling for the backend, native Windows for everything else — fewer surprises than dual-booting.</span></div>
+        <div class="uses-item"><span class="name">zsh with a minimal prompt</span><span class="why" data-i18n="uses.editor.zsh">Fast startup matters more on a machine that's also running a WebGL dev server and a model API in parallel.</span></div>
+      </div>
+
+      <div class="uses-group">
+        <h2 data-i18n="uses.machine.h">Machine</h2>
+        <div class="uses-item"><span class="name" data-i18n="uses.machine.name">Mid-range laptop, dual monitor at the desk</span><span class="why" data-i18n="uses.machine.why">Deliberately not top-spec — if a 3D scene or a demo is smooth here, it's smooth on what a hiring manager is using too.</span></div>
+      </div>
+
+      <div class="uses-group">
+        <h2 data-i18n="uses.ai.h">AI tooling</h2>
+        <div class="uses-item"><span class="name">Claude Code</span><span class="why" data-i18n="uses.ai.claudecode">Agentic terminal workflow fits multi-file refactors better than a chat window with copy-paste.</span></div>
+        <div class="uses-item"><span class="name">GitHub Copilot</span><span class="why" data-i18n="uses.ai.copilot">Inline completion for boilerplate; not trusted for architectural decisions.</span></div>
+      </div>
+
+      <div class="uses-group">
+        <h2 data-i18n="uses.models.h">Model providers benchmarked</h2>
+        <div class="uses-item"><span class="name">Anthropic Claude</span><span class="why" data-i18n="uses.models.claude">Best instruction-following for multi-step agent prompts in testing so far.</span></div>
+        <div class="uses-item"><span class="name">OpenAI GPT</span><span class="why" data-i18n="uses.models.gpt">Strong fallback and still the widest tool-calling compatibility across client stacks.</span></div>
+        <div class="uses-item"><span class="name" data-i18n="uses.models.openweight.name">Open-weight models via self-hosted inference</span><span class="why" data-i18n="uses.models.openweight.why">Only where a client requires data residency the hosted APIs can't satisfy — the trade-off is ops overhead for control.</span></div>
+      </div>
+
+      <div class="uses-group">
+        <h2 data-i18n="uses.hosting.h">Hosting</h2>
+        <div class="uses-item"><span class="name">Fly.io</span><span class="why" data-i18n="uses.hosting.flyio">Global edge deploy with WebSocket/WebRTC support that a plain PaaS often complicates.</span></div>
+        <div class="uses-item"><span class="name">Pipecat Cloud</span><span class="why" data-i18n="uses.hosting.pipecat">Purpose-built for real-time voice pipelines — reinventing that infrastructure per client isn't billable value.</span></div>
+        <div class="uses-item"><span class="name">GitHub Pages</span><span class="why"><span data-i18n="uses.hosting.ghpages1">Zero-cost static hosting for a site with no backend of its own; the trade-off is no server-side headers, hence the</span> <code>_headers</code> <span data-i18n="uses.hosting.ghpages2">file documented for migration.</span></span></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p></div>
+      <div class="footer-col"><h4 data-i18n="footer.site">Site</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.connect">Connect</h4><a href="contact.html" data-i18n="nav.contact">Contact</a><a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">GitHub</a><a href="#" rel="noopener noreferrer">LinkedIn</a></div>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>
