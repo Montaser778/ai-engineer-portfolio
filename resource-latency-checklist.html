@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Engineering Notes — Montaser Hussam</title>
-<meta name="description" content="Short write-ups on latency measurement, idempotent webhooks, demo-to-production gaps, and scoring prompt changes.">
-<link rel="canonical" href="https://montaser778.github.io/notes.html">
-<meta property="og:title" content="Engineering Notes — Montaser Hussam">
-<meta property="og:description" content="Short, concrete write-ups from building voice and agent systems.">
-<meta property="og:type" content="website">
+<title>Voice AI Latency Checklist | Montaser Hussam</title>
+<meta name="description" content="Twelve places latency hides in a speech pipeline — a free, one-page audit checklist. No email required.">
+<link rel="canonical" href="https://montaser778.github.io/resource-latency-checklist.html">
+<meta property="og:title" content="Voice AI Latency Checklist — Montaser Hussam">
+<meta property="og:description" content="Twelve places latency hides in a speech pipeline.">
+<meta property="og:type" content="article">
 <meta property="og:site_name" content="Montaser Hussam">
 <meta property="og:image" content="https://montaser778.github.io/og.svg">
 <meta property="og:image:width" content="1200">
@@ -24,9 +24,15 @@
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/site.css">
-<link rel="alternate" hreflang="en" href="https://montaser778.github.io/notes.html">
-<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/notes.html">
-<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/notes.html">
+<style>
+.checklist-num{list-style:none;padding:0;margin:22px 0;counter-reset:cl}
+.checklist-num li{counter-increment:cl;position:relative;padding-inline-start:38px;margin-bottom:18px;font-size:14.5px;color:var(--body);line-height:1.6}
+.checklist-num li::before{content:counter(cl);position:absolute;inset-inline-start:0;top:0;width:26px;height:26px;border-radius:50%;border:1px solid var(--teal);color:var(--teal);font-family:var(--font-mono);font-size:12px;display:flex;align-items:center;justify-content:center}
+.checklist-num strong{color:var(--sand);display:block;margin-bottom:2px}
+</style>
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/resource-latency-checklist.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/resource-latency-checklist.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/resource-latency-checklist.html">
 <link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
 </head>
 <body data-shape="helix">
@@ -36,14 +42,14 @@
 <div class="veil" aria-hidden="true"></div>
 <div id="scroll-progress"></div>
 
-<header class="site-header">
+<header class="site-header no-print">
   <div class="nav-wrap">
     <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
     <nav class="main-nav" aria-label="Primary">
       <a href="index.html" data-i18n="nav.home">Home</a>
       <a href="projects.html" data-i18n="nav.projects">Projects</a>
       <a href="demos.html" data-i18n="nav.demos">Demos</a>
-      <a href="notes.html" class="active" data-i18n="nav.notes">Notes</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
       <a href="about.html" data-i18n="nav.about">About</a>
       <a href="services.html" data-i18n="nav.services">Services</a>
       <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
@@ -58,63 +64,46 @@
   </div>
 </header>
 
-<div id="section-rail" class="section-rail no-print" hidden></div>
-
 <main id="main">
   <section class="page-head">
     <div class="container">
-      <div class="label" data-i18n="notes.label">Notes</div>
-      <h1 data-i18n="notes.h1">Engineering write-ups</h1>
-      <p class="lede" data-i18n="notes.lede">Short, specific notes from building voice and agent systems — not tutorials, just what the work actually taught.</p>
+      <div class="resume-head">
+        <div>
+          <div class="label">Free resource</div>
+          <h1>The voice AI latency checklist</h1>
+          <p class="lede">Twelve places turn latency hides in a real-time speech pipeline. Useful whether or not you ever hire anyone for it.</p>
+        </div>
+        <button class="btn btn-ghost no-print" type="button" onclick="window.print()">Download as PDF</button>
+      </div>
     </div>
   </section>
 
   <section style="padding-top:0">
-    <div class="container" style="max-width:760px">
-      <div class="notes-list">
-        <div class="note-row">
-          <div class="meta"><span>12 May 2026</span><span data-i18n="notes.minread3">3 min read</span></div>
-          <h2><a href="note-latency.html" data-i18n="notes.latency.h">Measure latency where the user feels it</a></h2>
-          <p data-i18n="notes.latency.p">A client-side timer measures something real, but the number that predicts how a conversation feels is endpoint-detected-to-first-audible-token, measured on the server.</p>
-        </div>
-        <div class="note-row">
-          <div class="meta"><span>26 May 2026</span><span data-i18n="notes.minread3">3 min read</span></div>
-          <h2><a href="note-idempotency.html" data-i18n="notes.idempotency.h">A payment webhook will fire twice</a></h2>
-          <p data-i18n="notes.idempotency.p">Payment providers retry webhook delivery on any ambiguous response — the idempotency key has to be there from the first handler written.</p>
-        </div>
-        <div class="note-row">
-          <div class="meta"><span>9 Jun 2026</span><span data-i18n="notes.minread4">4 min read</span></div>
-          <h2><a href="note-webrtc.html" data-i18n="notes.webrtc.h">A working local demo says nothing about the network path</a></h2>
-          <p data-i18n="notes.webrtc.p">Localhost tells you the application logic is sound. It tells you nothing about NAT traversal, TURN relay cost, or mobile network jitter.</p>
-        </div>
-        <div class="note-row">
-          <div class="meta"><span>22 Jun 2026</span><span data-i18n="notes.minread2">2 min read</span></div>
-          <h2><a href="note-evaluation.html" data-i18n="notes.evaluation.h">An unscored prompt change is a guess</a></h2>
-          <p data-i18n="notes.evaluation.p">Eyeballing three example outputs is not measurement — it is a guess wearing the clothes of an experiment.</p>
-        </div>
-      </div>
-      <p style="margin-top:30px"><a href="feed.xml" data-i18n="notes.rss">RSS feed</a> · <a href="search.html" data-i18n="notes.search">Search notes</a></p>
-    </div>
-  </section>
-
-  <section>
-    <div class="container" style="max-width:760px">
-      <div class="section-head"><div class="label">Free resources</div><h2>Downloadable, no email required</h2></div>
-      <div class="grid-3">
-        <div class="card" data-tilt><h3 style="font-size:.95rem">Voice AI latency checklist</h3><p style="font-size:13.5px">Twelve places latency hides in a speech pipeline.</p><a class="btn btn-ghost btn-sm" style="margin-top:14px" href="resource-latency-checklist.html">Open</a></div>
-        <div class="card" data-tilt><h3 style="font-size:.95rem">LLM cost worksheet</h3><p style="font-size:13.5px">The model behind the live cost estimator, as a worksheet.</p><a class="btn btn-ghost btn-sm" style="margin-top:14px" href="resource-cost-worksheet.html">Open</a></div>
-        <div class="card" data-tilt><h3 style="font-size:.95rem">Production readiness checklist</h3><p style="font-size:13.5px">What must exist before an AI prototype meets real users.</p><a class="btn btn-ghost btn-sm" style="margin-top:14px" href="resource-readiness-checklist.html">Open</a></div>
-      </div>
-      <div class="card" style="margin-top:30px">
-        <h3 style="font-size:.95rem">Stay in the loop</h3>
-        <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px">New engineering notes, roughly monthly. Nothing else, ever.</p>
-        <a class="btn btn-ghost btn-sm" href="mailto:eng.7montaser@gmail.com?subject=Add%20me%20to%20the%20notes%20list">Email to be added</a>
+    <div class="container" style="max-width:720px">
+      <ol class="checklist-num">
+        <li><strong>Voice activity detection threshold</strong>Too conservative and you wait after the user finishes; too aggressive and you cut them off mid-sentence.</li>
+        <li><strong>Endpointing silence duration</strong>The gap required before a turn is considered over — tune per language, not once for English and reused everywhere.</li>
+        <li><strong>Network jitter and packet loss handling</strong>A pipeline tested only on office wifi hides this entirely until a real mobile network exposes it.</li>
+        <li><strong>Transport choice</strong>WebSocket versus WebRTC changes the latency floor before any application code runs.</li>
+        <li><strong>Speech-to-text streaming vs. batch</strong>Waiting for a full utterance before transcription starts adds the entire utterance length to every turn.</li>
+        <li><strong>Time to first token from the LLM</strong>The gap between sending a prompt and receiving the first streamed token — not the same as total generation time.</li>
+        <li><strong>Prompt and context length</strong>A longer context window measurably slows first-token latency on most providers.</li>
+        <li><strong>Tool calls and retrieval steps</strong>Each round-trip to a tool, database or retrieval index adds serial latency unless deliberately parallelised.</li>
+        <li><strong>Text-to-speech time-to-first-audio</strong>Some providers synthesise the whole response before playback starts; streaming synthesis avoids this.</li>
+        <li><strong>Audio buffering on the client</strong>Overly large client-side buffers add latency invisibly, trading a small amount of choppiness for a lot of delay.</li>
+        <li><strong>Cold starts</strong>A serverless or scale-to-zero deployment adds seconds to the very first turn after idle — measure p99, not just p50.</li>
+        <li><strong>Geographic distance to the inference region</strong>A model hosted in one region adds real round-trip time for a user on another continent — this is why "it works fine for me" is not a benchmark.</li>
+      </ol>
+      <p class="form-note" style="margin-top:20px">Measure each stage separately before optimising any of them — the biggest gain is rarely where it's assumed to be.</p>
+      <div class="btn-row no-print" style="margin-top:24px">
+        <a class="btn btn-solid" href="contact.html">Discuss your latency budget</a>
+        <a class="btn btn-ghost" href="note-latency.html">Read the full write-up</a>
       </div>
     </div>
   </section>
 </main>
 
-<footer class="site-footer">
+<footer class="site-footer no-print">
   <div class="container">
     <div class="footer-grid footer-grid-4">
       <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p><p class="footer-status mono" id="footer-status" hidden></p></div>
@@ -136,11 +125,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="assets/js/scene.js"></script>
 <script src="assets/js/site.js"></script>
-<script src="assets/js/hero3d.js"></script>
 <script src="assets/js/polish.js"></script>
 <script src="assets/js/motion.js"></script>
 <script src="assets/js/status.js"></script>
-<script src="assets/js/rail.js"></script>
-<script src="assets/js/conversion.js"></script>
 </body>
 </html>

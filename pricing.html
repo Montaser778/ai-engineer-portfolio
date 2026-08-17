@@ -79,23 +79,32 @@
 
   <section style="padding-top:0">
     <div class="container">
+      <div class="currency-bar">
+        <span class="currency-bar-label" data-i18n="pricing.currency.label">Show prices in</span>
+        <div class="currency-select" role="group" aria-label="Select currency">
+          <button class="currency-btn" data-currency="USD" aria-pressed="true">USD</button>
+          <button class="currency-btn" data-currency="EUR" aria-pressed="false">EUR</button>
+          <button class="currency-btn" data-currency="GBP" aria-pressed="false">GBP</button>
+        </div>
+        <span class="currency-note" data-i18n="pricing.currency.note">Rates as of 17 Aug 2026. All contracts invoiced and settled in USD.</span>
+      </div>
       <div class="grid-3">
         <div class="card pricing-card" data-tilt>
           <h3 data-i18n="pricing.sprint.h">Sprint</h3>
-          <div class="price mono"><span data-i18n="pricing.from">from</span> $1,800</div>
+          <div class="price mono"><span data-i18n="pricing.from">from</span> <span data-price data-usd="1800">$1,800</span></div>
           <p class="mono" style="font-size:12.5px;color:var(--muted)" data-i18n="pricing.sprint.duration">1–2 weeks</p>
           <ul><li data-i18n="pricing.sprint.li1">One well-defined feature or fix</li><li data-i18n="pricing.sprint.li2">Daily async updates</li><li data-i18n="pricing.sprint.li3">Single milestone delivery</li></ul>
         </div>
         <div class="card pricing-card featured" data-tilt>
           <span class="badge" data-i18n="pricing.mostcommon">Most common</span>
           <h3 data-i18n="pricing.build.h">Build</h3>
-          <div class="price mono"><span data-i18n="pricing.from">from</span> $6,000</div>
+          <div class="price mono"><span data-i18n="pricing.from">from</span> <span data-price data-usd="6000">$6,000</span></div>
           <p class="mono" style="font-size:12.5px;color:var(--muted)" data-i18n="pricing.build.duration">4–8 weeks</p>
           <ul><li data-i18n="pricing.build.li1">A full voice or agent system, end to end</li><li data-i18n="pricing.build.li2">Multiple visible milestones</li><li data-i18n="pricing.build.li3">Deployment included</li><li data-i18n="pricing.build.li4">Post-delivery support window</li></ul>
         </div>
         <div class="card pricing-card" data-tilt>
           <h3 data-i18n="pricing.retainer.h">Retainer</h3>
-          <div class="price mono">$3,500<span style="font-size:1rem;color:var(--muted)" data-i18n="pricing.permo">/mo</span></div>
+          <div class="price mono"><span data-price data-usd="3500">$3,500</span><span style="font-size:1rem;color:var(--muted)" data-i18n="pricing.permo">/mo</span></div>
           <p class="mono" style="font-size:12.5px;color:var(--muted)" data-i18n="pricing.ongoing">Ongoing</p>
           <ul><li data-i18n="pricing.retainer.li1">Continuous feature work</li><li data-i18n="pricing.retainer.li2">Priority response time</li><li data-i18n="pricing.retainer.li3">Monthly scope check-in</li></ul>
         </div>
@@ -113,7 +122,7 @@
         <p data-i18n="pricing.hourly.p">$65/hour, minimum 5 hours. For architecture review, latency audits, or a second opinion on an existing build.</p>
       </div>
       <div class="btn-row" style="margin-top:24px">
-        <a class="btn btn-ghost" href="REPLACE_BOOKING_URL" target="_blank" rel="noopener noreferrer" data-i18n="services.book">Book a 30-minute call</a>
+        <a class="btn btn-ghost" href="https://calendly.com/eng-7montaser/30min" target="_blank" rel="noopener noreferrer" data-i18n="services.book">Book a 30-minute call</a>
       </div>
     </div>
   </section>
@@ -194,5 +203,43 @@
 <script src="assets/js/status.js"></script>
 <script src="assets/js/rail.js"></script>
 <script src="assets/js/conversion.js"></script>
+<script>
+/* §131: currency selector — fixed, dated rate. Never fetches a live rate. */
+(function () {
+  var RATES = { USD: { rate: 1, symbol: '$' }, EUR: { rate: 0.92, symbol: '€' }, GBP: { rate: 0.79, symbol: '£' } };
+  var btns = document.querySelectorAll('.currency-btn');
+  var prices = document.querySelectorAll('[data-price]');
+  if (!btns.length || !prices.length) return;
+
+  function format(usd, cur) {
+    var v = Math.round(usd * RATES[cur].rate);
+    return RATES[cur].symbol + v.toLocaleString('en-US');
+  }
+
+  function select(cur, pushUrl) {
+    var btn = document.querySelector('.currency-btn[data-currency="' + cur + '"]');
+    if (!btn || !RATES[cur]) return;
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    btn.setAttribute('aria-pressed', 'true');
+    prices.forEach(function (el) {
+      var usd = parseFloat(el.getAttribute('data-usd'));
+      if (!isNaN(usd)) el.textContent = format(usd, cur);
+    });
+    if (pushUrl) {
+      var url = new URL(window.location.href);
+      url.searchParams.set('currency', cur);
+      history.replaceState(null, '', url);
+    }
+  }
+
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function () { select(btn.getAttribute('data-currency'), true); });
+  });
+
+  var params = new URLSearchParams(window.location.search);
+  var wanted = params.get('currency');
+  if (wanted && RATES[wanted]) select(wanted, false);
+})();
+</script>
 </body>
 </html>

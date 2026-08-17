@@ -161,6 +161,8 @@
             var iframe = document.createElement('iframe');
             iframe.src = url;
             iframe.loading = 'lazy';
+            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
+            iframe.setAttribute('referrerpolicy', 'no-referrer');
             iframe.style.width = '100%';
             iframe.style.height = '560px';
             iframe.style.border = '1px solid var(--line)';

@@ -510,6 +510,11 @@ body.nav-open .burger span:nth-child(3) { transform: translateY(-5px) rotate(-45
 #hero3d { position: absolute; inset: 0; }
 #hero3d canvas { width: 100% !important; height: 100% !important; }
 
+/* v10 §149: contact page room scene, beside the pitch line */
+.contact-scene-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+.contact-stage { height: 320px; border-radius: 14px; overflow: hidden; background: rgba(255,255,255,.02); }
+@media (max-width: 900px) { .contact-scene-grid { grid-template-columns: 1fr; } .contact-stage { order: -1; } }
+
 /* ==========================================================================
    Split headline reveal
    ========================================================================== */
@@ -608,6 +613,15 @@ body.nav-open .burger span:nth-child(3) { transform: translateY(-5px) rotate(-45
 .specialism-crosslinks a { font-family: var(--font-mono); font-size: 12.5px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--body); }
 .specialism-crosslinks a:hover { color: var(--teal); border-color: var(--teal); }
 .specialism-crosslinks a[aria-current="page"] { color: var(--teal); border-color: var(--teal); }
+
+/* §131: currency selector --------------------------------------------------- */
+.currency-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 26px; }
+.currency-bar-label { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.currency-select { display: flex; gap: 6px; }
+.currency-btn { font-family: var(--font-mono); font-size: 12px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--body); cursor: pointer; }
+.currency-btn[aria-pressed="true"] { border-color: var(--teal); color: var(--teal); }
+.currency-note { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-inline-start: auto; }
+@media (max-width: 640px) { .currency-note { margin-inline-start: 0; width: 100%; } }
 
 /* §132: risk-reversal row -------------------------------------------------- */
 .risk-reversal {

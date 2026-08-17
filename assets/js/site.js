@@ -533,7 +533,7 @@
     var form = document.getElementById('contact-form');
     if (!form) return;
     var loadedAt = Date.now();
-    var FORM_ENDPOINT = 'REPLACE_FORM_ENDPOINT';
+    var FORM_ENDPOINT = 'https://formspree.io/f/xeogqaez';
 
     // pre-fill from ?subject= (used by "discuss this note" links)
     var qs = new URLSearchParams(window.location.search);
