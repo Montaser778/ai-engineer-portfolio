@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real-Time Voice AI Engineer — Pipecat &amp; WebRTC Voice Agents | Montaser Hussam</title>
+<meta name="description" content="Real-time voice AI engineer building Pipecat and WebRTC voice agents with sub-800ms turn latency, deployed and operating in production — not a demo.">
+<link rel="canonical" href="https://montaser778.github.io/voice-ai.html">
+<meta property="og:title" content="Real-Time Voice AI Engineer — Montaser Hussam">
+<meta property="og:description" content="Pipecat and WebRTC voice agents with sub-800ms turn latency, deployed to production.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","serviceType":"Real-time voice AI engineering","areaServed":"Worldwide","provider":{"@type":"Person","name":"Montaser Hussam"},"description":"Real-time voice AI engineering: Pipecat and WebRTC voice agents, low-latency speech pipelines, deployed to production."}
+</script>
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/voice-ai.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/voice-ai.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/voice-ai.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="sphere">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="voiceai.label">Specialism</div>
+      <h1 data-i18n="voiceai.h1">Your voice agent works in the demo and dies in production.</h1>
+      <p class="lede" data-i18n="voiceai.lede">Real-time voice AI engineering: Pipecat and WebRTC voice agents built and measured for the network conditions a demo never shows you.</p>
+      <div class="btn-row" style="margin-top:20px">
+        <a class="btn btn-solid" href="contact.html" data-i18n="home.cta.btn">Send a project brief</a>
+      </div>
+      <div class="specialism-crosslinks">
+        <a href="voice-ai.html" aria-current="page" data-i18n="footer.spec1">Voice AI</a>
+        <a href="llm-agents.html" data-i18n="footer.spec2">LLM &amp; agents</a>
+        <a href="arabic-ai.html" data-i18n="footer.spec3">Arabic AI</a>
+        <a href="ml-to-production.html" data-i18n="footer.spec4">ML to production</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="voiceai.symptoms.label">Recognise this?</div><h2 data-i18n="voiceai.symptoms.h2">Three signs latency is the actual problem</h2></div>
+      <ul class="checklist">
+        <li data-i18n="voiceai.symptom1">Turn latency is fine on your office wifi and unusable on a phone network three time zones away.</li>
+        <li data-i18n="voiceai.symptom2">The agent works until two people call at once, then the audio pipeline falls over.</li>
+        <li data-i18n="voiceai.symptom3">Nobody on the team can say the p50 or p95 turn latency number without guessing.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="voiceai.approach.label">Approach</div><h2 data-i18n="voiceai.approach.h2">How a voice agent gets to production</h2></div>
+      <div class="process">
+        <div class="process-step"><span class="process-num">01</span><div><h3 data-i18n="voiceai.step1.h">Measure before building</h3><p data-i18n="voiceai.step1.p">Every stage of the pipeline — endpointing, transcription, reasoning, synthesis — gets its own latency number before anything is optimised, so effort goes where it actually matters.</p></div></div>
+        <div class="process-step"><span class="process-num">02</span><div><h3 data-i18n="voiceai.step2.h">Build on Pipecat or an equivalent real-time framework</h3><p data-i18n="voiceai.step2.p">Not a custom WebSocket loop reinvented per project — a framework built for interruption handling, voice activity detection and streaming, so the hard parts aren't rebuilt from scratch.</p></div></div>
+        <div class="process-step"><span class="process-num">03</span><div><h3 data-i18n="voiceai.step3.h">Design endpointing per language</h3><p data-i18n="voiceai.step3.p">Silence thresholds and turn-taking logic tuned per language, not a single number that happens to work for English.</p></div></div>
+        <div class="process-step"><span class="process-num">04</span><div><h3 data-i18n="voiceai.step4.h">Deploy where real-time media actually works</h3><p data-i18n="voiceai.step4.p">Hosting chosen for WebRTC and media relay behaviour, not a general-purpose web host that happens to run the app.</p></div></div>
+        <div class="process-step"><span class="process-num">05</span><div><h3 data-i18n="voiceai.step5.h">Load test concurrent calls before launch</h3><p data-i18n="voiceai.step5.p">The failure mode that never shows up in a solo demo — two calls at once — gets tested before a client's users find it first.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="voiceai.proof.label">Proof</div><h2 data-i18n="voiceai.proof.h2">Muhawir: sub-800ms, bilingual, in production</h2></div>
+      <div class="card" data-tilt>
+        <p data-i18n="voiceai.proof.p">A bilingual voice interview practice agent running mock interviews end to end — capture, understand, respond, evaluate, report — with scoring deliberately kept out of the conversation loop so it never adds latency to the spoken turn. Deployed on Fly.io with Pipecat Cloud handling the real-time media.</p>
+        <div class="btn-row" style="margin-top:16px">
+          <a class="btn btn-ghost btn-sm" href="project-muhawir.html" data-i18n="projects.casestudy">Case study</a>
+          <a class="btn btn-ghost btn-sm" href="demos.html" data-i18n="voiceai.proof.demo">Try the live voice demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="voiceai.deliver.label">What you get</div><h2 data-i18n="voiceai.deliver.h2">Concrete deliverables</h2></div>
+      <div class="grid-2">
+        <div class="card" data-tilt><h3 data-i18n="voiceai.d1.h">A measured latency budget</h3><p data-i18n="voiceai.d1.p">Per-stage p50 and p95 numbers, not a single end-to-end guess.</p></div>
+        <div class="card" data-tilt><h3 data-i18n="voiceai.d2.h">A deployed, working endpoint</h3><p data-i18n="voiceai.d2.p">Not a local demo — a hosted voice agent your users can actually call.</p></div>
+        <div class="card" data-tilt><h3 data-i18n="voiceai.d3.h">Interruption and turn-taking handling</h3><p data-i18n="voiceai.d3.p">The agent stops talking when the user starts, and resumes cleanly.</p></div>
+        <div class="card" data-tilt><h3 data-i18n="voiceai.d4.h">Load-tested for concurrency</h3><p data-i18n="voiceai.d4.p">Verified under multiple simultaneous calls before launch, not after a complaint.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="voiceai.objection.label">Objections</div><h2 data-i18n="voiceai.objection.h2">The two questions every team asks</h2></div>
+      <div class="objection-grid">
+        <div class="card"><h4 data-i18n="voiceai.obj1.q">"Won't latency always be a problem with real users?"</h4><p data-i18n="voiceai.obj1.a">It's a bounded problem, not an open one. Endpointing, transcription and synthesis each have a measurable floor — the work is choosing the right provider and pipeline shape for each stage, then verifying the combined number under real network conditions rather than assuming it.</p></div>
+        <div class="card"><h4 data-i18n="voiceai.obj2.q">"Where does this actually run?"</h4><p data-i18n="voiceai.obj2.a">Hosting is chosen specifically for real-time media handling — general-purpose web hosts frequently add latency or drop connections under WebRTC load. Fly.io and Pipecat Cloud are the combination used on Muhawir; the right choice depends on the project's traffic pattern.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="voiceai.pricing.label">Pricing</div><h2 data-i18n="voiceai.pricing.h2">A voice agent build starts at $6,000</h2></div>
+      <p class="lede" data-i18n="voiceai.pricing.p">The Build tier covers a full voice or agent system end to end, deployed, across 4–8 weeks. Full tiers and payment terms are on the pricing page.</p>
+      <div class="btn-row" style="margin-top:10px">
+        <a class="btn btn-ghost" href="pricing.html" data-i18n="voiceai.pricing.cta">See full pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container center">
+      <h2 data-i18n="voiceai.cta.h2">Have a voice agent to build or fix?</h2>
+      <div class="btn-row center" style="justify-content:center;margin-top:20px"><a class="btn btn-solid" href="contact.html" data-i18n="home.cta.btn">Send a project brief</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid footer-grid-4">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p><p class="footer-status mono" id="footer-status" hidden></p></div>
+      <div class="footer-col"><h4 data-i18n="footer.work">Work</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="project-muhawir.html" data-i18n="footer.casestudy1">Muhawir case study</a><a href="project-agents.html" data-i18n="footer.casestudy2">Agents case study</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.specialisms">Specialisms</h4><a href="voice-ai.html" data-i18n="footer.spec1">Voice AI</a><a href="llm-agents.html" data-i18n="footer.spec2">LLM &amp; agents</a><a href="arabic-ai.html" data-i18n="footer.spec3">Arabic AI</a><a href="ml-to-production.html" data-i18n="footer.spec4">ML to production</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.engage">Engage</h4><a href="services.html" data-i18n="nav.services">Services</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="contact.html" data-i18n="nav.contact">Contact</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.about">About</h4><a href="about.html" data-i18n="nav.about">About</a><a href="resume.html" data-i18n="footer.resume">Résumé</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a><a href="legal.html">Legal &amp; compliance</a></div>
+    </div>
+    <div class="footer-social">
+      <a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/programmer-montaser/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="mailto:eng.7montaser@gmail.com">Email</a>
+      <a href="https://eng7montaser.linkbio.co/" target="_blank" rel="noopener noreferrer">More work</a>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

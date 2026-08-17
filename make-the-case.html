@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convince Your Manager — Internal Case Toolkit | Montaser Hussam</title>
+<meta name="description" content="A ready-made internal case for hiring Montaser Hussam: a copy-ready email, a one-page business case, and an objection cheat-sheet.">
+<link rel="canonical" href="https://montaser778.github.io/make-the-case.html">
+<meta property="og:title" content="Convince Your Manager — Montaser Hussam">
+<meta property="og:description" content="A ready-made internal case: copy-ready email, business case, objection cheat-sheet.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+.case-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.case-form label{display:block;font-family:var(--font-mono);font-size:11.5px;color:var(--muted);margin-bottom:6px}
+.case-form input,.case-form select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02);color:var(--sand);font-size:13.5px;font-family:inherit}
+.case-form .full{grid-column:1/-1}
+@media (max-width:640px){.case-form{grid-template-columns:1fr}}
+#case-email-output{white-space:pre-wrap;font-family:var(--font-mono);font-size:13px;line-height:1.7;color:var(--body);background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:20px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:760px){.two-col{grid-template-columns:1fr}}
+</style>
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/make-the-case.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/make-the-case.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/make-the-case.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="grid">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header no-print">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="case.label">For the internal champion</div>
+      <h1 data-i18n="case.h1">Found the right engineer. Now you have to convince someone who wasn't in the room.</h1>
+      <p class="lede" data-i18n="case.lede">You can't authorise the spend yourself, and the conversation with your manager needs to happen from memory, days later. This page gives you the words, ready to send.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0" class="no-print">
+    <div class="container" style="max-width:760px">
+      <div class="section-head"><div class="label" data-i18n="case.email.label">Step one</div><h2 data-i18n="case.email.h2">A copy-ready email</h2></div>
+      <div class="case-form">
+        <div><label for="case-manager" data-i18n="case.f.manager">Manager's name</label><input id="case-manager" type="text" placeholder="Sam"></div>
+        <div><label for="case-project" data-i18n="case.f.project">Project name</label><input id="case-project" type="text" placeholder="checkout"></div>
+        <div class="full"><label for="case-problem" data-i18n="case.f.problem">The specific problem</label><input id="case-problem" type="text" placeholder="the voice ordering feature"></div>
+        <div><label for="case-duration" data-i18n="case.f.duration">How long you've been blocked</label><input id="case-duration" type="text" placeholder="six weeks"></div>
+        <div><label for="case-tier" data-i18n="case.f.tier">Engagement tier</label>
+          <select id="case-tier">
+            <option value="Sprint tier, from $1,800" data-i18n="case.f.tier.sprint">Sprint, from $1,800</option>
+            <option value="Build tier, from $6,000" selected data-i18n="case.f.tier.build">Build, from $6,000</option>
+            <option value="monthly retainer, $3,500/mo" data-i18n="case.f.tier.retainer">Retainer, $3,500/mo</option>
+          </select>
+        </div>
+        <div class="full"><label for="case-alt" data-i18n="case.f.alt">The alternative if this doesn't happen</label><input id="case-alt" type="text" placeholder="hiring a full-time engineer, or slipping the roadmap another quarter"></div>
+      </div>
+      <div id="case-email-output" aria-live="polite"></div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-solid" id="case-copy" type="button" data-i18n="case.copy">Copy email</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="case-business">
+    <div class="container" style="max-width:760px">
+      <div class="section-head"><div class="label" data-i18n="case.biz.label">Step two</div><h2 data-i18n="case.biz.h2">The one-page business case</h2></div>
+      <div class="card">
+        <h3 data-i18n="case.biz.problem.h">The problem, in business terms</h3>
+        <p data-i18n="case.biz.problem.p">A voice or agent feature is blocked, slipping the roadmap, or shipped in a state that doesn't survive real usage — real network conditions, concurrent users, or a language the prototype was never tested in. Each week of delay has a cost, whether that's a missed launch window or continued manual work the feature was meant to remove.</p>
+
+        <h3 style="margin-top:22px" data-i18n="case.biz.options.h">Three options, compared</h3>
+        <table style="margin-top:10px">
+          <thead><tr><th data-i18n="case.biz.opt.col1">Option</th><th data-i18n="case.biz.opt.col2">Cost</th><th data-i18n="case.biz.opt.col3">Timeline</th></tr></thead>
+          <tbody>
+            <tr><td data-i18n="case.biz.opt1.a">Hire in-house</td><td data-i18n="case.biz.opt1.b">Salary + recruiting time + ramp-up</td><td data-i18n="case.biz.opt1.c">Months before first shippable work</td></tr>
+            <tr><td data-i18n="case.biz.opt2.a">Engage an agency</td><td data-i18n="case.biz.opt2.b">Typically higher than a specialist contractor, plus account overhead</td><td data-i18n="case.biz.opt2.c">Weeks to scope and staff</td></tr>
+            <tr><td data-i18n="case.biz.opt3.a">Fixed-scope specialist contract</td><td data-i18n="case.biz.opt3.b">From $1,800 (Sprint) or $6,000 (Build), fixed and quoted upfront</td><td data-i18n="case.biz.opt3.c">Scoping call this week, first milestone in days</td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:22px" data-i18n="case.biz.rec.h">Recommendation</h3>
+        <p data-i18n="case.biz.rec.p">A fixed-scope engagement de-risks the decision: the price is fixed before work starts, unstarted milestones are fully refundable, and the code belongs to the company on completion. It is the lowest-commitment way to validate the approach before considering a larger hire.</p>
+
+        <h3 style="margin-top:22px" data-i18n="case.biz.risk.h">Risk reversal terms</h3>
+        <ul class="checklist">
+          <li data-i18n="pricing.risk.pilot.h">Paid pilot milestone</li>
+          <li data-i18n="pricing.risk.refund.h">Unstarted work refundable</li>
+          <li data-i18n="pricing.risk.code.h">You own the code</li>
+          <li data-i18n="pricing.risk.support.h">Named support window</li>
+        </ul>
+
+        <h3 style="margin-top:22px" data-i18n="case.biz.timeline.h">Engagement timeline</h3>
+        <p data-i18n="case.biz.timeline.p">Scoping call (free, 30 minutes) → written proposal with milestones → 50% deposit → first milestone delivered and demoed → remaining milestones → final payment and handover with a named support window. Full detail on the <a href="services.html">services page</a>.</p>
+      </div>
+      <div class="btn-row no-print" style="margin-top:20px">
+        <button class="btn btn-ghost" type="button" onclick="window.print()" data-i18n="case.biz.print">Print this as a PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="no-print">
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="case.obj.label">Step three</div><h2 data-i18n="case.obj.h2">Objection cheat-sheet</h2></div>
+      <div class="two-col">
+        <div class="card"><h4 data-i18n="case.obj1.q">"Why not use our own team?"</h4><p data-i18n="case.obj1.a">Because they're already committed elsewhere, or this isn't their specialism — real-time voice and multi-agent systems are a narrow skill set most product teams don't carry in-house. If your team has the bandwidth and the specific experience, you shouldn't hire him — that's the honest answer.</p></div>
+        <div class="card"><h4 data-i18n="case.obj2.q">"Why not an agency?"</h4><p data-i18n="case.obj2.a">Agencies typically cost more and add account-management overhead, and you rarely know in advance which individual engineer will actually do the work. A direct specialist contract skips both, at the cost of one point of failure instead of a team — which is exactly what the risk-reversal terms are designed to offset.</p></div>
+        <div class="card"><h4 data-i18n="case.obj3.q">"What if he becomes unavailable mid-project?"</h4><p data-i18n="case.obj3.a">Milestones are scoped so each one delivers working, demoable software — nothing is held back until a single final delivery. If something happened mid-milestone, you'd be holding working code and clear documentation up to that point, not a folder of unfinished work. This is a real trade-off of working with an individual rather than a firm, worth weighing honestly against the cost difference.</p></div>
+        <div class="card"><h4 data-i18n="case.obj4.q">"How do we even pay someone abroad?"</h4><p data-i18n="case.obj4.a">Standard international wire transfer or a freelance-platform contract (e.g. Upwork), both offered — whichever fits your procurement process. This is raised and settled on the scoping call before any commitment.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="no-print">
+    <div class="container center">
+      <h2 data-i18n="case.cta.h2">Ready to book the scoping call?</h2>
+      <div class="btn-row center" style="justify-content:center;margin-top:20px">
+        <a class="btn btn-solid" href="contact.html" data-i18n="home.cta.btn">Send a project brief</a>
+        <a class="btn btn-ghost" href="REPLACE_BOOKING_URL" target="_blank" rel="noopener noreferrer" data-i18n="services.book">Book a 30-minute call</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="footer-grid footer-grid-4">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p><p class="footer-status mono" id="footer-status" hidden></p></div>
+      <div class="footer-col"><h4 data-i18n="footer.work">Work</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="project-muhawir.html" data-i18n="footer.casestudy1">Muhawir case study</a><a href="project-agents.html" data-i18n="footer.casestudy2">Agents case study</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.specialisms">Specialisms</h4><a href="voice-ai.html" data-i18n="footer.spec1">Voice AI</a><a href="llm-agents.html" data-i18n="footer.spec2">LLM &amp; agents</a><a href="arabic-ai.html" data-i18n="footer.spec3">Arabic AI</a><a href="ml-to-production.html" data-i18n="footer.spec4">ML to production</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.engage">Engage</h4><a href="services.html" data-i18n="nav.services">Services</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="make-the-case.html" data-i18n="footer.makecase">Make the case</a><a href="contact.html" data-i18n="nav.contact">Contact</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.about">About</h4><a href="about.html" data-i18n="nav.about">About</a><a href="resume.html" data-i18n="footer.resume">Résumé</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a><a href="legal.html">Legal &amp; compliance</a></div>
+    </div>
+    <div class="footer-social">
+      <a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/programmer-montaser/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="mailto:eng.7montaser@gmail.com">Email</a>
+      <a href="https://eng7montaser.linkbio.co/" target="_blank" rel="noopener noreferrer">More work</a>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/make-the-case.js"></script>
+</body>
+</html>

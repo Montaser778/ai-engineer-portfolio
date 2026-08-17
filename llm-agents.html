@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-Agent LLM Development — RAG &amp; Agent Pipeline Engineer | Montaser Hussam</title>
+<meta name="description" content="Multi-agent LLM development and RAG engineering: pipelines with explicit conflict resolution and a scored evaluation set, not a single oversized prompt.">
+<link rel="canonical" href="https://montaser778.github.io/llm-agents.html">
+<meta property="og:title" content="Multi-Agent LLM Development — Montaser Hussam">
+<meta property="og:description" content="Multi-agent LLM pipelines with explicit conflict resolution, evaluated against a scored set.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Montaser Hussam">
+<meta property="og:image" content="https://montaser778.github.io/og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://montaser778.github.io/og.svg">
+<meta name="theme-color" content="#0b0f18">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","serviceType":"Multi-agent LLM development","areaServed":"Worldwide","provider":{"@type":"Person","name":"Montaser Hussam"},"description":"Multi-agent LLM pipeline development, RAG systems and production evaluation infrastructure."}
+</script>
+<link rel="alternate" hreflang="en" href="https://montaser778.github.io/llm-agents.html">
+<link rel="alternate" hreflang="ar" href="https://montaser778.github.io/llm-agents.html">
+<link rel="alternate" hreflang="x-default" href="https://montaser778.github.io/llm-agents.html">
+<link rel="alternate" type="application/rss+xml" title="Montaser Hussam — Notes" href="feed.xml">
+</head>
+<body data-shape="knot">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="preloader"><span class="pl-name">MONTASER HUSSAM</span><div class="pl-track"><div class="pl-bar"></div></div><span class="pl-pct">0%</span></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div id="scroll-progress"></div>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="#7c5cff"/><circle cx="4" cy="6" r="2" fill="#22d3c5"/><circle cx="20" cy="6" r="2" fill="#22d3c5"/><circle cx="4" cy="18" r="2" fill="#22d3c5"/><circle cx="20" cy="18" r="2" fill="#22d3c5"/><path d="M12 12L4 6M12 12L20 6M12 12L4 18M12 12L20 18" stroke="#8892a6" stroke-width="1"/></svg>Montaser Hussam</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="projects.html" data-i18n="nav.projects">Projects</a>
+      <a href="demos.html" data-i18n="nav.demos">Demos</a>
+      <a href="notes.html" data-i18n="nav.notes">Notes</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="services.html" data-i18n="nav.services">Services</a>
+      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      <button id="lang-toggle" type="button" aria-label="Toggle language">ع</button>
+      <button id="kbtn" type="button" aria-label="Open command palette">⌘K</button>
+      <button class="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <div class="label" data-i18n="llmagents.label">Specialism</div>
+      <h1 data-i18n="llmagents.h1">Your single prompt gives a confident answer that's wrong half the time.</h1>
+      <p class="lede" data-i18n="llmagents.lede">Multi-agent LLM development: pipelines where disagreement between agents is the feature, resolved explicitly at synthesis and checked against a scored evaluation set.</p>
+      <div class="btn-row" style="margin-top:20px">
+        <a class="btn btn-solid" href="contact.html" data-i18n="home.cta.btn">Send a project brief</a>
+      </div>
+      <div class="specialism-crosslinks">
+        <a href="voice-ai.html" data-i18n="footer.spec1">Voice AI</a>
+        <a href="llm-agents.html" aria-current="page" data-i18n="footer.spec2">LLM &amp; agents</a>
+        <a href="arabic-ai.html" data-i18n="footer.spec3">Arabic AI</a>
+        <a href="ml-to-production.html" data-i18n="footer.spec4">ML to production</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="llmagents.symptoms.label">Recognise this?</div><h2 data-i18n="llmagents.symptoms.h2">Three signs a single prompt has hit its ceiling</h2></div>
+      <ul class="checklist">
+        <li data-i18n="llmagents.symptom1">One giant prompt tries to research, analyse and write in a single pass, and quietly drops steps under pressure.</li>
+        <li data-i18n="llmagents.symptom2">Nobody can say why an answer changed between two runs, or catch it when it gets worse.</li>
+        <li data-i18n="llmagents.symptom3">A prompt change ships on a hunch, with no scored set to check it against before or after.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="llmagents.approach.label">Approach</div><h2 data-i18n="llmagents.approach.h2">How a multi-agent system gets built</h2></div>
+      <div class="process">
+        <div class="process-step"><span class="process-num">01</span><div><h3 data-i18n="llmagents.step1.h">Split the task by role, not by prompt length</h3><p data-i18n="llmagents.step1.p">Research, analysis, risk and writing become separate agents with narrow responsibilities — each easier to evaluate and debug than one prompt doing everything.</p></div></div>
+        <div class="process-step"><span class="process-num">02</span><div><h3 data-i18n="llmagents.step2.h">Design the synthesis step to expect disagreement</h3><p data-i18n="llmagents.step2.p">Conflicting findings between agents are surfaced and resolved explicitly at synthesis, not silently averaged away.</p></div></div>
+        <div class="process-step"><span class="process-num">03</span><div><h3 data-i18n="llmagents.step3.h">Build a scored evaluation set before shipping changes</h3><p data-i18n="llmagents.step3.p">Any prompt change that touches production runs against the same scored set first, so a regression is caught before a user sees it.</p></div></div>
+        <div class="process-step"><span class="process-num">04</span><div><h3 data-i18n="llmagents.step4.h">Track cost per run from day one</h3><p data-i18n="llmagents.step4.p">Multiple agents means multiple calls — cost is measured per run, not discovered on the first invoice.</p></div></div>
+        <div class="process-step"><span class="process-num">05</span><div><h3 data-i18n="llmagents.step5.h">Guard against agents converging on each other's language</h3><p data-i18n="llmagents.step5.p">A known failure mode where agents start echoing each other instead of contributing independent perspective — checked for explicitly, not assumed away.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="llmagents.proof.label">Proof</div><h2 data-i18n="llmagents.proof.h2">Four agents, one recommendation, conflicts resolved on purpose</h2></div>
+      <div class="card" data-tilt>
+        <p data-i18n="llmagents.proof.p">A multi-agent business idea analyst where four specialised agents — research, analysis, risk and writing — reconcile conflicting findings into a single recommendation. The hard parts were conflict resolution at synthesis, controlling cost per run, and stopping the agents from converging on each other's language.</p>
+        <div class="btn-row" style="margin-top:16px">
+          <a class="btn btn-ghost btn-sm" href="project-agents.html" data-i18n="projects.casestudy">Case study</a>
+          <a class="btn btn-ghost btn-sm" href="demos.html" data-i18n="llmagents.proof.demo">Try the live agent pipeline demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="llmagents.deliver.label">What you get</div><h2 data-i18n="llmagents.deliver.h2">Concrete deliverables</h2></div>
+      <div class="grid-2">
+        <div class="card" data-tilt><h3 data-i18n="llmagents.d1.h">A graph definition, not a black box</h3><p data-i18n="llmagents.d1.p">The agent graph is documented and inspectable, not a single unexplainable prompt chain.</p></div>
+        <div class="card" data-tilt><h3 data-i18n="llmagents.d2.h">A scored evaluation set</h3><p data-i18n="llmagents.d2.p">A reusable set to check every future prompt or model change against, before it ships.</p></div>
+        <div class="card" data-tilt><h3 data-i18n="llmagents.d3.h">An explicit conflict-resolution step</h3><p data-i18n="llmagents.d3.p">A synthesis stage that names and resolves disagreement instead of hiding it.</p></div>
+        <div class="card" data-tilt><h3 data-i18n="llmagents.d4.h">A measured cost per run</h3><p data-i18n="llmagents.d4.p">Token and call cost tracked per execution, so scaling cost is predictable.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="llmagents.objection.label">Objections</div><h2 data-i18n="llmagents.objection.h2">The two questions every team asks</h2></div>
+      <div class="objection-grid">
+        <div class="card"><h4 data-i18n="llmagents.obj1.q">"Isn't more agents just more places for things to go wrong?"</h4><p data-i18n="llmagents.obj1.a">Fewer, actually — a narrow agent with one job is easier to evaluate and fix than a single prompt doing five things at once. The trade-off is real, though: more agents means more calls and more synthesis logic, which is why the evaluation set and conflict-resolution step aren't optional extras.</p></div>
+        <div class="card"><h4 data-i18n="llmagents.obj2.q">"What happens to our LLM bill?"</h4><p data-i18n="llmagents.obj2.a">It goes up per run and needs to be tracked from the start, not discovered later. Cost per run is measured during development, and cheaper models are used for narrower sub-tasks where a smaller model performs just as well as a frontier one.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head"><div class="label" data-i18n="llmagents.pricing.label">Pricing</div><h2 data-i18n="llmagents.pricing.h2">A multi-agent build starts at $6,000</h2></div>
+      <p class="lede" data-i18n="llmagents.pricing.p">The Build tier covers a full agent or LLM system end to end, deployed, across 4–8 weeks. Full tiers and payment terms are on the pricing page.</p>
+      <div class="btn-row" style="margin-top:10px">
+        <a class="btn btn-ghost" href="pricing.html" data-i18n="voiceai.pricing.cta">See full pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container center">
+      <h2 data-i18n="llmagents.cta.h2">Have an agent or LLM pipeline to build?</h2>
+      <div class="btn-row center" style="justify-content:center;margin-top:20px"><a class="btn btn-solid" href="contact.html" data-i18n="home.cta.btn">Send a project brief</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid footer-grid-4">
+      <div class="footer-col"><h4>Montaser Hussam</h4><p style="font-size:13.5px;color:var(--muted)" data-i18n="footer.tagline">AI/ML engineer, Gaza, Palestine. Remote worldwide.</p><p class="footer-status mono" id="footer-status" hidden></p></div>
+      <div class="footer-col"><h4 data-i18n="footer.work">Work</h4><a href="projects.html" data-i18n="nav.projects">Projects</a><a href="project-muhawir.html" data-i18n="footer.casestudy1">Muhawir case study</a><a href="project-agents.html" data-i18n="footer.casestudy2">Agents case study</a><a href="demos.html" data-i18n="nav.demos">Demos</a><a href="notes.html" data-i18n="nav.notes">Notes</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.specialisms">Specialisms</h4><a href="voice-ai.html" data-i18n="footer.spec1">Voice AI</a><a href="llm-agents.html" data-i18n="footer.spec2">LLM &amp; agents</a><a href="arabic-ai.html" data-i18n="footer.spec3">Arabic AI</a><a href="ml-to-production.html" data-i18n="footer.spec4">ML to production</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.engage">Engage</h4><a href="services.html" data-i18n="nav.services">Services</a><a href="pricing.html" data-i18n="nav.pricing">Pricing</a><a href="contact.html" data-i18n="nav.contact">Contact</a></div>
+      <div class="footer-col"><h4 data-i18n="footer.about">About</h4><a href="about.html" data-i18n="nav.about">About</a><a href="resume.html" data-i18n="footer.resume">Résumé</a><a href="uses.html" data-i18n="footer.uses">Uses</a><a href="changelog.html" data-i18n="footer.changelog">Changelog</a><a href="legal.html">Legal &amp; compliance</a></div>
+    </div>
+    <div class="footer-social">
+      <a href="https://github.com/montaser778" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/programmer-montaser/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="mailto:eng.7montaser@gmail.com">Email</a>
+      <a href="https://eng7montaser.linkbio.co/" target="_blank" rel="noopener noreferrer">More work</a>
+    </div>
+    <div class="footer-bottom"><span data-i18n="footer.copyright">© 2026 Montaser Hussam</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/hero3d.js"></script>
+<script src="assets/js/polish.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/status.js"></script>
+<script src="assets/js/conversion.js"></script>
+</body>
+</html>

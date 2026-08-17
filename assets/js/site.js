@@ -282,7 +282,7 @@
      ========================================================================= */
   (function revealsAndCounters() {
     var reveals = document.querySelectorAll('[data-reveal]');
-    var counters = document.querySelectorAll('[data-counter]');
+    var counters = document.querySelectorAll('[data-counter]:not([data-counter-eager])');
     var skills = document.querySelectorAll('.skill-fill');
 
     function runCounter(el) {
@@ -313,6 +313,12 @@
     }
 
     var all = Array.prototype.slice.call(reveals).concat(Array.prototype.slice.call(counters), Array.prototype.slice.call(skills));
+
+    /* §129: above-the-fold metrics animate on load, not on scroll */
+    document.querySelectorAll('[data-counter-eager]').forEach(function (el) {
+      el.classList.add('revealed');
+      runCounter(el);
+    });
 
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
@@ -457,7 +463,7 @@
       var company = form.querySelector('[name="company"]');
       var engagement = form.querySelector('[name="engagement"]');
       var budget = form.querySelector('[name="budget"]');
-      var email = 'REPLACE@EMAIL.COM';
+      var email = 'eng.7montaser@gmail.com';
       var subject = 'Project inquiry — ' + (company && company.value.trim() ? company.value.trim() : 'new lead');
       var bodyLines = [
         'Name: ' + (name ? name.value.trim() : ''),

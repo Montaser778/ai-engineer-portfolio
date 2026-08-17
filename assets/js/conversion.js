@@ -9,7 +9,7 @@
     if (!footer) return;
     var isContactPage = /contact\.html$/.test(window.location.pathname);
 
-    var EMAIL = 'REPLACE@EMAIL.COM';
+    var EMAIL = 'eng.7montaser@gmail.com';
 
     /* CTA band, skipped on contact.html itself */
     if (!isContactPage && !document.querySelector('.mh-cta-band')) {
