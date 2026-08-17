@@ -28,6 +28,92 @@
      ========================================================================= */
 
   /* =========================================================================
+     0b. §153: single inline SVG icon sprite, one stroke weight (1.5px),
+     currentColor, 24x24. Injected once, referenced everywhere via <use>.
+     ========================================================================= */
+  (function iconSprite() {
+    var ICONS = {
+      mic: '<path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/>',
+      agents: '<circle cx="6" cy="7" r="2.3"/><circle cx="18" cy="7" r="2.3"/><circle cx="12" cy="17" r="2.3"/><path d="M7.8 8.6 10.5 15M16.2 8.6 13.5 15"/>',
+      server: '<rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><path d="M8 7h.01M8 17h.01"/>',
+      globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 4 5.4 4 8.5s-1.4 6.1-4 8.5c-2.6-2.4-4-5.4-4-8.5s1.4-6.1 4-8.5Z"/>',
+      check: '<path d="M5 12.5 9.5 17 19 7"/>',
+      shield: '<path d="M12 3.5 19 6.5v5.4c0 4.4-3 7.4-7 8.6-4-1.2-7-4.2-7-8.6V6.5L12 3.5Z"/><path d="m9 12 2.2 2.2L15.5 9.8"/>',
+      code: '<path d="M9 8 4.5 12.5 9 17M15 8l4.5 4.5L15 17"/>',
+      clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+      chart: '<path d="M5 19V10M12 19V5M19 19v-7"/><path d="M3.5 19h17"/>',
+      message: '<path d="M4.5 5.5h15v10.5h-8L7 19v-3H4.5V5.5Z"/>',
+      briefcase: '<rect x="3.5" y="7.5" width="17" height="11" rx="1.5"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M3.5 12.5h17"/>',
+      spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>'
+    };
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+    var html = '';
+    Object.keys(ICONS).forEach(function (id) {
+      html += '<symbol id="icon-' + id + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + ICONS[id] + '</symbol>';
+    });
+    svg.innerHTML = html;
+    document.body.insertBefore(svg, document.body.firstChild);
+  })();
+
+  /* =========================================================================
+     0c. §152: turn section eyebrows (.label above an h2/h1) into icon pills.
+     Purely presentational — the label text and data-i18n key are untouched.
+     ========================================================================= */
+  (function eyebrowBadges() {
+    var KEYWORDS = [
+      ['voice|mic|call', 'mic'], ['agent|multi', 'agents'], ['deploy|prod|infra|host', 'server'],
+      ['bilingual|arabic|world|global', 'globe'], ['proof|case|result|outcome', 'check'],
+      ['risk|security|trust|legal|privacy', 'shield'], ['approach|process|step|how', 'code'],
+      ['pricing|cost|payment|money', 'clock'], ['stat|metric|number|measured', 'chart'],
+      ['faq|question', 'message'], ['work|engage|service|specialism', 'briefcase']
+    ];
+    function iconFor(text) {
+      var t = text.toLowerCase();
+      for (var i = 0; i < KEYWORDS.length; i++) {
+        if (new RegExp(KEYWORDS[i][0]).test(t)) return KEYWORDS[i][1];
+      }
+      return 'spark';
+    }
+    document.querySelectorAll('.section-head .label, .page-head .label').forEach(function (el) {
+      if (el.querySelector('svg')) return;
+      var icon = iconFor(el.textContent || '');
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('class', 'eyebrow-icon');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.innerHTML = '<use href="#icon-' + icon + '"></use>';
+      el.classList.add('eyebrow');
+      el.insertBefore(svg, el.firstChild);
+    });
+  })();
+
+  /* =========================================================================
+     0d. v10 §151: timeline line brightens on the segment scrolled past.
+     ========================================================================= */
+  (function timelineProgress() {
+    var el = document.getElementById('about-timeline');
+    if (!el) return;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var rect = el.getBoundingClientRect();
+      var viewportCenter = window.innerHeight * 0.5;
+      var total = rect.height;
+      if (total <= 0) return;
+      var passed = viewportCenter - rect.top;
+      var pct = Math.max(0, Math.min(100, (passed / total) * 100));
+      el.style.setProperty('--tl-progress', pct + '%');
+    }
+    function onScroll() {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  })();
+
+  /* =========================================================================
      1. Preloader
      ========================================================================= */
   (function preloader() {

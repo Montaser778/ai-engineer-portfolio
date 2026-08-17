@@ -25,11 +25,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/site.css">
 <style>
-.timeline{border-left:1px solid var(--line);padding-left:24px;margin:24px 0}
-.timeline-item{margin-bottom:30px;position:relative}
-.timeline-item::before{content:"";position:absolute;left:-29px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--teal)}
-.timeline-item .when{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+/* v10 §151: logo-in-node timeline */
+.timeline{position:relative;margin:24px 0;padding-left:58px}
+.timeline::before{content:"";position:absolute;left:23px;top:24px;bottom:24px;width:2px;background:var(--line)}
+.timeline::after{content:"";position:absolute;left:23px;top:24px;width:2px;background:linear-gradient(var(--teal),var(--violet));height:var(--tl-progress,0%);transition:height .3s ease}
+.timeline-item{margin-bottom:34px;position:relative}
+.timeline-item:last-child{margin-bottom:0}
+.timeline-node{position:absolute;left:-58px;top:0;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:600;font-size:15px;color:var(--ink);background:linear-gradient(135deg,var(--violet),var(--teal));border:3px solid var(--ink);box-shadow:0 0 0 1px var(--line);z-index:1}
+.timeline-item .when{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-top:2px}
 .tagcloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+@media (max-width:520px){.timeline{padding-left:50px}.timeline::before,.timeline::after{left:19px}.timeline-node{left:-50px;width:40px;height:40px;font-size:13px}}
 </style>
 <link rel="alternate" hreflang="en" href="https://montaser778.github.io/about.html">
 <link rel="alternate" hreflang="ar" href="https://montaser778.github.io/about.html">
@@ -85,10 +90,10 @@
         <p data-i18n="about.looking.p">Teams building a real-time voice product, an agent-based workflow, or a production LLM feature that needs to survive contact with real users and real network conditions — not a proof of concept that stays a proof of concept.</p>
 
         <h2 style="margin-top:50px" data-i18n="about.exp.h">Experience</h2>
-        <div class="timeline">
-          <div class="timeline-item"><div class="when">2026 — present</div><h3 data-i18n="about.exp.muhawir.h">Muhawir — Founder &amp; engineer</h3><p data-i18n="about.exp.muhawir.p">Designed and built a bilingual real-time voice interview coach end to end, from the WebRTC transport layer to post-call scoring and billing.</p></div>
-          <div class="timeline-item"><div class="when">2025 — 2026</div><h3 data-i18n="about.exp.indep.h">Independent AI/ML engineer</h3><p data-i18n="about.exp.indep.p">Delivered agent pipelines and LLM-backed features for early-stage products, focused on shipping working systems on realistic timelines.</p></div>
-          <div class="timeline-item"><div class="when">2023</div><h3 data-i18n="about.exp.bsc.h">BSc, with distinction</h3><p data-i18n="about.exp.bsc.p">Undergraduate degree with a focus on software engineering and applied machine learning.</p></div>
+        <div class="timeline" id="about-timeline">
+          <div class="timeline-item"><div class="timeline-node" aria-hidden="true">M</div><div class="when">2026 — present</div><h3 data-i18n="about.exp.muhawir.h">Muhawir — Founder &amp; engineer</h3><p data-i18n="about.exp.muhawir.p">Designed and built a bilingual real-time voice interview coach end to end, from the WebRTC transport layer to post-call scoring and billing.</p></div>
+          <div class="timeline-item"><div class="timeline-node" aria-hidden="true">I</div><div class="when">2025 — 2026</div><h3 data-i18n="about.exp.indep.h">Independent AI/ML engineer</h3><p data-i18n="about.exp.indep.p">Delivered agent pipelines and LLM-backed features for early-stage products, focused on shipping working systems on realistic timelines.</p></div>
+          <div class="timeline-item"><div class="timeline-node" aria-hidden="true">B</div><div class="when">2023</div><h3 data-i18n="about.exp.bsc.h">BSc, with distinction</h3><p data-i18n="about.exp.bsc.p">Undergraduate degree with a focus on software engineering and applied machine learning.</p></div>
         </div>
       </div>
 
