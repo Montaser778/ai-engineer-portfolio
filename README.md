@@ -1,213 +1,122 @@
-# Montaser Hussam — Portfolio (v4)
+# Montaser Hussam — AI Engineer Portfolio
 
-Vanilla HTML/CSS/JS multi-page portfolio. No build step, no frameworks. Three.js
-r128 loaded from CDN for the background particle field and the hero 3D
-workstation model.
+> Vanilla HTML / CSS / JS multi-page portfolio. No build step, no frameworks.
+> Three.js r128 (CDN) powers the background particle field and the hero 3D workstation model.
+
+**Live:** https://eng7montaser.tech
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Markup | Vanilla HTML5 (multi-page) |
+| Styling | Custom CSS, no framework |
+| 3D / WebGL | Three.js r128 + custom GLSL ShaderMaterial |
+| Interactivity | Vanilla JS (ES modules) |
+| i18n | EN / AR dictionary (`assets/data/i18n.json`) |
+| Hosting | GitHub Pages |
+
+---
 
 ## Deploy
 
-Copy every file to the root of the `montaser778.github.io` repository:
-
 ```bash
 git add .
-git commit -m "Portfolio v3"
+git commit -m "Portfolio update"
 git push
 ```
 
-Settings → Pages → branch `main`, folder root. Live within a couple of minutes.
-For a custom domain, add a `CNAME` file with the bare domain and point an
-ALIAS/ANAME record at GitHub Pages.
+Then go to **Settings → Pages → Branch: `main`, Folder: `/ (root)`**.
+The site goes live within a couple of minutes.
 
-## File structure
+For a custom domain, add a `CNAME` file at the repo root containing the bare
+domain, and point A / ALIAS records at GitHub Pages.
 
+---
+
+## File Structure
+
+### Pages
 ```
-index.html, projects.html, project-muhawir.html, project-agents.html,
-demos.html, notes.html, note-latency.html, note-idempotency.html,
-note-webrtc.html, note-evaluation.html, about.html, services.html,
-pricing.html, resume.html, contact.html, uses.html, changelog.html,
-search.html, 404.html, offline.html
-favicon.svg, og.svg, site.webmanifest, robots.txt, sitemap.xml, feed.xml,
-sw.js, humans.txt, _headers
-.github/workflows/deploy.yml, .github/lighthouserc.json
-assets/css/site.css
-assets/js/scene.js    background GLSL particle engine (theme-aware, §16)
-assets/js/hero3d.js   hero workstation model + tilt cards
-assets/js/site.js     UI chrome, command palette, theme/i18n, contact form,
-                       search integration, timezone widget, craft details
-assets/js/demos.js    voice VAD, answer scoring, agent pipeline sim
-assets/js/tools.js    architecture explorer, cost calculator, live GitHub feed
-assets/js/search.js   standalone search page, ?q= deep links
-assets/data/i18n.json         EN/AR dictionary for data-i18n elements
-assets/data/search-index.json content index for command palette + search.html
+index.html            projects.html        project-muhawir.html
+project-agents.html   demos.html           notes.html
+note-latency.html     note-idempotency.html
+note-webrtc.html      note-evaluation.html
+about.html            services.html        pricing.html
+resume.html           contact.html         uses.html
+changelog.html        search.html          404.html
+offline.html
 ```
 
-## Placeholders to replace before launch
+### Assets & Config
+```
+favicon.svg           og.svg               site.webmanifest
+robots.txt            sitemap.xml          feed.xml
+sw.js                 humans.txt           _headers
+.github/workflows/deploy.yml
+.github/lighthouserc.json
+```
 
-These are intentionally obvious tokens — do not invent real values for them.
+### Scripts
+| File | Responsibility |
+|---|---|
+| `assets/css/site.css` | All styling |
+| `assets/js/scene.js` | Background particle engine (theme-aware, §16) |
+| `assets/js/hero3d.js` | Hero workstation model, tilt cards |
+| `assets/js/site.js` | UI chrome, command palette, theme/i18n, contact form, timezone widget |
+| `assets/js/demos.js` | Voice VAD, scoring, agent pipeline simulation |
+| `assets/js/tools.js` | Architecture explorer, cost calculator, GitHub feed |
+| `assets/js/search.js` | Standalone search page, `?q=` deep links |
+| `assets/data/i18n.json` | EN / AR dictionary for `data-i18n` elements |
+| `assets/data/index.json` | Content index for command palette + `search.html` |
+
+---
+
+## Placeholders — Replace Before Launch
+
+These are intentionally obvious tokens. **Do not invent values for them.**
 
 | Token | Location | Needs |
 |---|---|---|
-| `REPLACE@EMAIL.COM` | contact.html, resume.html, humans.txt, site.js `contactForm()` | Working email address |
-| `REPLACE_WITH_YOUR_TRC20_ADDRESS` | pricing.html `WALLETS` object | USDT TRC20 address |
-| `REPLACE_WITH_YOUR_ERC20_ADDRESS` | pricing.html `WALLETS` object | USDT ERC20 address (or delete the network) |
-| `REPLACE_WITH_YOUR_BEP20_ADDRESS` | pricing.html `WALLETS` object | USDT BEP20 address (or delete the network) |
-| `https://REPLACE-WITH-YOUR-LIVE-URL` | demos.html `#liveUrl`, projects.html Muhawir card | Deployed Muhawir URL |
-| `href="#"` LinkedIn links | every page footer + contact.html + resume.html | LinkedIn profile URL |
-| `data-user="montaser778"` | demos.html `#gh` | Confirm GitHub username is correct |
-| Project repo/live links marked `href="#"` | projects.html (4 of 6 project cards) | Repo or live URL per project |
-| `REPLACE_FORM_ENDPOINT` | contact.html / site.js `contactForm()` | Formspree, Basin or Web3Forms endpoint URL — falls back to `mailto:` until set |
-| `REPLACE_BOOKING_URL` | contact.html, services.html, pricing.html | Cal.com or Calendly booking link |
-| `assets/audio/en/*.webm` / `assets/audio/ar/*.webm` (+ `.mp3`, `.vtt`) | not built this pass — see "Deferred" below | Real Cartesia Sonic narration audio, captions |
-| Video intro / poster | not built this pass | A real 45s self-hosted or YouTube-embedded video |
-| Upwork/Toptal rating, GitHub headline stats on home page | not built this pass | Real, confirmed profile data only — never a placeholder rating |
-| `legal.html` items marked "Unconfirmed" (data handling, sub-processors) | legal.html | Written confirmation from him before this can be called final |
+| `REPLACE@EMAIL.COM` | `contact.html`, `resume.html`, `humans.txt`, `site.js` → `contactForm()` | Working email |
+| `REPLACE_WITH_YOUR_TRC20_ADDRESS` | `pricing.html` → `WALLETS` | USDT TRC20 address |
+| `REPLACE_WITH_YOUR_ERC20_ADDRESS` | `pricing.html` → `WALLETS` | USDT ERC20 address (or delete network) |
+| `REPLACE_WITH_YOUR_BEP20_ADDRESS` | `pricing.html` → `WALLETS` | USDT BEP20 address (or delete network) |
+| `https://REPLACE-WITH-YOUR-LIVE-URL` | `demos.html` → `#liveUrl`, `projects.html` Muhawir card | Deployed Muhawir URL |
+| LinkedIn links | Every page footer, `contact.html`, `resume.html` | LinkedIn profile URL |
+| `data-user="montaser778"` | `demos.html` → `#gh` | Confirm GitHub username |
+| `href="#"` | `projects.html` (4 of 6 project cards) | Repo / live URL per project |
+| `REPLACE_FORM_ENDPOINT` | `contact.html`, `site.js` → `contactForm()` | Formspree / Basin / Web3Forms endpoint — falls back to `mailto:` until set |
+| `REPLACE_BOOKING_URL` | `contact.html`, `services.html`, `pricing.html` | Cal.com or Calendly link |
 
-## Part B additions (bilingual, theme, search, offline, infra)
+Find them all at once:
 
-- **Bilingual EN/AR (§15)** — toggle in the header, `assets/data/i18n.json`,
-  `data-i18n` attributes. Infrastructure (RTL, font swap, persistence,
-  hreflang, `<html lang/dir>`) is fully wired site-wide. Arabic copy is
-  written (not machine-translated) for navigation, footer and the home hero;
-  the rest of each page's body copy remains English by design — translating
-  every page's full prose natively is a larger content pass than this build
-  covered, so nothing was machine-translated to fake completeness.
-- **Theme (§16)** — dark/light/system cycle, blocking inline script prevents
-  a flash of the wrong theme, both Three.js scenes respond via a shared
-  `uTheme` uniform (see `scene.js`).
-- **Search (§17)** — `search-index.json` + scored client-side search, wired
-  into the command palette and the standalone `search.html` (`?q=` deep
-  links).
-- **Notes split + RSS (§18)** — four standalone note pages, `feed.xml`,
-  prev/next nav, reading time, JSON-LD, "discuss this" links pre-filling the
-  contact form subject.
-- **Second case study (§19)** — `project-agents.html`, with a hand-written
-  SVG state-flow diagram and a graph-definition code block.
-- **Trust (§20)** — trusted-stack strip and a dismissible availability
-  banner on the home page. No client logos or testimonials exist yet, so
-  none are in the DOM — per the spec, that section is left out entirely
-  rather than faked.
-- **Contact form (§21)** — `fetch` POST with honeypot + 3-second time-trap,
-  automatic `mailto:` fallback while `REPLACE_FORM_ENDPOINT` is unset or on
-  network error.
-- **Booking + timezone (§22)** — booking CTA on services/pricing/contact,
-  `Intl`-based timezone converter widget.
-- **`uses.html` / `changelog.html` (§24, §25)** — both built in full.
-- **Offline (§26)** — `sw.js` (cache-first static, network-first HTML,
-  versioned cache) + `offline.html`.
-- **Social preview (§27)** — `og.svg` wired via `og:image`/`twitter:image`
-  on every page. A rasterised PNG was **not** produced — this environment
-  has no image-rasterisation tooling available, so only the SVG source
-  ships. Some platforms (older LinkedIn/Slack unfurlers) render `og:image`
-  PNGs more reliably than SVG; convert `og.svg` to a 1200×630 PNG with any
-  design tool before relying on link previews in those channels.
-- **View transitions / route polish (§28)** — `@view-transition` CSS
-  declaration, `<link rel="prefetch">` on viewport-entered nav links,
-  `history.scrollRestoration = 'manual'`.
-- **URL state (§29)** — project filters and the pricing USDT network
-  selector read/write the query string.
-- **Security headers (§31)** — `_headers` (Netlify/Cloudflare Pages; GitHub
-  Pages ignores it, documented in the file itself).
-- **CI (§32)** — `.github/workflows/deploy.yml` runs HTML validation, a
-  link checker and Lighthouse CI (budgets in `.github/lighthouserc.json`)
-  before deploying to Pages. Not run against a live repo in this session —
-  verify the action versions still resolve when first pushed.
-- **Craft pass (§33)** — console signature, `?` shortcut overlay, copy-code
-  buttons, heading anchors on notes, `humans.txt`, reduced-data mode
-  (halves particle count via `prefers-reduced-data`/`saveData`), focus traps
-  on the palette and mobile nav, a global error-boundary listener.
+```bash
+git grep -n "REPLACE"
+```
 
-### Deferred (per §35's own guidance on what's safest to cut)
+---
 
-- **§23 Quote/invoice generator** — not built. Explicitly marked optional
-  and lowest-priority in the spec's own build order.
-- **§30 Analytics** — not built. Explicitly optional; add a cookieless
-  provider (Plausible/Umami/GoatCounter) later if measurement is wanted.
-- Arabic translation is infrastructure-complete but content-partial (see
-  above) — extending `data-i18n` coverage to every page's full body copy is
-  the largest remaining Part B task if pursued further.
-- The CI Lighthouse thresholds and link-checker are configured but untested
-  against a real GitHub Actions run in this session.
+## Deferred — Not Built This Pass
 
-## Notes on the build
+| Item | Notes |
+|---|---|
+| `assets/audio/en/*.webm`, `assets/audio/ar/*.webm` (+ `.mp3`, `.vtt`) | Real Cartesia Sonic narration audio and captions |
+| Video intro / poster | A real 45s self-hosted or YouTube-embedded video |
+| Upwork / Toptal rating headline stats (home page) | Real, confirmed profile data — never a placeholder rating |
+| `legal.html` items marked "Unconfirmed" (data sub-processors) | Written confirmation before this can be final |
 
-- All chrome (preloader, cursor, command palette, reveals, mobile nav, FAQ,
-  magnetic buttons, contact-form mailto) is injected/driven by `assets/js/site.js`
-  and no-ops safely if its target markup is missing, so every script can be
-  loaded on every page.
-- `scene.js` wraps `WebGLRenderer` creation in try/catch and hides the canvas
-  if WebGL is unavailable; `prefers-reduced-motion` zeroes drift via a
-  `uReduced` uniform.
-- The voice demo works with or without microphone permission — the
-  "simulate a turn" button always works if `getUserMedia` is denied or absent.
-- The GitHub demo fails gracefully to a text message on rate limit or network
-  failure, never a blank panel.
-- `resume.html` has a dedicated print stylesheet in `assets/css/site.css`
-  (`@media print`) that removes canvases, header, footer and cursor, and
-  switches to a white background.
+---
 
-## Part C/D/E additions (ADDENDUM_V5) and Part F–L additions (ADDENDUM_V6)
+## Part B Additions
 
-Built this pass, additive only, per each spec's own priority order:
+Bilingual support, theme switching, search, offline mode, and supporting
+infrastructure.
 
-- **v5 §36 grain/vignette/mesh glow** — already existed from a prior pass
-  (`assets/js/polish.js` + CSS at the end of `site.css`), left untouched.
-- **v5 §37 curtain transitions** + **§39 scroll-velocity skew** —
-  `assets/js/motion.js`, new module, loaded on every page, no-ops under
-  `prefers-reduced-motion`.
-- **v5 §44 case study metrics band** — animated counter bands added to
-  `project-muhawir.html`, `project-agents.html`, and the featured cards on
-  `projects.html`, reusing the existing generic `[data-counter]` engine in
-  `site.js`.
-- **v5 §48 live status strip** — `assets/data/status.json` (one manually
-  edited file) + `assets/js/status.js`, rendered on the home page only
-  (`#status-strip`). Shows nothing if the fetch fails — never a stale or
-  invented status.
-- **v6 §56 five-second answer band** — new section directly under the hero
-  on `index.html` answering what/who-for/result/proof/next in one screen.
-- **v6 §57 contact on every page** — `assets/js/conversion.js`, injects a
-  compact CTA band before the footer and a plain-text email line in the
-  footer's Connect column, on every page except `contact.html` itself.
-- **v6 §63 what happens next** + **§64 risk reversal** — new sections added
-  directly to `contact.html`, below the form.
-- **v6 §58 prune projects** — `projects.html` restructured into a Featured
-  tier (Muhawir + multi-agent analyst, with metrics) and an "Also built"
-  compact list for the remaining four. Nothing was deleted.
-- **v6 §65 legal.html** — new page: NDA, IP assignment, accessibility and
-  privacy stated plainly; data handling and sub-processors explicitly
-  marked `Unconfirmed` per the spec's own instruction not to invent a legal
-  position. Linked from every page's footer.
-- **v6 §69 payment matrix** + **§70 rate card note** — extended the existing
-  "prefer not to use crypto" card on `pricing.html` into a USDT / escrow /
-  bank-transfer comparison table, plus a short fixed-price-vs-hourly note.
+---
 
-### Deferred (not built this pass — listed honestly, not silently dropped)
+## License
 
-- **v5 Part D, audio guided tour (§42–43)** — not built. This is the
-  largest remaining item. It requires real Cartesia Sonic narration audio,
-  which no tool in this environment can produce; building the JS
-  infrastructure alone (invitation panel, persistent control, `tour.html`,
-  segment-triggering) without real audio files or real `.vtt` captions
-  behind it would be a half-built feature, which the spec's own priority
-  order (§54) explicitly says is worse than not building it at all. If
-  pursued next: write the six EN + six AR narration scripts first (pure
-  content, no tooling needed), then wire the player against placeholder
-  paths like `assets/audio/en/01-hero.webm` that 404 gracefully.
-- **v5 §38 scramble, §40 spotlight, §41 structural details (partial)** —
-  shortcut overlay, console signature and copy buttons already existed from
-  an earlier pass; section numbers and back-to-top were not added.
-- **v5 §45 approach-your-problem flow, §46 comparison table, §47 process
-  page, §49 one-pager, §50 micro-interactions, §51 content depth, §52
-  performance additions** — not built this pass, deferred for time.
-- **v6 §59 verification strip, §60 video intro, §61 case-study PDFs, §62
-  video testimonials** — not built. All require real external data (a real
-  Upwork/Toptal rating, a real recorded video) that doesn't exist yet; per
-  the spec's own hard rule, no placeholder badge or poster was faked.
-- **v6 §67 currency toggle, §71–75 authority/SEO/AEO, §76 dashboard demo,
-  §77 scope builder, §79 objection FAQ rewrite, §80–84 operations** — not
-  built this pass, deferred for time. §77 extends the same §45 flow that
-  was also deferred, so building §45 first is the natural next step.
-
-None of the above required touching an existing file's current behaviour —
-they are simply not yet started.
-#   a i - e n g i n e e r - p o r t f o l i o  
- 
+All rights reserved. © Montaser Hussam
