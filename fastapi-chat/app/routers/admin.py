@@ -211,7 +211,8 @@ def profile_save(
     admin: AdminUser = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    admin.email = email or None
+    user = db.query(AdminUser).filter(AdminUser.id == admin.id).with_for_update().first()
+    user.email = email or None
     db.commit()
     return RedirectResponse("/admin/profile?saved=true", status_code=303)
 
