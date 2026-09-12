@@ -54,6 +54,11 @@ BASE_STYLE = """
   nav { display: flex; align-items: center; flex-wrap: wrap; }
   nav a { margin-inline-start: 16px; color: var(--body); text-decoration: none; font-size: 13.5px; font-family: var(--font-mono); transition: color .15s ease; }
   nav a:hover, nav a.active { color: var(--teal); }
+  .lang-toggle-link {
+    font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-decoration: none;
+    border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; margin-inline-start: 16px;
+  }
+  .lang-toggle-link:hover { color: var(--teal); border-color: var(--teal); }
   main { max-width: 960px; margin: 0 auto; padding: 40px 24px 64px; }
   h1 { color: var(--sand); font-size: 1.7rem; margin-bottom: 6px; }
   .page-eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
@@ -162,9 +167,19 @@ IDLE_LOGOUT_SCRIPT = f"""<script>
 </script>"""
 
 
-def page(title: str, body: str, nav: str = "") -> str:
+def _lang_toggle_link(lang: str, next_path: str) -> str:
+    other = "ar" if lang == "en" else "en"
+    label = "ع" if lang == "en" else "EN"
+    return f'<a class="lang-toggle-link" href="/admin/set-lang?lang={other}&next={esc(next_path)}">{label}</a>'
+
+
+def page(title: str, body: str, nav: str = "", lang: str = "en", path: str = "/admin") -> str:
+    dir_ = "rtl" if lang == "ar" else "ltr"
+    from app.dashboard_i18n import get_translator
+
+    t = get_translator(lang)
     return f"""<!doctype html>
-<html lang="en">
+<html lang="{lang}" dir="{dir_}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -177,8 +192,9 @@ def page(title: str, body: str, nav: str = "") -> str:
 <body>
 {NEURAL_BG}
 <header>
-  <span class="brand">{LOGO_SVG}Portfolio Admin</span>
+  <span class="brand">{LOGO_SVG}{esc(t('brand'))}</span>
   {nav}
+  {_lang_toggle_link(lang, path)}
 </header>
 <main>
 {body}
@@ -189,13 +205,14 @@ def page(title: str, body: str, nav: str = "") -> str:
 </html>"""
 
 
-def auth_page(title: str, body: str) -> str:
+def auth_page(title: str, body: str, lang: str = "en", path: str = "/admin/login") -> str:
     """A full-bleed gradient page for login/forgot-password/reset -- mirrors
     the public site's hero background treatment instead of the plain flat
     dashboard chrome, since these are the pages a visitor (or the owner,
     logged out) actually judges the "brand" of first."""
+    dir_ = "rtl" if lang == "ar" else "ltr"
     return f"""<!doctype html>
-<html lang="en">
+<html lang="{lang}" dir="{dir_}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -207,19 +224,30 @@ def auth_page(title: str, body: str) -> str:
 {BASE_STYLE}
   body {{ min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }}
   .auth-shell {{ width: 100%; max-width: 380px; position: relative; z-index: 1; }}
+  .auth-lang-toggle {{ position: fixed; top: 20px; inset-inline-end: 20px; z-index: 2; }}
   .auth-brand {{ display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 28px; color: var(--sand); font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; }}
   .auth-brand svg {{ width: 28px; height: 28px; }}
   .auth-card {{
     background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px;
     box-shadow: 0 20px 60px rgba(0,0,0,.45); backdrop-filter: blur(12px);
   }}
-  .auth-card h1 {{ font-size: 1.3rem; margin: 0 0 20px; text-align: center; }}
-  .auth-links {{ text-align: center; margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }}
-  .auth-card button {{ width: 100%; margin-top: 6px; }}
+  .auth-card h1 {{ font-size: 1.3rem; margin: 0 0 24px; text-align: center; }}
+  .auth-card form {{ display: flex; flex-direction: column; }}
+  .auth-card label {{ margin-top: 16px; }}
+  .auth-card label:first-of-type {{ margin-top: 0; }}
+  .auth-card input {{ padding: 11px 14px; }}
+  .auth-links {{ text-align: center; margin-top: 22px; display: flex; flex-direction: column; gap: 8px; }}
+  .auth-card button {{ width: 100%; margin-top: 24px; }}
+  .lang-toggle-link {{
+    font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-decoration: none;
+    border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px;
+  }}
+  .lang-toggle-link:hover {{ color: var(--teal); border-color: var(--teal); }}
 </style>
 </head>
 <body>
 {NEURAL_BG}
+<div class="auth-lang-toggle">{_lang_toggle_link(lang, path)}</div>
 <div class="auth-shell">
   <div class="auth-brand">{LOGO_SVG}Montaser Hussam</div>
   <div class="auth-card">
@@ -231,21 +259,24 @@ def auth_page(title: str, body: str) -> str:
 </html>"""
 
 
-def admin_nav(active: str, role: str) -> str:
+def admin_nav(active: str, role: str, lang: str = "en") -> str:
+    from app.dashboard_i18n import get_translator
+
+    t = get_translator(lang)
     links = [
-        ("dashboard", "/admin", "Overview"),
-        ("analytics", "/admin/analytics", "Analytics"),
-        ("content", "/admin/content", "Site text"),
-        ("projects", "/admin/projects", "Projects"),
-        ("pricing", "/admin/pricing", "Pricing"),
-        ("messages", "/admin/messages", "Messages"),
-        ("settings", "/admin/settings", "Settings"),
+        ("dashboard", "/admin", t("nav.overview")),
+        ("analytics", "/admin/analytics", t("nav.analytics")),
+        ("content", "/admin/content", t("nav.content")),
+        ("projects", "/admin/projects", t("nav.projects")),
+        ("pricing", "/admin/pricing", t("nav.pricing")),
+        ("messages", "/admin/messages", t("nav.messages")),
+        ("settings", "/admin/settings", t("nav.settings")),
     ]
     if role == "owner":
-        links.append(("users", "/admin/users", "Users"))
-    links.append(("profile", "/admin/profile", "Profile"))
+        links.append(("users", "/admin/users", t("nav.users")))
+    links.append(("profile", "/admin/profile", t("nav.profile")))
     items = "".join(
-        f'<a href="{href}" class="{"active" if key == active else ""}">{label}</a>'
+        f'<a href="{href}" class="{"active" if key == active else ""}">{esc(label)}</a>'
         for key, href, label in links
     )
-    return f'<nav>{items}<a href="/admin/logout">Log out</a></nav>'
+    return f'<nav>{items}<a href="/admin/logout">{esc(t("nav.logout"))}</a></nav>'

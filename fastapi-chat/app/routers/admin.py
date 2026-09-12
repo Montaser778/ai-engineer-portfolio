@@ -13,7 +13,7 @@ import json
 import os
 import secrets as secrets_mod
 
-from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Cookie, Depends, Form, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -30,12 +30,19 @@ from app.auth import (
     SESSION_COOKIE_NAME,
     SESSION_MAX_AGE_SECONDS,
 )
+from app.dashboard_i18n import get_translator
 from app.db import get_db
 from app.email_service import send_email
 from app.github_storage import public_url_for, read_file, write_file
 from app.translate_service import translate_to_arabic
 from app.models import AdminUser, ChatLog, ContactMessage, PageView, PasswordResetToken, PricingTier, Project, SiteSetting
 from app.templates import admin_nav, auth_page, esc, page
+
+LANG_COOKIE_NAME = "mh_admin_lang"
+
+
+def get_lang(mh_admin_lang: str | None = Cookie(default=None)) -> str:
+    return mh_admin_lang if mh_admin_lang in ("en", "ar") else "en"
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -48,23 +55,32 @@ BACKEND_BASE_URL = os.environ.get("BACKEND_BASE_URL", "https://ai-engineer-portf
 
 
 # ---------------------------------------------------------------- auth ----
+@router.get("/set-lang")
+def set_lang(lang: str, next: str = "/admin"):
+    resp = RedirectResponse(next, status_code=303)
+    if lang in ("en", "ar"):
+        resp.set_cookie(LANG_COOKIE_NAME, lang, max_age=60 * 60 * 24 * 365, samesite="lax")
+    return resp
+
+
 @router.get("/login", response_class=HTMLResponse)
-def login_form(error: str | None = None):
+def login_form(error: str | None = None, lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     body = f"""
-    <h1>Log in</h1>
+    <h1>{esc(t('login.title'))}</h1>
     {'<div class="error">' + esc(error) + '</div>' if error else ''}
     <form method="post" action="/admin/login">
-      <label>Username</label>
+      <label>{esc(t('login.username'))}</label>
       <input name="username" required autofocus>
-      <label>Password</label>
+      <label>{esc(t('login.password'))}</label>
       <input name="password" type="password" required>
-      <button type="submit">Log in</button>
+      <button type="submit">{esc(t('login.submit'))}</button>
     </form>
     <div class="auth-links">
-      <a class="muted-link" href="/admin/forgot-password">Forgot password?</a>
+      <a class="muted-link" href="/admin/forgot-password">{esc(t('login.forgot'))}</a>
     </div>
     """
-    return HTMLResponse(auth_page("Log in", body))
+    return HTMLResponse(auth_page(t("login.title"), body, lang, "/admin/login"))
 
 
 @router.post("/login")
@@ -99,26 +115,25 @@ def logout():
 
 # ------------------------------------------------------ forgot / reset ----
 @router.get("/forgot-password", response_class=HTMLResponse)
-def forgot_password_form(sent: bool = False):
+def forgot_password_form(sent: bool = False, lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     if sent:
-        body = """
-        <h1>Check your email</h1>
-        <p style="text-align:center;color:var(--muted);font-size:14px">
-          If that email is on an account, a reset link is on its way. It expires in 30 minutes.
-        </p>
-        <div class="auth-links"><a class="muted-link" href="/admin/login">Back to log in</a></div>
+        body = f"""
+        <h1>{esc(t('forgot.sent_title'))}</h1>
+        <p style="text-align:center;color:var(--muted);font-size:14px">{esc(t('forgot.sent_body'))}</p>
+        <div class="auth-links"><a class="muted-link" href="/admin/login">{esc(t('login.back'))}</a></div>
         """
     else:
-        body = """
-        <h1>Reset password</h1>
+        body = f"""
+        <h1>{esc(t('forgot.title'))}</h1>
         <form method="post" action="/admin/forgot-password">
-          <label>Email</label>
+          <label>{esc(t('forgot.email'))}</label>
           <input name="email" type="email" required autofocus>
-          <button type="submit">Send reset link</button>
+          <button type="submit">{esc(t('forgot.submit'))}</button>
         </form>
-        <div class="auth-links"><a class="muted-link" href="/admin/login">Back to log in</a></div>
+        <div class="auth-links"><a class="muted-link" href="/admin/login">{esc(t('login.back'))}</a></div>
         """
-    return HTMLResponse(auth_page("Reset password", body))
+    return HTMLResponse(auth_page(t("forgot.title"), body, lang, "/admin/forgot-password"))
 
 
 @router.post("/forgot-password")
@@ -142,18 +157,19 @@ async def forgot_password_submit(email: str = Form(...), db: Session = Depends(g
 
 
 @router.get("/reset-password", response_class=HTMLResponse)
-def reset_password_form(token: str, error: str | None = None):
+def reset_password_form(token: str, error: str | None = None, lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     body = f"""
-    <h1>Set a new password</h1>
+    <h1>{esc(t('reset.title'))}</h1>
     {'<div class="error">' + esc(error) + '</div>' if error else ''}
     <form method="post" action="/admin/reset-password">
       <input type="hidden" name="token" value="{esc(token)}">
-      <label>New password</label>
+      <label>{esc(t('reset.new_password'))}</label>
       <input name="password" type="password" required minlength="8" autofocus>
-      <button type="submit">Set password</button>
+      <button type="submit">{esc(t('reset.submit'))}</button>
     </form>
     """
-    return HTMLResponse(auth_page("Set a new password", body))
+    return HTMLResponse(auth_page(t("reset.title"), body, lang, f"/admin/reset-password?token={token}"))
 
 
 @router.post("/reset-password")
@@ -179,32 +195,33 @@ def reset_password_submit(token: str = Form(...), password: str = Form(...), db:
 
 # -------------------------------------------------------------- profile ----
 @router.get("/profile", response_class=HTMLResponse)
-def profile_form(admin: AdminUser = Depends(get_current_admin), saved: bool = False):
+def profile_form(admin: AdminUser = Depends(get_current_admin), saved: bool = False, lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     body = f"""
-    <div class="page-eyebrow">Account</div>
-    <h1>Profile</h1>
-    {'<div class="flash">Saved.</div>' if saved else ''}
+    <div class="page-eyebrow">{esc(t('eyebrow.account'))}</div>
+    <h1>{esc(t('profile.title'))}</h1>
+    {'<div class="flash">' + esc(t('profile.saved')) + '</div>' if saved else ''}
     <div class="card">
       <form method="post" action="/admin/profile">
-        <label>Username</label>
+        <label>{esc(t('profile.username'))}</label>
         <input value="{esc(admin.username)}" disabled>
-        <label>Email (used for password reset)</label>
+        <label>{esc(t('profile.email'))}</label>
         <input name="email" type="email" value="{esc(admin.email or '')}">
-        <div style="margin-top:16px"><button type="submit">Save email</button></div>
+        <div style="margin-top:16px"><button type="submit">{esc(t('profile.save_email'))}</button></div>
       </form>
     </div>
-    <h2>Change password</h2>
+    <h2>{esc(t('profile.change_password'))}</h2>
     <div class="card">
       <form method="post" action="/admin/profile/password">
-        <label>Current password</label>
+        <label>{esc(t('profile.current_password'))}</label>
         <input name="current_password" type="password" required>
-        <label>New password</label>
+        <label>{esc(t('profile.new_password'))}</label>
         <input name="new_password" type="password" required minlength="8">
-        <div style="margin-top:16px"><button type="submit">Change password</button></div>
+        <div style="margin-top:16px"><button type="submit">{esc(t('profile.change_password'))}</button></div>
       </form>
     </div>
     """
-    return HTMLResponse(page("Profile", body, admin_nav("profile", admin.role)))
+    return HTMLResponse(page(t("profile.title"), body, admin_nav("profile", admin.role, lang), lang, "/admin/profile"))
 
 
 @router.post("/profile")
@@ -235,21 +252,22 @@ def profile_change_password(
 
 # ----------------------------------------------------------- dashboard ----
 @router.get("", response_class=HTMLResponse)
-def dashboard_home(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def dashboard_home(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     unread = db.query(func.count(ContactMessage.id)).filter(ContactMessage.read.is_(False)).scalar()
     total_projects = db.query(func.count(Project.id)).scalar()
     total_chats = db.query(func.count(func.distinct(ChatLog.session_id))).scalar()
     body = f"""
-    <div class="page-eyebrow">Dashboard</div>
-    <h1>Overview</h1>
+    <div class="page-eyebrow">{esc(t('eyebrow.dashboard'))}</div>
+    <h1>{esc(t('overview.title'))}</h1>
     <div class="card">
-      <p>Logged in as <strong>{esc(admin.username)}</strong> ({esc(admin.role)})</p>
+      <p>{esc(t('overview.logged_in_as'))} <strong>{esc(admin.username)}</strong> ({esc(admin.role)})</p>
       <p>{unread} unread contact message(s) · {total_projects} project(s) · {total_chats} chat session(s)</p>
-      <p><a class="btn" href="/admin/messages">View inbox</a></p>
-      <p><a class="btn btn-ghost" href="/admin/analytics">View analytics</a></p>
+      <p><a class="btn" href="/admin/messages">{esc(t('overview.view_inbox'))}</a></p>
+      <p><a class="btn btn-ghost" href="/admin/analytics">{esc(t('overview.view_analytics'))}</a></p>
     </div>
     """
-    return HTMLResponse(page("Overview", body, admin_nav("dashboard", admin.role)))
+    return HTMLResponse(page(t("overview.title"), body, admin_nav("dashboard", admin.role, lang), lang, "/admin"))
 
 
 # ------------------------------------------------------------ analytics ----
@@ -783,11 +801,12 @@ def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(
 
 # ------------------------------------------------------------- settings ----
 @router.get("/settings", response_class=HTMLResponse)
-def settings_page(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def settings_page(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     current_settings = {s.key: s.value for s in db.query(SiteSetting).all()}
     toggle_rows = "".join(
         f"""<label class="settings-toggle-row">
-          <span>{esc(label)}</span>
+          <span>{esc(t(f'settings.toggle.{setting_key}'))}</span>
           <span class="settings-switch">
             <input type="checkbox" name="{esc(setting_key)}"
               {"checked" if current_settings.get(setting_key, True) else ""}
@@ -795,7 +814,7 @@ def settings_page(admin: AdminUser = Depends(get_current_admin), db: Session = D
             <span class="settings-switch-track"></span>
           </span>
         </label>"""
-        for setting_key, label in SETTING_LABELS.items()
+        for setting_key in SETTING_LABELS
     )
 
     integrations = [
@@ -807,28 +826,28 @@ def settings_page(admin: AdminUser = Depends(get_current_admin), db: Session = D
     integration_rows = "".join(
         f"""<div class="settings-integration-row">
           <span>{esc(name)}</span>
-          <span class="badge {'ok' if ok else 'unread'}">{'Connected' if ok else 'Not configured'}</span>
+          <span class="badge {'ok' if ok else 'unread'}">{esc(t('settings.connected') if ok else t('settings.not_configured'))}</span>
         </div>"""
         for name, ok in integrations
     )
 
     body = f"""
-    <div class="page-eyebrow">Configuration</div>
-    <h1>Settings</h1>
+    <div class="page-eyebrow">{esc(t('eyebrow.configuration'))}</div>
+    <h1>{esc(t('settings.title'))}</h1>
 
-    <h2>Homepage sections</h2>
+    <h2>{esc(t('settings.homepage_sections'))}</h2>
     <div class="card">{toggle_rows}</div>
 
-    <h2>Integrations</h2>
+    <h2>{esc(t('settings.integrations'))}</h2>
     <div class="card">{integration_rows}</div>
 
-    <h2>Account</h2>
+    <h2>{esc(t('settings.account'))}</h2>
     <div class="card">
-      <p style="margin:0 0 14px;color:var(--body);font-size:14px">Change your email or password from your profile.</p>
-      <a class="btn btn-ghost" href="/admin/profile">Go to profile</a>
+      <p style="margin:0 0 14px;color:var(--body);font-size:14px">{esc(t('settings.account_body'))}</p>
+      <a class="btn btn-ghost" href="/admin/profile">{esc(t('settings.go_to_profile'))}</a>
     </div>
     """
-    return HTMLResponse(page("Settings", body, admin_nav("settings", admin.role)))
+    return HTMLResponse(page(t("settings.title"), body, admin_nav("settings", admin.role, lang), lang, "/admin/settings"))
 
 
 @router.post("/users/new")
