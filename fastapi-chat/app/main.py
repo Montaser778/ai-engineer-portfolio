@@ -69,40 +69,6 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/debug/groq-models")
-async def debug_groq_models():
-    """Temporary diagnostic endpoint -- lists the models this deployment's
-    GROQ_API_KEY can actually see, to debug the model_not_found errors seen
-    with llama-3.3-70b-versatile / llama-3.1-8b-instant. Never returns the
-    key itself. Remove once the chat is confirmed working."""
-    if not GROQ_API_KEY:
-        return {"configured": False}
-    async with httpx.AsyncClient(timeout=15) as client:
-        resp = await client.get(
-            "https://api.groq.com/openai/v1/models",
-            headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
-        )
-    return {"configured": True, "status_code": resp.status_code, "body": resp.json()}
-
-
-@app.get("/debug/groq-test-call")
-async def debug_groq_test_call():
-    """Temporary: performs the exact same chat-completion call /chat makes,
-    using GROQ_MODEL, and returns Groq's raw response (status + body) so we
-    can see the real failure reason directly instead of only in Render's
-    logs. Never returns the key itself. Remove once chat is confirmed
-    working."""
-    if not GROQ_API_KEY:
-        return {"configured": False}
-    async with httpx.AsyncClient(timeout=20) as client:
-        resp = await client.post(
-            GROQ_URL,
-            headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
-            json={"model": GROQ_MODEL, "messages": [{"role": "user", "content": "hi"}], "max_tokens": 20},
-        )
-    return {"model_used": GROQ_MODEL, "status_code": resp.status_code, "body": resp.text[:2000]}
-
-
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
     if not GROQ_API_KEY:
