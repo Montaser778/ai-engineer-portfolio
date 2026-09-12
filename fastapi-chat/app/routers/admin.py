@@ -34,7 +34,7 @@ from app.db import get_db
 from app.email_service import send_email
 from app.github_storage import public_url_for, read_file, write_file
 from app.translate_service import translate_to_arabic
-from app.models import AdminUser, ChatLog, ContactMessage, PageView, PasswordResetToken, PricingTier, Project
+from app.models import AdminUser, ChatLog, ContactMessage, PageView, PasswordResetToken, PricingTier, Project, SiteSetting
 from app.templates import admin_nav, auth_page, esc, page
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -579,14 +579,31 @@ def delete_pricing(item_id: int, admin: AdminUser = Depends(get_current_admin), 
 
 
 # -------------------------------------------------------------- content ----
+SETTING_LABELS = {
+    "show_hero_chip": 'The "Available for new engagements" chip in the homepage hero',
+    "show_availability_banner": "The dismissible availability banner under the header",
+}
+
+
 @router.get("/content", response_class=HTMLResponse)
-async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_admin)):
+async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
     raw, _ = await read_file(I18N_PATH)
     dict_ = json.loads(raw) if raw else {"en": {}, "ar": {}}
     en = dict_.get("en", {})
     keys = sorted(en.keys())
     if q:
         keys = [k for k in keys if q.lower() in k.lower()]
+
+    current_settings = {s.key: s.value for s in db.query(SiteSetting).all()}
+    toggle_rows = "".join(
+        f"""<label style="display:flex;align-items:center;gap:10px;margin:10px 0;font-family:var(--font-body);font-size:14px;color:var(--body)">
+          <input style="width:auto" type="checkbox" name="{esc(setting_key)}"
+            {"checked" if current_settings.get(setting_key, True) else ""}
+            onchange="fetch('/admin/settings/toggle',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{key:'{setting_key}',value:this.checked}})}})">
+          {esc(label)}
+        </label>"""
+        for setting_key, label in SETTING_LABELS.items()
+    )
     rows = "".join(
         f"""<div class="card">
           <form method="post" action="/admin/content/save">
@@ -605,6 +622,9 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
     )
     body = f"""
     <h1>Site text</h1>
+    <h2>Homepage sections</h2>
+    <div class="card">{toggle_rows}</div>
+    <h2>Text keys</h2>
     <form method="get" action="/admin/content" style="margin-bottom:16px">
       <input name="q" value="{esc(q)}" placeholder="Search keys, e.g. hero.h1">
     </form>
@@ -640,6 +660,21 @@ async def translate_endpoint(payload: dict, admin: AdminUser = Depends(get_curre
     text = payload.get("text", "")
     translation = await translate_to_arabic(text)
     return {"translation": translation}
+
+
+@router.post("/settings/toggle")
+def toggle_setting(payload: dict, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+    key = payload.get("key")
+    value = bool(payload.get("value"))
+    if key not in SETTING_LABELS:
+        raise HTTPException(status_code=400, detail="Unknown setting.")
+    row = db.query(SiteSetting).filter(SiteSetting.key == key).first()
+    if row:
+        row.value = value
+    else:
+        db.add(SiteSetting(key=key, value=value))
+    db.commit()
+    return {"status": "ok"}
 
 
 @router.post("/content/save")

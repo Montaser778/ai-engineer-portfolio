@@ -7,9 +7,23 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import PricingTier, Project
+from app.models import PricingTier, Project, SiteSetting
 
 router = APIRouter(prefix="/content", tags=["content"])
+
+# Every toggle the public site knows how to check, with its default when
+# never explicitly set. Keep this list in sync with the checkboxes on the
+# admin Site text page.
+SETTING_DEFAULTS = {
+    "show_hero_chip": True,
+    "show_availability_banner": True,
+}
+
+
+@router.get("/settings")
+def get_settings(db: Session = Depends(get_db)):
+    rows = {s.key: s.value for s in db.query(SiteSetting).all()}
+    return {key: rows.get(key, default) for key, default in SETTING_DEFAULTS.items()}
 
 
 @router.get("/projects")

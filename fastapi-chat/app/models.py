@@ -19,6 +19,18 @@ class AdminUser(Base):
     locked_until: Mapped[datetime.datetime | None] = mapped_column(DateTime, nullable=True)
 
 
+class SiteSetting(Base):
+    """Generic on/off switches the public site checks at runtime (e.g.
+    "show the availability chip"), so a specific element can be hidden
+    without needing a code change/redeploy -- editable from the dashboard's
+    Site text page. Value defaults to visible (True) when a key has never
+    been set."""
+    __tablename__ = "site_settings"
+
+    key: Mapped[str] = mapped_column(String(100), primary_key=True)
+    value: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
 class PasswordResetToken(Base):
     """Short-lived, single-use tokens for the forgot-password flow. Storing
     these server-side (rather than only trusting a signed URL) lets a used
