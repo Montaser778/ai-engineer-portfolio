@@ -28,12 +28,18 @@ BASE_STYLE = """
   html { background: var(--ink); }
   body {
     margin: 0; color: var(--body); font-family: var(--font-body); min-height: 100vh;
-    background:
-      radial-gradient(ellipse 70% 40% at 50% 0%, rgba(124,92,255,.10), transparent 62%),
-      radial-gradient(ellipse 60% 45% at 100% 100%, rgba(34,211,197,.07), transparent 65%),
-      var(--ink);
-    background-attachment: fixed;
+    background: var(--ink);
+    position: relative;
   }
+  .neural-bg-host {
+    position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  #neural-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    mask-image: radial-gradient(ellipse at center, #000 45%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 45%, transparent 90%);
+  }
+  header, main { position: relative; z-index: 1; }
   a { color: var(--teal); }
   h1, h2, .brand { font-family: var(--font-display); }
   header {
@@ -122,6 +128,13 @@ FONT_LINK = (
     '&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">'
 )
 
+# Same animated neural-network canvas as the public site's hero, loaded
+# straight from the live site rather than duplicated here -- one script,
+# one place it can go stale. Harmless if the site is ever briefly
+# unreachable: neural-bg.js no-ops without errors if anything's missing.
+NEURAL_BG = '<div class="neural-bg-host"><canvas id="neural-bg" aria-hidden="true"></canvas></div>'
+NEURAL_BG_SCRIPT = '<script src="https://eng7montaser.tech/assets/js/neural-bg.js"></script>'
+
 
 def esc(value) -> str:
     return html.escape(str(value), quote=True)
@@ -162,6 +175,7 @@ def page(title: str, body: str, nav: str = "") -> str:
 <style>{BASE_STYLE}</style>
 </head>
 <body>
+{NEURAL_BG}
 <header>
   <span class="brand">{LOGO_SVG}Portfolio Admin</span>
   {nav}
@@ -169,6 +183,7 @@ def page(title: str, body: str, nav: str = "") -> str:
 <main>
 {body}
 </main>
+{NEURAL_BG_SCRIPT}
 {IDLE_LOGOUT_SCRIPT}
 </body>
 </html>"""
@@ -190,14 +205,8 @@ def auth_page(title: str, body: str) -> str:
 {FONT_LINK}
 <style>
 {BASE_STYLE}
-  body {{
-    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
-    background:
-      radial-gradient(ellipse 70% 55% at 50% 20%, rgba(124,92,255,.18), transparent 62%),
-      radial-gradient(ellipse 80% 60% at 50% 85%, rgba(34,211,197,.12), transparent 65%),
-      var(--ink);
-  }}
-  .auth-shell {{ width: 100%; max-width: 380px; }}
+  body {{ min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }}
+  .auth-shell {{ width: 100%; max-width: 380px; position: relative; z-index: 1; }}
   .auth-brand {{ display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 28px; color: var(--sand); font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; }}
   .auth-brand svg {{ width: 28px; height: 28px; }}
   .auth-card {{
@@ -210,12 +219,14 @@ def auth_page(title: str, body: str) -> str:
 </style>
 </head>
 <body>
+{NEURAL_BG}
 <div class="auth-shell">
   <div class="auth-brand">{LOGO_SVG}Montaser Hussam</div>
   <div class="auth-card">
 {body}
   </div>
 </div>
+{NEURAL_BG_SCRIPT}
 </body>
 </html>"""
 
