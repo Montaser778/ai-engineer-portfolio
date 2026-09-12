@@ -5,7 +5,7 @@ a local SQLite file only for local development when DATABASE_URL is unset.
 """
 import os
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./dev.db")
@@ -36,6 +36,26 @@ def get_db():
         db.close()
 
 
+def _add_missing_columns():
+    """Base.metadata.create_all() only creates tables that don't exist yet
+    -- it never adds columns to a table that's already there. There's no
+    Alembic set up (overkill for one small nullable column so far), so this
+    is a deliberately minimal, idempotent ALTER TABLE run at startup for
+    columns added after the table already existed in production.
+    """
+    is_sqlite = DATABASE_URL.startswith("sqlite")
+    statements = [
+        "ALTER TABLE admin_users ADD COLUMN email VARCHAR(255)" + ("" if is_sqlite else " NULL"),
+    ]
+    with engine.connect() as conn:
+        for stmt in statements:
+            try:
+                conn.execute(text(stmt))
+                conn.commit()
+            except Exception:
+                conn.rollback()  # column already exists -- fine, this is idempotent
+
+
 def init_db_and_seed_owner():
     """Creates tables if they don't exist, and seeds the one owner account
     from ADMIN_USERNAME/ADMIN_PASSWORD env vars on first run only -- mirrors
@@ -46,6 +66,7 @@ def init_db_and_seed_owner():
     from app.models import AdminUser
 
     Base.metadata.create_all(bind=engine)
+    _add_missing_columns()
 
     username = os.environ.get("ADMIN_USERNAME")
     password = os.environ.get("ADMIN_PASSWORD")

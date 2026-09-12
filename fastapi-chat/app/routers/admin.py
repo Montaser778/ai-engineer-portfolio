@@ -10,6 +10,8 @@ structure to make dashboard-editable the way projects.html's cards are.
 """
 import datetime
 import json
+import os
+import secrets as secrets_mod
 
 from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -29,13 +31,19 @@ from app.auth import (
     SESSION_MAX_AGE_SECONDS,
 )
 from app.db import get_db
+from app.email_service import send_email
 from app.github_storage import public_url_for, read_file, write_file
-from app.models import AdminUser, ChatLog, ContactMessage, PricingTier, Project
-from app.templates import admin_nav, esc, page
+from app.models import AdminUser, ChatLog, ContactMessage, PasswordResetToken, PricingTier, Project
+from app.templates import admin_nav, auth_page, esc, page
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 I18N_PATH = "assets/data/i18n.json"
+RESET_TOKEN_MAX_AGE_MINUTES = 30
+# Base URL of this backend itself (not the static site) -- used to build the
+# reset-password link emailed to the user. Set to wherever this service is
+# actually deployed; defaults to the current known Render URL.
+BACKEND_BASE_URL = os.environ.get("BACKEND_BASE_URL", "https://ai-engineer-portfolio-va7f.onrender.com")
 
 
 # ---------------------------------------------------------------- auth ----
@@ -44,17 +52,18 @@ def login_form(error: str | None = None):
     body = f"""
     <h1>Log in</h1>
     {'<div class="error">' + esc(error) + '</div>' if error else ''}
-    <div class="card" style="max-width:360px">
-      <form method="post" action="/admin/login">
-        <label>Username</label>
-        <input name="username" required autofocus>
-        <label>Password</label>
-        <input name="password" type="password" required>
-        <div style="margin-top:16px"><button type="submit">Log in</button></div>
-      </form>
+    <form method="post" action="/admin/login">
+      <label>Username</label>
+      <input name="username" required autofocus>
+      <label>Password</label>
+      <input name="password" type="password" required>
+      <button type="submit">Log in</button>
+    </form>
+    <div class="auth-links">
+      <a class="muted-link" href="/admin/forgot-password">Forgot password?</a>
     </div>
     """
-    return HTMLResponse(page("Log in", body))
+    return HTMLResponse(auth_page("Log in", body))
 
 
 @router.post("/login")
@@ -85,6 +94,140 @@ def logout():
     resp = RedirectResponse("/admin/login", status_code=303)
     resp.delete_cookie(SESSION_COOKIE_NAME)
     return resp
+
+
+# ------------------------------------------------------ forgot / reset ----
+@router.get("/forgot-password", response_class=HTMLResponse)
+def forgot_password_form(sent: bool = False):
+    if sent:
+        body = """
+        <h1>Check your email</h1>
+        <p style="text-align:center;color:var(--muted);font-size:14px">
+          If that email is on an account, a reset link is on its way. It expires in 30 minutes.
+        </p>
+        <div class="auth-links"><a class="muted-link" href="/admin/login">Back to log in</a></div>
+        """
+    else:
+        body = """
+        <h1>Reset password</h1>
+        <form method="post" action="/admin/forgot-password">
+          <label>Email</label>
+          <input name="email" type="email" required autofocus>
+          <button type="submit">Send reset link</button>
+        </form>
+        <div class="auth-links"><a class="muted-link" href="/admin/login">Back to log in</a></div>
+        """
+    return HTMLResponse(auth_page("Reset password", body))
+
+
+@router.post("/forgot-password")
+async def forgot_password_submit(email: str = Form(...), db: Session = Depends(get_db)):
+    user = db.query(AdminUser).filter(AdminUser.email == email).first()
+    if user:
+        token = secrets_mod.token_urlsafe(32)
+        db.add(PasswordResetToken(user_id=user.id, token=token))
+        db.commit()
+        reset_url = f"{BACKEND_BASE_URL}/admin/reset-password?token={token}"
+        await send_email(
+            email,
+            "Reset your Portfolio Admin password",
+            f'<p>Click below to set a new password. This link expires in {RESET_TOKEN_MAX_AGE_MINUTES} minutes.</p>'
+            f'<p><a href="{reset_url}">{reset_url}</a></p>'
+            f'<p>If you did not request this, you can ignore this email.</p>',
+        )
+    # Always the same response whether or not the email matched -- never
+    # reveal which emails have an account.
+    return RedirectResponse("/admin/forgot-password?sent=true", status_code=303)
+
+
+@router.get("/reset-password", response_class=HTMLResponse)
+def reset_password_form(token: str, error: str | None = None):
+    body = f"""
+    <h1>Set a new password</h1>
+    {'<div class="error">' + esc(error) + '</div>' if error else ''}
+    <form method="post" action="/admin/reset-password">
+      <input type="hidden" name="token" value="{esc(token)}">
+      <label>New password</label>
+      <input name="password" type="password" required minlength="8" autofocus>
+      <button type="submit">Set password</button>
+    </form>
+    """
+    return HTMLResponse(auth_page("Set a new password", body))
+
+
+@router.post("/reset-password")
+def reset_password_submit(token: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    record = db.query(PasswordResetToken).filter(PasswordResetToken.token == token).first()
+    valid = (
+        record
+        and not record.used
+        and record.created_at > datetime.datetime.utcnow() - datetime.timedelta(minutes=RESET_TOKEN_MAX_AGE_MINUTES)
+    )
+    if not valid:
+        return RedirectResponse(f"/admin/reset-password?token={token}&error=This+link+has+expired+or+was+already+used.", status_code=303)
+    user = db.query(AdminUser).filter(AdminUser.id == record.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404)
+    user.password_hash = hash_password(password)
+    user.failed_login_count = 0
+    user.locked_until = None
+    record.used = True
+    db.commit()
+    return RedirectResponse("/admin/login", status_code=303)
+
+
+# -------------------------------------------------------------- profile ----
+@router.get("/profile", response_class=HTMLResponse)
+def profile_form(admin: AdminUser = Depends(get_current_admin), saved: bool = False):
+    body = f"""
+    <h1>Profile</h1>
+    {'<div class="flash">Saved.</div>' if saved else ''}
+    <div class="card">
+      <form method="post" action="/admin/profile">
+        <label>Username</label>
+        <input value="{esc(admin.username)}" disabled>
+        <label>Email (used for password reset)</label>
+        <input name="email" type="email" value="{esc(admin.email or '')}">
+        <div style="margin-top:16px"><button type="submit">Save email</button></div>
+      </form>
+    </div>
+    <h2>Change password</h2>
+    <div class="card">
+      <form method="post" action="/admin/profile/password">
+        <label>Current password</label>
+        <input name="current_password" type="password" required>
+        <label>New password</label>
+        <input name="new_password" type="password" required minlength="8">
+        <div style="margin-top:16px"><button type="submit">Change password</button></div>
+      </form>
+    </div>
+    """
+    return HTMLResponse(page("Profile", body, admin_nav("profile", admin.role)))
+
+
+@router.post("/profile")
+def profile_save(
+    email: str = Form(""),
+    admin: AdminUser = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    admin.email = email or None
+    db.commit()
+    return RedirectResponse("/admin/profile?saved=true", status_code=303)
+
+
+@router.post("/profile/password")
+def profile_change_password(
+    current_password: str = Form(...),
+    new_password: str = Form(...),
+    admin: AdminUser = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    if not verify_password(current_password, admin.password_hash):
+        raise HTTPException(status_code=400, detail="Current password is incorrect.")
+    admin.password_hash = hash_password(new_password)
+    db.commit()
+    return RedirectResponse("/admin/profile?saved=true", status_code=303)
 
 
 # ----------------------------------------------------------- dashboard ----
@@ -486,7 +629,7 @@ def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(
     users = db.query(AdminUser).order_by(AdminUser.id).all()
     rows = "".join(
         f"""<tr>
-          <td>{esc(u.username)}</td><td>{esc(u.role)}</td>
+          <td>{esc(u.username)}</td><td>{esc(u.email or '—')}</td><td>{esc(u.role)}</td>
           <td>{'' if u.role == 'owner' else '<form class="inline" method="post" action="/admin/users/' + str(u.id) + '/delete" onsubmit="return confirm(\'Remove this user?\')"><button class="btn-danger" type="submit">Remove</button></form>'}</td>
         </tr>"""
         for u in users
@@ -494,13 +637,14 @@ def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(
     body = f"""
     <h1>Users</h1>
     <div class="card">
-      <table><thead><tr><th>Username</th><th>Role</th><th></th></tr></thead>
+      <table><thead><tr><th>Username</th><th>Email</th><th>Role</th><th></th></tr></thead>
       <tbody>{rows}</tbody></table>
     </div>
     <h2>Add editor</h2>
     <div class="card">
       <form method="post" action="/admin/users/new">
         <label>Username</label><input name="username" required>
+        <label>Email (needed for them to reset their own password)</label><input name="email" type="email">
         <label>Password</label><input name="password" type="password" required minlength="8">
         <div style="margin-top:16px"><button type="submit">Add</button></div>
       </form>
@@ -513,12 +657,13 @@ def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(
 def create_user(
     username: str = Form(...),
     password: str = Form(...),
+    email: str = Form(""),
     admin: AdminUser = Depends(require_owner),
     db: Session = Depends(get_db),
 ):
     if db.query(AdminUser).filter(AdminUser.username == username).first():
         raise HTTPException(status_code=400, detail="Username already taken.")
-    db.add(AdminUser(username=username, password_hash=hash_password(password), role="editor"))
+    db.add(AdminUser(username=username, email=email or None, password_hash=hash_password(password), role="editor"))
     db.commit()
     return RedirectResponse("/admin/users", status_code=303)
 
