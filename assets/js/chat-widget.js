@@ -12,14 +12,15 @@
 
   var history = [];
   var open = false;
+  var greeted = false;
 
   var root = document.createElement("div");
   root.id = "chat-widget";
   root.innerHTML =
     '<button id="chat-toggle" type="button" aria-label="Open chat assistant" aria-expanded="false">' +
-    '<span class="chat-toggle-icon">💬</span></button>' +
-    '<div id="chat-panel" role="dialog" aria-modal="false" aria-label="Chat assistant" hidden>' +
-    '<div class="chat-header"><span>Ask about Montaser</span>' +
+    '<span class="chat-toggle-icon chat-icon-bubble">💬</span><span class="chat-toggle-icon chat-icon-close">×</span></button>' +
+    '<div id="chat-panel" role="dialog" aria-modal="false" aria-label="Chat assistant">' +
+    '<div class="chat-header"><span class="chat-header-title"><span class="chat-status-dot"></span>Ask about Montaser</span>' +
     '<button id="chat-close" type="button" aria-label="Close chat">×</button></div>' +
     '<div id="chat-log" role="log" aria-live="polite"></div>' +
     '<form id="chat-form">' +
@@ -37,9 +38,16 @@
 
   function setOpen(next) {
     open = next;
-    panel.hidden = !open;
+    root.classList.toggle("chat-open", open);
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
-    if (open) input.focus();
+    panel.setAttribute("aria-hidden", open ? "false" : "true");
+    if (open) {
+      input.focus();
+      if (!greeted) {
+        greeted = true;
+        addBubble("assistant", "Hi! Ask me anything about Montaser's work, stack, or availability.");
+      }
+    }
   }
 
   toggle.addEventListener("click", function () { setOpen(!open); });
@@ -57,6 +65,15 @@
     return bubble;
   }
 
+  function addTypingBubble() {
+    var bubble = document.createElement("div");
+    bubble.className = "chat-bubble chat-bubble-assistant chat-typing";
+    bubble.innerHTML = "<span></span><span></span><span></span>";
+    log.appendChild(bubble);
+    log.scrollTop = log.scrollHeight;
+    return bubble;
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var message = input.value.trim();
@@ -64,7 +81,7 @@
     input.value = "";
     input.disabled = true;
     addBubble("user", message);
-    var pending = addBubble("assistant", "…");
+    var pending = addTypingBubble();
 
     fetch(CHAT_API_URL.replace(/\/$/, "") + "/chat", {
       method: "POST",
@@ -76,11 +93,13 @@
         return res.json();
       })
       .then(function (data) {
+        pending.classList.remove("chat-typing");
         pending.textContent = data.reply;
         history.push({ role: "user", content: message });
         history.push({ role: "assistant", content: data.reply });
       })
       .catch(function () {
+        pending.classList.remove("chat-typing");
         pending.textContent = "Sorry, the assistant is unavailable right now — try the contact page instead.";
       })
       .finally(function () {
