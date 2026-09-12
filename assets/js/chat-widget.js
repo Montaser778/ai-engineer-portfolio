@@ -6,7 +6,7 @@
   // Set this to the deployed backend's base URL once it's live, e.g.
   // "https://portfolio-chat.onrender.com". Left blank, the widget does not
   // render at all.
-  var CHAT_API_URL = "";
+  var CHAT_API_URL = "https://ai-engineer-portfolio-va7f.onrender.com";
 
   if (!CHAT_API_URL) return;
 
