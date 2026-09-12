@@ -76,6 +76,7 @@
     <div class="container" style="max-width:760px">
       <div class="card">
         <h3>Inputs</h3>
+        <div class="table-wrap">
         <table style="margin-top:10px">
           <tbody>
             <tr><td>Expected monthly active users</td><td>_______________</td></tr>
@@ -86,10 +87,12 @@
             <tr><td>Turns per session</td><td>_______________</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div class="card" style="margin-top:20px">
         <h3>Cost breakdown — fill in your provider's published per-unit price</h3>
+        <div class="table-wrap">
         <table style="margin-top:10px">
           <thead><tr><th>Component</th><th>Unit</th><th>Rate</th><th>Monthly cost</th></tr></thead>
           <tbody>
@@ -101,16 +104,19 @@
             <tr><td><strong>Total</strong></td><td></td><td></td><td><strong>_______</strong></td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div class="card" style="margin-top:20px">
         <h3>Per-user economics</h3>
+        <div class="table-wrap">
         <table style="margin-top:10px">
           <tbody>
             <tr><td>Total monthly cost ÷ monthly active users</td><td><strong>= cost per user</strong></td></tr>
             <tr><td>Cost per user vs. planned price per user</td><td><strong>= gross margin</strong></td></tr>
           </tbody>
         </table>
+        </div>
         <p class="form-note" style="margin-top:14px">Arabic sessions typically add an endpointing penalty to turn latency, not directly to cost — but a longer average session (from re-prompts on cut-off speech) does raise cost per user. Model that separately if Arabic is a meaningful share of traffic.</p>
       </div>
 
