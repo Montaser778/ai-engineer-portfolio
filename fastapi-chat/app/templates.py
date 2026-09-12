@@ -64,6 +64,16 @@ BASE_STYLE = """
   .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-family: var(--font-mono); }
   .badge.unread { color: var(--teal); border-color: var(--teal); }
   form.inline { display: inline; }
+  .analytics-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+  .analytics-stat { text-align: center; margin-bottom: 0; }
+  .analytics-stat-num { font-family: var(--font-display); font-size: 1.8rem; color: var(--sand); font-weight: 600; }
+  .analytics-stat-lbl { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+  .analytics-bars { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
+  .analytics-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; }
+  .analytics-bar { width: 100%; max-width: 28px; background: linear-gradient(180deg, var(--violet), var(--teal)); border-radius: 4px 4px 0 0; transition: filter .15s ease; }
+  .analytics-bar-col:hover .analytics-bar { filter: brightness(1.25); }
+  .analytics-bar-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  @media (max-width: 640px) { .analytics-stats { grid-template-columns: repeat(2, 1fr); } }
   .muted-link { color: var(--muted); font-size: 13px; text-decoration: none; }
   .muted-link:hover { color: var(--teal); }
 """
@@ -151,6 +161,7 @@ def auth_page(title: str, body: str) -> str:
 def admin_nav(active: str, role: str) -> str:
     links = [
         ("dashboard", "/admin", "Overview"),
+        ("analytics", "/admin/analytics", "Analytics"),
         ("content", "/admin/content", "Site text"),
         ("projects", "/admin/projects", "Projects"),
         ("pricing", "/admin/pricing", "Pricing"),

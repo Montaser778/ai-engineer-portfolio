@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.db import get_db, init_db_and_seed_owner
-from app.models import ChatLog, ContactMessage
+from app.models import ChatLog, ContactMessage, PageView
 from app.routers import admin, content
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
@@ -101,6 +101,12 @@ class ContactRequest(BaseModel):
     message: str = Field(min_length=1, max_length=5000)
 
 
+class TrackRequest(BaseModel):
+    path: str = Field(min_length=1, max_length=300)
+    visitor_id: str = Field(min_length=1, max_length=64)
+    referrer: str = Field(default="", max_length=300)
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -110,6 +116,19 @@ def health():
 def contact(req: ContactRequest, db: Session = Depends(get_db)):
     db.add(ContactMessage(name=req.name, email=req.email, message=req.message))
     db.commit()
+    return {"status": "ok"}
+
+
+@app.post("/track")
+def track(req: TrackRequest, db: Session = Depends(get_db)):
+    """Best-effort visitor analytics beacon -- must never surface an error
+    to the page that called it (a broken analytics call is not something a
+    visitor should ever see or have block anything)."""
+    try:
+        db.add(PageView(path=req.path, visitor_id=req.visitor_id, referrer=req.referrer))
+        db.commit()
+    except Exception:
+        db.rollback()
     return {"status": "ok"}
 
 

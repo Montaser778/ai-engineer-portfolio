@@ -34,7 +34,7 @@ from app.db import get_db
 from app.email_service import send_email
 from app.github_storage import public_url_for, read_file, write_file
 from app.translate_service import translate_to_arabic
-from app.models import AdminUser, ChatLog, ContactMessage, PasswordResetToken, PricingTier, Project
+from app.models import AdminUser, ChatLog, ContactMessage, PageView, PasswordResetToken, PricingTier, Project
 from app.templates import admin_nav, auth_page, esc, page
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -244,9 +244,73 @@ def dashboard_home(admin: AdminUser = Depends(get_current_admin), db: Session = 
       <p>Logged in as <strong>{esc(admin.username)}</strong> ({esc(admin.role)})</p>
       <p>{unread} unread contact message(s) · {total_projects} project(s) · {total_chats} chat session(s)</p>
       <p><a class="btn" href="/admin/messages">View inbox</a></p>
+      <p><a class="btn btn-ghost" href="/admin/analytics">View analytics</a></p>
     </div>
     """
     return HTMLResponse(page("Overview", body, admin_nav("dashboard", admin.role)))
+
+
+# ------------------------------------------------------------ analytics ----
+@router.get("/analytics", response_class=HTMLResponse)
+def analytics(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+    now = datetime.datetime.utcnow()
+    today_start = datetime.datetime(now.year, now.month, now.day)
+
+    total_views = db.query(func.count(PageView.id)).scalar()
+    total_visitors = db.query(func.count(func.distinct(PageView.visitor_id))).scalar()
+    views_today = db.query(func.count(PageView.id)).filter(PageView.created_at >= today_start).scalar()
+    visitors_today = (
+        db.query(func.count(func.distinct(PageView.visitor_id))).filter(PageView.created_at >= today_start).scalar()
+    )
+
+    # Last 14 days, oldest first, as (date, view count, unique visitor count).
+    daily = []
+    max_count = 1
+    for i in range(13, -1, -1):
+        day_start = today_start - datetime.timedelta(days=i)
+        day_end = day_start + datetime.timedelta(days=1)
+        count = (
+            db.query(func.count(PageView.id))
+            .filter(PageView.created_at >= day_start, PageView.created_at < day_end)
+            .scalar()
+        )
+        daily.append((day_start.strftime("%b %d"), count))
+        max_count = max(max_count, count)
+
+    bars = "".join(
+        f"""<div class="analytics-bar-col" title="{esc(label)}: {count} view(s)">
+          <div class="analytics-bar" style="height:{max(4, round(count / max_count * 120))}px"></div>
+          <span class="analytics-bar-label">{esc(label[-2:])}</span>
+        </div>"""
+        for label, count in daily
+    )
+
+    top_pages = (
+        db.query(PageView.path, func.count(PageView.id).label("n"))
+        .group_by(PageView.path)
+        .order_by(func.count(PageView.id).desc())
+        .limit(10)
+        .all()
+    )
+    top_rows = "".join(f"<tr><td>{esc(p)}</td><td>{n}</td></tr>" for p, n in top_pages)
+
+    body = f"""
+    <h1>Analytics</h1>
+    <div class="analytics-stats">
+      <div class="card analytics-stat"><div class="analytics-stat-num">{total_views}</div><div class="analytics-stat-lbl">Total views</div></div>
+      <div class="card analytics-stat"><div class="analytics-stat-num">{total_visitors}</div><div class="analytics-stat-lbl">Unique visitors</div></div>
+      <div class="card analytics-stat"><div class="analytics-stat-num">{views_today}</div><div class="analytics-stat-lbl">Views today</div></div>
+      <div class="card analytics-stat"><div class="analytics-stat-num">{visitors_today}</div><div class="analytics-stat-lbl">Visitors today</div></div>
+    </div>
+    <h2>Last 14 days</h2>
+    <div class="card"><div class="analytics-bars">{bars}</div></div>
+    <h2>Top pages</h2>
+    <div class="card">
+      <table><thead><tr><th>Path</th><th>Views</th></tr></thead>
+      <tbody>{top_rows or '<tr><td colspan="2">No data yet.</td></tr>'}</tbody></table>
+    </div>
+    """
+    return HTMLResponse(page("Analytics", body, admin_nav("analytics", admin.role)))
 
 
 # ------------------------------------------------------------ projects ----

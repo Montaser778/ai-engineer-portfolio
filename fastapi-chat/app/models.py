@@ -82,3 +82,18 @@ class ChatLog(Base):
     role: Mapped[str] = mapped_column(String(20))  # "user" | "assistant"
     content: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
+
+
+class PageView(Base):
+    """One row per page load, fired by assets/js/analytics.js. visitor_id is
+    a random id the browser keeps in localStorage (not a fingerprint, not
+    cross-site) -- good enough to distinguish "unique visitors" from
+    "total views" for a portfolio site without adding a real analytics
+    vendor or a cookie-consent banner."""
+    __tablename__ = "page_views"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    path: Mapped[str] = mapped_column(String(300))
+    visitor_id: Mapped[str] = mapped_column(String(64), index=True)
+    referrer: Mapped[str] = mapped_column(String(300), default="")
+    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow, index=True)

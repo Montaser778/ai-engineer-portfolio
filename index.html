@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');document.documentElement.setAttribute('data-theme',(['dark','light','system'].indexOf(t)!==-1?t:'system'));if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('mh-theme');var l=localStorage.getItem('mh-lang');var theme=(['dark','light','system'].indexOf(t)!==-1)?t:(function(){var h=new Date().getHours();return (h>=18||h<6)?'dark':'light';})();document.documentElement.setAttribute('data-theme',theme);if(l){document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Montaser Hussam — AI &amp; ML Engineer, Remote Worldwide</title>
 <meta name="description" content="Montaser Hussam builds real-time voice agents, multi-agent architectures and production LLM pipelines — from microphone to deployed endpoint.">
@@ -222,6 +222,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="assets/js/scene.js"></script>
 <script src="assets/js/site.js"></script>
+<script src="assets/js/analytics.js"></script>
 <script src="assets/js/chat-widget.js"></script>
 <script src="assets/js/neural-bg.js"></script>
 <script src="assets/js/hero3d.js"></script>
