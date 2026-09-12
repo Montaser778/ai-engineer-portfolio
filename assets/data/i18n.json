@@ -526,7 +526,6 @@
     "voiceai.pricing.p": "The Build tier covers a full voice or agent system end to end, deployed, across 4–8 weeks. Full tiers and payment terms are on the pricing page.",
     "voiceai.pricing.cta": "See full pricing",
     "voiceai.cta.h2": "Have a voice agent to build or fix?",
-
     "llmagents.label": "Specialism",
     "llmagents.h1": "Your single prompt gives a confident answer that's wrong half the time.",
     "llmagents.lede": "Multi-agent LLM development: pipelines where disagreement between agents is the feature, resolved explicitly at synthesis and checked against a scored evaluation set.",
@@ -571,7 +570,6 @@
     "llmagents.pricing.h2": "A multi-agent build starts at $6,000",
     "llmagents.pricing.p": "The Build tier covers a full agent or LLM system end to end, deployed, across 4–8 weeks. Full tiers and payment terms are on the pricing page.",
     "llmagents.cta.h2": "Have an agent or LLM pipeline to build?",
-
     "arabicai.label": "Specialism",
     "arabicai.h1": "Your Arabic AI feature is an English one with translated strings.",
     "arabicai.lede": "Bilingual Arabic AI engineering: native RTL interfaces and language-aware voice pipelines, built for Arabic rather than translated into it.",
@@ -615,7 +613,6 @@
     "arabicai.pricing.h2": "Bilingual work starts at $6,000",
     "arabicai.pricing.p": "The Build tier covers a full bilingual voice or agent system end to end, deployed, across 4–8 weeks. Full tiers and payment terms are on the pricing page.",
     "arabicai.cta.h2": "Have a bilingual product to build?",
-
     "mlprod.label": "Specialism",
     "mlprod.h1": "It works on your laptop. That was never the hard part.",
     "mlprod.lede": "Taking an ML or LLM prototype to production: a real deployed API, monitored, cost-controlled and load-tested before real users find the gaps.",
@@ -671,7 +668,7 @@
     "nav.services": "الخدمات",
     "nav.pricing": "الأسعار",
     "nav.contact": "تواصل",
-    "hero.chip": "متاح لمشاريع جديدة",
+    "hero.chip": "���� ������� �����",
     "hero.label": "مهندس ذكاء اصطناعي — عن بعد لأي مكان",
     "hero.lede": "وكلاء صوتيون بزمن استجابة منخفض، أنظمة وكلاء متعددة، وخطوط إنتاج جاهزة لنماذج اللغة — من الميكروفون إلى الخادم.",
     "hero.cta1": "شاهد الأعمال",
@@ -1189,7 +1186,6 @@
     "voiceai.pricing.p": "فئة Build بتغطي نظام صوتي أو وكيل كامل من البداية للنهاية، منشور، خلال 4-8 أسابيع. كل الفئات وشروط الدفع موجودة بصفحة الأسعار.",
     "voiceai.pricing.cta": "شوف كل التسعير",
     "voiceai.cta.h2": "عندك وكيل صوتي محتاج بناء أو إصلاح؟",
-
     "llmagents.label": "تخصص",
     "llmagents.h1": "الموجه الواحد بيعطيك جواب واثق وغلط بنص الحالات.",
     "llmagents.lede": "تطوير أنظمة وكلاء متعددة بالنماذج اللغوية: بايبلاينات وين الاختلاف بين الوكلاء هو الميزة، بينحل صراحة بمرحلة التوليف ويتفحص مقابل مجموعة تقييم مُقيَّمة.",
@@ -1234,7 +1230,6 @@
     "llmagents.pricing.h2": "بناء نظام وكلاء متعددة يبلش من 6,000$",
     "llmagents.pricing.p": "فئة Build بتغطي نظام وكلاء أو LLM كامل من البداية للنهاية، منشور، خلال 4-8 أسابيع. كل الفئات وشروط الدفع موجودة بصفحة الأسعار.",
     "llmagents.cta.h2": "عندك بايبلاين وكلاء أو LLM محتاج بناء؟",
-
     "arabicai.label": "تخصص",
     "arabicai.h1": "ميزة الذكاء الاصطناعي العربية تبعك هي بالأساس إنجليزية بنصوص مترجمة.",
     "arabicai.lede": "هندسة ذكاء اصطناعي عربي ثنائي اللغة: واجهات RTL أصيلة وبايبلاينات صوتية واعية للغة، مبنية للعربي مش مترجمة إله.",
@@ -1278,7 +1273,6 @@
     "arabicai.pricing.h2": "الشغل ثنائي اللغة يبلش من 6,000$",
     "arabicai.pricing.p": "فئة Build بتغطي نظام صوتي أو وكيل ثنائي اللغة كامل من البداية للنهاية، منشور، خلال 4-8 أسابيع. كل الفئات وشروط الدفع موجودة بصفحة الأسعار.",
     "arabicai.cta.h2": "عندك منتج ثنائي اللغة محتاج بناء؟",
-
     "mlprod.label": "تخصص",
     "mlprod.h1": "شغال على اللابتوب تبعك. هاد ما كان الجزء الصعب أبداً.",
     "mlprod.lede": "أخذ نموذج ML أو LLM تجريبي للإنتاج: API منشور فعلياً، مراقَب، مضبوط التكلفة، ومختبر تحت الحمل قبل ما المستخدمين الحقيقيين يلاقوا الثغرات.",
