@@ -43,7 +43,8 @@ BASE_STYLE = """
   a { color: var(--teal); }
   h1, h2, .brand { font-family: var(--font-display); }
   header {
-    display: flex; align-items: center; justify-content: space-between; padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    row-gap: 10px; padding: 16px 20px;
     border-bottom: 1px solid var(--line);
     background: color-mix(in srgb, var(--ink) 75%, transparent);
     backdrop-filter: blur(14px);
@@ -60,13 +61,16 @@ BASE_STYLE = """
   }
   .lang-toggle-link:hover { color: var(--teal); border-color: var(--teal); }
   main { max-width: 960px; margin: 0 auto; padding: 40px 24px 64px; }
+  @media (max-width: 640px) { main { padding: 28px 16px 48px; } }
   h1 { color: var(--sand); font-size: 1.7rem; margin-bottom: 6px; }
   .page-eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
   h2 { color: var(--sand); font-size: 1.05rem; margin-top: 36px; margin-bottom: 12px; font-family: var(--font-mono); font-weight: 500; }
   .card {
     background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
     margin-bottom: 16px; backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    max-width: 100%; overflow-x: auto;
   }
+  @media (max-width: 640px) { .card { padding: 16px; } }
   table { width: 100%; border-collapse: collapse; }
   th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: top; }
   th { color: var(--muted); font-size: 12px; text-transform: uppercase; font-family: var(--font-mono); }

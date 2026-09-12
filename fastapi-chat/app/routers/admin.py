@@ -272,7 +272,8 @@ def dashboard_home(admin: AdminUser = Depends(get_current_admin), db: Session = 
 
 # ------------------------------------------------------------ analytics ----
 @router.get("/analytics", response_class=HTMLResponse)
-def analytics(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def analytics(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     now = datetime.datetime.utcnow()
     today_start = datetime.datetime(now.year, now.month, now.day)
 
@@ -315,23 +316,23 @@ def analytics(admin: AdminUser = Depends(get_current_admin), db: Session = Depen
     top_rows = "".join(f"<tr><td>{esc(p)}</td><td>{n}</td></tr>" for p, n in top_pages)
 
     body = f"""
-    <div class="page-eyebrow">Insights</div>
-    <h1>Analytics</h1>
+    <div class="page-eyebrow">{esc(t('eyebrow.insights'))}</div>
+    <h1>{esc(t('analytics.title'))}</h1>
     <div class="analytics-stats">
-      <div class="card analytics-stat"><div class="analytics-stat-num">{total_views}</div><div class="analytics-stat-lbl">Total views</div></div>
-      <div class="card analytics-stat"><div class="analytics-stat-num">{total_visitors}</div><div class="analytics-stat-lbl">Unique visitors</div></div>
-      <div class="card analytics-stat"><div class="analytics-stat-num">{views_today}</div><div class="analytics-stat-lbl">Views today</div></div>
-      <div class="card analytics-stat"><div class="analytics-stat-num">{visitors_today}</div><div class="analytics-stat-lbl">Visitors today</div></div>
+      <div class="card analytics-stat"><div class="analytics-stat-num">{total_views}</div><div class="analytics-stat-lbl">{esc(t('analytics.total_views'))}</div></div>
+      <div class="card analytics-stat"><div class="analytics-stat-num">{total_visitors}</div><div class="analytics-stat-lbl">{esc(t('analytics.unique_visitors'))}</div></div>
+      <div class="card analytics-stat"><div class="analytics-stat-num">{views_today}</div><div class="analytics-stat-lbl">{esc(t('analytics.views_today'))}</div></div>
+      <div class="card analytics-stat"><div class="analytics-stat-num">{visitors_today}</div><div class="analytics-stat-lbl">{esc(t('analytics.visitors_today'))}</div></div>
     </div>
-    <h2>Last 14 days</h2>
+    <h2>{esc(t('analytics.last_14_days'))}</h2>
     <div class="card"><div class="analytics-bars">{bars}</div></div>
-    <h2>Top pages</h2>
+    <h2>{esc(t('analytics.top_pages'))}</h2>
     <div class="card">
-      <table><thead><tr><th>Path</th><th>Views</th></tr></thead>
-      <tbody>{top_rows or '<tr><td colspan="2">No data yet.</td></tr>'}</tbody></table>
+      <table><thead><tr><th>{esc(t('analytics.path'))}</th><th>{esc(t('analytics.views'))}</th></tr></thead>
+      <tbody>{top_rows or '<tr><td colspan="2">' + esc(t('analytics.no_data')) + '</td></tr>'}</tbody></table>
     </div>
     """
-    return HTMLResponse(page("Analytics", body, admin_nav("analytics", admin.role)))
+    return HTMLResponse(page(t("analytics.title"), body, admin_nav("analytics", admin.role, lang), lang, "/admin/analytics"))
 
 
 # ------------------------------------------------------------ projects ----
@@ -374,7 +375,8 @@ async def _upload_image_if_present(image: UploadFile | None) -> str:
     return public_url_for(path)
 
 
-def _project_form_fields(item: Project | None = None) -> str:
+def _project_form_fields(item: Project | None = None, lang: str = "en") -> str:
+    t = get_translator(lang)
     title = esc(item.title) if item else ""
     description = esc(item.description) if item else ""
     category = esc(item.category) if item else ""
@@ -383,59 +385,61 @@ def _project_form_fields(item: Project | None = None) -> str:
     ctas = esc(_serialize_ctas(item.ctas)) if item else ""
     published_checked = "checked" if (item is None or item.published) else ""
     image_preview = (
-        f'<label>Current image</label><img src="{esc(item.image_path)}" style="max-width:200px;border-radius:8px">'
+        f'<label>{esc(t("pf.current_image"))}</label><img src="{esc(item.image_path)}" style="max-width:200px;border-radius:8px">'
         if item and item.image_path
         else ""
     )
+    image_label = t("pf.replace_image") if item else t("pf.image")
     return f"""
-        <label>Title</label><input name="title" value="{title}" required>
-        <label>Description</label><textarea name="description" rows="3">{description}</textarea>
-        <label>Category (matches a filter pill's data-cats value, e.g. "voice,agents")</label>
+        <label>{esc(t('pf.title'))}</label><input name="title" value="{title}" required>
+        <label>{esc(t('pf.description'))}</label><textarea name="description" rows="3">{description}</textarea>
+        <label>{esc(t('pf.category'))}</label>
         <input name="category" value="{category}">
-        <label>Metrics -- one per line, "value|suffix|label" (e.g. "800|ms|Turn latency")</label>
+        <label>{esc(t('pf.metrics'))}</label>
         <textarea name="metrics" rows="3">{metrics}</textarea>
-        <label>Tags -- comma-separated (e.g. "Pipecat, WebRTC, FastAPI")</label>
+        <label>{esc(t('pf.tags'))}</label>
         <input name="tags" value="{tags}">
-        <label>Buttons -- one per line, "label|link" (e.g. "Case study|project-muhawir.html")</label>
+        <label>{esc(t('pf.buttons'))}</label>
         <textarea name="ctas" rows="2">{ctas}</textarea>
         {image_preview}
-        <label>{"Replace" if item else ""} Image</label><input name="image" type="file" accept="image/*">
-        <label><input style="width:auto" type="checkbox" name="published" {published_checked}> Published</label>
+        <label>{esc(image_label)}</label><input name="image" type="file" accept="image/*">
+        <label><input style="width:auto" type="checkbox" name="published" {published_checked}> {esc(t('pf.published'))}</label>
     """
 
 
 @router.get("/projects", response_class=HTMLResponse)
-def list_projects(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def list_projects(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     items = db.query(Project).order_by(Project.sort_order, Project.id).all()
     rows = "".join(
         f"""<tr>
           <td>{esc(it.title)}</td><td>{esc(it.category)}</td>
           <td>{'✓' if it.published else '—'}</td>
           <td>
-            <a class="btn btn-ghost" href="/admin/projects/{it.id}/edit">Edit</a>
-            <form class="inline" method="post" action="/admin/projects/{it.id}/delete" onsubmit="return confirm('Delete this project?')">
-              <button class="btn-danger" type="submit">Delete</button>
+            <a class="btn btn-ghost" href="/admin/projects/{it.id}/edit">{esc(t('common.edit'))}</a>
+            <form class="inline" method="post" action="/admin/projects/{it.id}/delete" onsubmit="return confirm('{esc(t('projects.confirm_delete'))}')">
+              <button class="btn-danger" type="submit">{esc(t('common.delete'))}</button>
             </form>
           </td>
         </tr>"""
         for it in items
     )
     body = f"""
-    <div class="page-eyebrow">Content</div>
-    <h1>Projects</h1>
+    <div class="page-eyebrow">{esc(t('eyebrow.content'))}</div>
+    <h1>{esc(t('projects.title'))}</h1>
     <div class="card">
-      <table><thead><tr><th>Title</th><th>Category</th><th>Published</th><th></th></tr></thead>
-      <tbody>{rows or '<tr><td colspan="4">None yet.</td></tr>'}</tbody></table>
+      <table><thead><tr><th>{esc(t('projects.col_title'))}</th><th>{esc(t('projects.col_category'))}</th><th>{esc(t('projects.col_published'))}</th><th></th></tr></thead>
+      <tbody>{rows or '<tr><td colspan="4">' + esc(t('projects.none_yet')) + '</td></tr>'}</tbody></table>
     </div>
-    <h2>Add new</h2>
+    <h2>{esc(t('projects.add_new'))}</h2>
     <div class="card">
       <form method="post" action="/admin/projects/new" enctype="multipart/form-data">
-        {_project_form_fields()}
-        <div style="margin-top:16px"><button type="submit">Add</button></div>
+        {_project_form_fields(lang=lang)}
+        <div style="margin-top:16px"><button type="submit">{esc(t('common.add'))}</button></div>
       </form>
     </div>
     """
-    return HTMLResponse(page("Projects", body, admin_nav("projects", admin.role)))
+    return HTMLResponse(page(t("projects.title"), body, admin_nav("projects", admin.role, lang), lang, "/admin/projects"))
 
 
 @router.post("/projects/new")
@@ -469,20 +473,21 @@ async def create_project(
 
 
 @router.get("/projects/{item_id}/edit", response_class=HTMLResponse)
-def edit_project_form(item_id: int, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def edit_project_form(item_id: int, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     item = db.query(Project).filter(Project.id == item_id).first()
     if not item:
         raise HTTPException(status_code=404)
     body = f"""
-    <h1>Edit project</h1>
+    <h1>{esc(t('projects.edit_title'))}</h1>
     <div class="card">
       <form method="post" action="/admin/projects/{item.id}/edit" enctype="multipart/form-data">
-        {_project_form_fields(item)}
-        <div style="margin-top:16px"><button type="submit">Save</button></div>
+        {_project_form_fields(item, lang=lang)}
+        <div style="margin-top:16px"><button type="submit">{esc(t('common.save'))}</button></div>
       </form>
     </div>
     """
-    return HTMLResponse(page("Edit project", body, admin_nav("projects", admin.role)))
+    return HTMLResponse(page(t("projects.edit_title"), body, admin_nav("projects", admin.role, lang), lang, f"/admin/projects/{item_id}/edit"))
 
 
 @router.post("/projects/{item_id}/edit")
@@ -525,39 +530,40 @@ def delete_project(item_id: int, admin: AdminUser = Depends(get_current_admin), 
 
 # ------------------------------------------------------------- pricing ----
 @router.get("/pricing", response_class=HTMLResponse)
-def list_pricing(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def list_pricing(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    tt = get_translator(lang)
     tiers = db.query(PricingTier).order_by(PricingTier.sort_order, PricingTier.id).all()
     rows = "".join(
         f"""<div class="card">
-          <form method="post" action="/admin/pricing/{t.id}/edit">
-            <label>Name</label><input name="name" value="{esc(t.name)}">
-            <label>Price (USD)</label><input name="price_usd" type="number" value="{t.price_usd}">
-            <label>Duration / cadence</label><input name="duration" value="{esc(t.duration)}">
-            <label>Features (one per line)</label><textarea name="features" rows="4">{esc(chr(10).join(t.features or []))}</textarea>
-            <div style="margin-top:12px"><button type="submit">Save</button></div>
+          <form method="post" action="/admin/pricing/{tier.id}/edit">
+            <label>{esc(tt('pricing.name'))}</label><input name="name" value="{esc(tier.name)}">
+            <label>{esc(tt('pricing.price_usd'))}</label><input name="price_usd" type="number" value="{tier.price_usd}">
+            <label>{esc(tt('pricing.duration'))}</label><input name="duration" value="{esc(tier.duration)}">
+            <label>{esc(tt('pricing.features'))}</label><textarea name="features" rows="4">{esc(chr(10).join(tier.features or []))}</textarea>
+            <div style="margin-top:12px"><button type="submit">{esc(tt('common.save'))}</button></div>
           </form>
-          <form method="post" action="/admin/pricing/{t.id}/delete" onsubmit="return confirm('Delete this tier?')" style="margin-top:8px">
-            <button class="btn-danger" type="submit">Delete</button>
+          <form method="post" action="/admin/pricing/{tier.id}/delete" onsubmit="return confirm('{esc(tt('pricing.confirm_delete'))}')" style="margin-top:8px">
+            <button class="btn-danger" type="submit">{esc(tt('common.delete'))}</button>
           </form>
         </div>"""
-        for t in tiers
+        for tier in tiers
     )
     body = f"""
-    <div class="page-eyebrow">Content</div>
-    <h1>Pricing</h1>
-    {rows or '<p>No tiers yet.</p>'}
-    <h2>Add tier</h2>
+    <div class="page-eyebrow">{esc(tt('eyebrow.content'))}</div>
+    <h1>{esc(tt('pricing.title'))}</h1>
+    {rows or '<p>' + esc(tt('pricing.none_yet')) + '</p>'}
+    <h2>{esc(tt('pricing.add_tier'))}</h2>
     <div class="card">
       <form method="post" action="/admin/pricing/new">
-        <label>Name</label><input name="name" required>
-        <label>Price (USD)</label><input name="price_usd" type="number" required>
-        <label>Duration / cadence</label><input name="duration">
-        <label>Features (one per line)</label><textarea name="features" rows="4"></textarea>
-        <div style="margin-top:16px"><button type="submit">Add</button></div>
+        <label>{esc(tt('pricing.name'))}</label><input name="name" required>
+        <label>{esc(tt('pricing.price_usd'))}</label><input name="price_usd" type="number" required>
+        <label>{esc(tt('pricing.duration'))}</label><input name="duration">
+        <label>{esc(tt('pricing.features'))}</label><textarea name="features" rows="4"></textarea>
+        <div style="margin-top:16px"><button type="submit">{esc(tt('common.add'))}</button></div>
       </form>
     </div>
     """
-    return HTMLResponse(page("Pricing", body, admin_nav("pricing", admin.role)))
+    return HTMLResponse(page(tt("pricing.title"), body, admin_nav("pricing", admin.role, lang), lang, "/admin/pricing"))
 
 
 @router.post("/pricing/new")
@@ -609,7 +615,8 @@ SETTING_LABELS = {
 
 
 @router.get("/content", response_class=HTMLResponse)
-async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_admin)):
+async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_admin), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     raw, _ = await read_file(I18N_PATH)
     dict_ = json.loads(raw) if raw else {"en": {}, "ar": {}}
     en = dict_.get("en", {})
@@ -622,25 +629,25 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
           <form method="post" action="/admin/content/save">
             <input type="hidden" name="key" value="{esc(k)}">
             <label>{esc(k)}</label>
-            <label style="margin-top:0">English</label><textarea name="en" rows="2" data-en-field>{esc(en.get(k, ''))}</textarea>
+            <label style="margin-top:0">{esc(t('content.english'))}</label><textarea name="en" rows="2" data-en-field>{esc(en.get(k, ''))}</textarea>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
-              <label style="margin:0">Arabic</label>
-              <button type="button" class="btn-ghost translate-btn" style="padding:4px 10px;font-size:12px">Translate ↴</button>
+              <label style="margin:0">{esc(t('content.arabic'))}</label>
+              <button type="button" class="btn-ghost translate-btn" style="padding:4px 10px;font-size:12px">{esc(t('content.translate'))}</button>
             </div>
             <textarea name="ar" rows="2" data-ar-field>{esc(dict_.get('ar', {}).get(k, ''))}</textarea>
-            <div style="margin-top:10px"><button type="submit">Save</button></div>
+            <div style="margin-top:10px"><button type="submit">{esc(t('common.save'))}</button></div>
           </form>
         </div>"""
         for k in keys[:200]
     )
     body = f"""
-    <div class="page-eyebrow">Content</div>
-    <h1>Site text</h1>
+    <div class="page-eyebrow">{esc(t('eyebrow.content'))}</div>
+    <h1>{esc(t('content.title'))}</h1>
     <form method="get" action="/admin/content" style="margin-bottom:16px">
-      <input name="q" value="{esc(q)}" placeholder="Search keys, e.g. hero.h1">
+      <input name="q" value="{esc(q)}" placeholder="{esc(t('content.search_placeholder'))}">
     </form>
-    {rows or '<p>No matching keys.</p>'}
-    {'<p class="badge">Showing first 200 matches — refine your search.</p>' if len(keys) > 200 else ''}
+    {rows or '<p>' + esc(t('content.none_matching')) + '</p>'}
+    {'<p class="badge">' + esc(t('content.showing_first_200')) + '</p>' if len(keys) > 200 else ''}
     <script>
       document.querySelectorAll('.translate-btn').forEach(function (btn) {{
         btn.addEventListener('click', function () {{
@@ -649,7 +656,7 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
           var arField = form.querySelector('[data-ar-field]');
           if (!enField.value.trim()) return;
           btn.disabled = true;
-          btn.textContent = 'Translating…';
+          btn.textContent = {json.dumps(t('content.translating'))};
           fetch('/admin/translate', {{
             method: 'POST',
             headers: {{ 'Content-Type': 'application/json' }},
@@ -657,13 +664,13 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
           }})
             .then(function (r) {{ if (!r.ok) throw new Error('bad status'); return r.json(); }})
             .then(function (data) {{ arField.value = data.translation; }})
-            .catch(function () {{ alert('Translation failed -- try again.'); }})
-            .finally(function () {{ btn.disabled = false; btn.textContent = 'Translate ↴'; }});
+            .catch(function () {{ alert({json.dumps(t('content.translate_failed'))}); }})
+            .finally(function () {{ btn.disabled = false; btn.textContent = {json.dumps(t('content.translate'))}; }});
         }});
       }});
     </script>
     """
-    return HTMLResponse(page("Site text", body, admin_nav("content", admin.role)))
+    return HTMLResponse(page(t("content.title"), body, admin_nav("content", admin.role, lang), lang, "/admin/content"))
 
 
 @router.post("/translate")
@@ -706,15 +713,16 @@ async def content_save(
 
 # ------------------------------------------------------------- messages ----
 @router.get("/messages", response_class=HTMLResponse)
-def list_messages(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def list_messages(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     contacts = db.query(ContactMessage).order_by(ContactMessage.received_at.desc()).limit(100).all()
     contact_rows = "".join(
         f"""<tr>
           <td>{esc(c.received_at.strftime('%Y-%m-%d %H:%M'))}</td>
           <td>{esc(c.name)} &lt;{esc(c.email)}&gt;</td>
           <td>{esc(c.message[:200])}</td>
-          <td>{'<span class="badge unread">unread</span>' if not c.read else '<span class="badge">read</span>'}
-            {'<form class="inline" method="post" action="/admin/messages/' + str(c.id) + '/read"><button class="btn-ghost" type="submit">Mark read</button></form>' if not c.read else ''}
+          <td>{'<span class="badge unread">' + esc(t('messages.unread')) + '</span>' if not c.read else '<span class="badge">' + esc(t('messages.read')) + '</span>'}
+            {'<form class="inline" method="post" action="/admin/messages/' + str(c.id) + '/read"><button class="btn-ghost" type="submit">' + esc(t('messages.mark_read')) + '</button></form>' if not c.read else ''}
           </td>
         </tr>"""
         for c in contacts
@@ -731,20 +739,20 @@ def list_messages(admin: AdminUser = Depends(get_current_admin), db: Session = D
         for s in sessions
     )
     body = f"""
-    <div class="page-eyebrow">Inbox</div>
-    <h1>Messages</h1>
-    <h2>Contact form</h2>
+    <div class="page-eyebrow">{esc(t('eyebrow.inbox'))}</div>
+    <h1>{esc(t('messages.title'))}</h1>
+    <h2>{esc(t('messages.contact_form'))}</h2>
     <div class="card">
-      <table><thead><tr><th>When</th><th>From</th><th>Message</th><th></th></tr></thead>
-      <tbody>{contact_rows or '<tr><td colspan="4">None yet.</td></tr>'}</tbody></table>
+      <table><thead><tr><th>{esc(t('messages.when'))}</th><th>{esc(t('messages.from'))}</th><th>{esc(t('messages.message'))}</th><th></th></tr></thead>
+      <tbody>{contact_rows or '<tr><td colspan="4">' + esc(t('messages.none_yet')) + '</td></tr>'}</tbody></table>
     </div>
-    <h2>Chat sessions</h2>
+    <h2>{esc(t('messages.chat_sessions'))}</h2>
     <div class="card">
-      <table><thead><tr><th>Last activity</th><th>Session</th></tr></thead>
-      <tbody>{session_rows or '<tr><td colspan="2">None yet.</td></tr>'}</tbody></table>
+      <table><thead><tr><th>{esc(t('messages.last_activity'))}</th><th>{esc(t('messages.session'))}</th></tr></thead>
+      <tbody>{session_rows or '<tr><td colspan="2">' + esc(t('messages.none_yet')) + '</td></tr>'}</tbody></table>
     </div>
     """
-    return HTMLResponse(page("Messages", body, admin_nav("messages", admin.role)))
+    return HTMLResponse(page(t("messages.title"), body, admin_nav("messages", admin.role, lang), lang, "/admin/messages"))
 
 
 @router.post("/messages/{item_id}/read")
@@ -757,46 +765,48 @@ def mark_read(item_id: int, admin: AdminUser = Depends(get_current_admin), db: S
 
 
 @router.get("/messages/chat/{session_id}", response_class=HTMLResponse)
-def view_chat_session(session_id: str, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def view_chat_session(session_id: str, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     turns = db.query(ChatLog).filter(ChatLog.session_id == session_id).order_by(ChatLog.created_at).all()
-    rows = "".join(f'<p><strong>{esc(t.role)}:</strong> {esc(t.content)}</p>' for t in turns)
+    rows = "".join(f'<p><strong>{esc(turn.role)}:</strong> {esc(turn.content)}</p>' for turn in turns)
     body = f"""
-    <h1>Chat session {esc(session_id[:12])}…</h1>
-    <div class="card">{rows or '<p>No messages.</p>'}</div>
-    <a class="btn btn-ghost" href="/admin/messages">Back</a>
+    <h1>{esc(t('messages.chat_session_title'))} {esc(session_id[:12])}…</h1>
+    <div class="card">{rows or '<p>' + esc(t('messages.no_messages')) + '</p>'}</div>
+    <a class="btn btn-ghost" href="/admin/messages">{esc(t('common.back'))}</a>
     """
-    return HTMLResponse(page("Chat session", body, admin_nav("messages", admin.role)))
+    return HTMLResponse(page(t("messages.chat_session_title"), body, admin_nav("messages", admin.role, lang), lang, f"/admin/messages/chat/{session_id}"))
 
 
 # ---------------------------------------------------------------- users ----
 @router.get("/users", response_class=HTMLResponse)
-def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(get_db)):
+def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(get_db), lang: str = Depends(get_lang)):
+    t = get_translator(lang)
     users = db.query(AdminUser).order_by(AdminUser.id).all()
     rows = "".join(
         f"""<tr>
           <td>{esc(u.username)}</td><td>{esc(u.email or '—')}</td><td>{esc(u.role)}</td>
-          <td>{'' if u.role == 'owner' else '<form class="inline" method="post" action="/admin/users/' + str(u.id) + '/delete" onsubmit="return confirm(\'Remove this user?\')"><button class="btn-danger" type="submit">Remove</button></form>'}</td>
+          <td>{'' if u.role == 'owner' else '<form class="inline" method="post" action="/admin/users/' + str(u.id) + '/delete" onsubmit="return confirm(\'' + esc(t('users.confirm_remove')) + '\')"><button class="btn-danger" type="submit">' + esc(t('users.remove')) + '</button></form>'}</td>
         </tr>"""
         for u in users
     )
     body = f"""
-    <div class="page-eyebrow">Access</div>
-    <h1>Users</h1>
+    <div class="page-eyebrow">{esc(t('eyebrow.access'))}</div>
+    <h1>{esc(t('users.title'))}</h1>
     <div class="card">
-      <table><thead><tr><th>Username</th><th>Email</th><th>Role</th><th></th></tr></thead>
+      <table><thead><tr><th>{esc(t('users.col_username'))}</th><th>{esc(t('users.col_email'))}</th><th>{esc(t('users.col_role'))}</th><th></th></tr></thead>
       <tbody>{rows}</tbody></table>
     </div>
-    <h2>Add editor</h2>
+    <h2>{esc(t('users.add_editor'))}</h2>
     <div class="card">
       <form method="post" action="/admin/users/new">
-        <label>Username</label><input name="username" required>
-        <label>Email (needed for them to reset their own password)</label><input name="email" type="email">
-        <label>Password</label><input name="password" type="password" required minlength="8">
-        <div style="margin-top:16px"><button type="submit">Add</button></div>
+        <label>{esc(t('users.col_username'))}</label><input name="username" required>
+        <label>{esc(t('users.email_hint'))}</label><input name="email" type="email">
+        <label>{esc(t('users.password'))}</label><input name="password" type="password" required minlength="8">
+        <div style="margin-top:16px"><button type="submit">{esc(t('common.add'))}</button></div>
       </form>
     </div>
     """
-    return HTMLResponse(page("Users", body, admin_nav("users", admin.role)))
+    return HTMLResponse(page(t("users.title"), body, admin_nav("users", admin.role, lang), lang, "/admin/users"))
 
 
 # ------------------------------------------------------------- settings ----
