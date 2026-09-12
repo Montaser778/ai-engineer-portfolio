@@ -93,6 +93,7 @@ async def chat(req: ChatRequest):
             raise HTTPException(status_code=502, detail="Could not reach the language model provider.")
 
     if resp.status_code != 200:
+        print(f"Groq API error {resp.status_code}: {resp.text[:500]}")
         raise HTTPException(status_code=502, detail="The language model provider returned an error.")
 
     data = resp.json()
