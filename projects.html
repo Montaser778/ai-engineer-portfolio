@@ -77,44 +77,11 @@
   <section style="padding-top:0">
     <div class="container">
       <div class="tier-label">Featured</div>
-      <div class="grid-2">
-
-        <div class="card" data-reveal data-cats="voice,agents" data-tilt>
-          <h3 data-i18n="projects.muhawir.h">Muhawir — voice interview practice</h3>
-          <p data-i18n="projects.muhawir.p">A bilingual real-time voice agent that runs mock interviews end to end and scores them after the call, keeping evaluation out of the conversation loop.</p>
-          <div class="metrics-band" style="margin:16px 0">
-            <div class="m-cell"><div class="m-num" data-counter="800" data-suffix="ms">0</div><div class="m-lbl">Turn latency</div></div>
-            <div class="m-cell"><div class="m-num" data-counter="2" data-suffix="">0</div><div class="m-lbl">Languages</div></div>
-          </div>
-          <div class="chip-row"><span class="tag">Pipecat</span><span class="tag">WebRTC</span><span class="tag">FastAPI</span></div>
-          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="project-muhawir.html" data-i18n="projects.casestudy">Case study</a><a class="btn btn-ghost btn-sm" href="https://muhawir.fly.dev/" target="_blank" rel="noopener" data-i18n="projects.livedemo">Live demo</a></div>
-        </div>
-
-        <div class="card" data-reveal data-cats="agents,backend" data-tilt>
-          <h3>Exam Integrity System</h3>
-          <p>An original Moodle plugin that watches an online exam attempt through four independent, locally-analysed signals — camera never leaves the student's browser, no video ever uploaded — merged into one 0–100 review score for a human reviewer, never an automated verdict.</p>
-          <div class="metrics-band" style="margin:16px 0">
-            <div class="m-cell"><div class="m-num" data-counter="4" data-suffix="">0</div><div class="m-lbl">Independent signals</div></div>
-            <div class="m-cell"><div class="m-num" data-counter="0" data-suffix="">0</div><div class="m-lbl">Video uploaded</div></div>
-          </div>
-          <div class="chip-row"><span class="tag">Moodle plugin (PHP)</span><span class="tag">FastAPI</span><span class="tag">scikit-learn</span></div>
-          <div class="btn-row">
-            <a class="btn btn-ghost btn-sm" href="https://exam-integrity-ai-service.onrender.com" target="_blank" rel="noopener">Live demo</a>
-            <a class="btn btn-ghost btn-sm" href="mailto:eng.7montaser@gmail.com?subject=Exam%20Integrity%20System%20—%20live%20demo%20request">Request a full live walkthrough</a>
-          </div>
-        </div>
-
-        <div class="card" data-reveal data-cats="agents" data-tilt>
-          <h3 data-i18n="projects.agents.h">Multi-agent business idea analyst</h3>
-          <p data-i18n="projects.agents.p">Four specialised agents — research, analysis, risk, writing — run in parallel and reconcile conflicting findings into a single recommendation.</p>
-          <div class="metrics-band" style="margin:16px 0">
-            <div class="m-cell"><div class="m-num" data-counter="4" data-suffix="">0</div><div class="m-lbl">Agents</div></div>
-            <div class="m-cell"><div class="m-num" data-counter="1" data-suffix="">0</div><div class="m-lbl">Synthesis pass</div></div>
-          </div>
-          <div class="chip-row"><span class="tag">LangChain</span><span class="tag">Python</span></div>
-          <div class="btn-row"><a class="btn btn-ghost btn-sm" href="project-agents.html" data-i18n="home.feat.readcase">Read the case study</a></div>
-        </div>
-
+      <div class="grid-2" id="featured-projects">
+        <!-- Rendered from the dashboard-managed backend by assets/js/cards.js
+             (fetches /content/projects) so admin edits show up with no
+             redeploy. Kept as plain HTML above until now; see fastapi-chat/
+             app/seed_content.py for the original copy this replaced. -->
       </div>
 
       <div class="tier-label" data-cats-tier="also-built">Also built</div>
@@ -150,6 +117,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="assets/js/scene.js"></script>
 <script src="assets/js/site.js"></script>
+<script src="assets/js/cards.js"></script>
 <script src="assets/js/chat-widget.js"></script>
 <script src="assets/js/hero3d.js"></script>
 <script src="assets/js/polish.js"></script>

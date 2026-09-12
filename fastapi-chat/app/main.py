@@ -1,15 +1,23 @@
-"""Small FastAPI backend for the portfolio's chat widget. Answers visitor
-questions about Montaser Hussam's work using Groq's LLM API, grounded in a
-fixed system prompt (see SYSTEM_PROMPT) so it doesn't hallucinate claims
-about him. Deployed separately from the static site (GitHub Pages can't run
-Python) -- see README.md in this folder for deployment steps.
+"""FastAPI backend for the portfolio site: the Groq-backed chat widget,
+public read endpoints for project/demo/pricing cards, the contact-form
+inbox, and (at /admin) a session-authenticated dashboard for editing all of
+the above plus site copy. Deployed separately from the static site (GitHub
+Pages can't run Python) -- see README.md in this folder for deployment
+steps.
 """
 import os
+import uuid
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from app.db import get_db, init_db_and_seed_owner
+from app.models import ChatLog, ContactMessage
+from app.routers import admin, content
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-20b")
@@ -43,25 +51,54 @@ used (English or Arabic). If you don't know something specific (e.g. exact rates
 availability dates), say so plainly and point to the Contact or Pricing page instead of \
 guessing."""
 
-app = FastAPI(title="Portfolio Chat API")
+app = FastAPI(title="Portfolio API")
+
+
+@app.on_event("startup")
+def _startup():
+    init_db_and_seed_owner()
+
 
 if ALLOWED_ORIGINS:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=ALLOWED_ORIGINS,
-        allow_methods=["POST"],
+        allow_methods=["GET", "POST"],
         allow_headers=["Content-Type"],
     )
+
+app.include_router(admin.router)
+app.include_router(content.router)
+
+
+@app.exception_handler(HTTPException)
+async def admin_auth_redirect(request: Request, exc: HTTPException):
+    """A logged-out visitor hitting an /admin/* HTML page should land on the
+    login form, not a raw JSON 401 -- API-style routes (content/, chat,
+    contact) are unaffected since they don't raise 401 in the first place."""
+    if exc.status_code == 401 and request.url.path.startswith("/admin"):
+        return RedirectResponse("/admin/login", status_code=303)
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
     # Short rolling history from the widget: [{"role": "user"|"assistant", "content": "..."}]
     history: list[dict] = Field(default_factory=list, max_length=20)
+    # Persisted client-side (e.g. localStorage) so a visitor's whole
+    # conversation groups into one session in the admin inbox. Optional --
+    # a missing id just means that exchange won't group with earlier ones.
+    session_id: str | None = Field(default=None, max_length=64)
 
 
 class ChatResponse(BaseModel):
     reply: str
+
+
+class ContactRequest(BaseModel):
+    name: str = Field(default="", max_length=200)
+    email: str = Field(default="", max_length=200)
+    message: str = Field(min_length=1, max_length=5000)
 
 
 @app.get("/health")
@@ -69,17 +106,24 @@ def health():
     return {"status": "ok"}
 
 
+@app.post("/contact")
+def contact(req: ContactRequest, db: Session = Depends(get_db)):
+    db.add(ContactMessage(name=req.name, email=req.email, message=req.message))
+    db.commit()
+    return {"status": "ok"}
+
+
 @app.post("/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest):
+async def chat(req: ChatRequest, db: Session = Depends(get_db)):
     if not GROQ_API_KEY:
         raise HTTPException(status_code=503, detail="Chat is not configured (no GROQ_API_KEY set).")
 
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     for turn in req.history:
         role = turn.get("role")
-        content = turn.get("content")
-        if role in ("user", "assistant") and isinstance(content, str):
-            messages.append({"role": role, "content": content[:2000]})
+        content_ = turn.get("content")
+        if role in ("user", "assistant") and isinstance(content_, str):
+            messages.append({"role": role, "content": content_[:2000]})
     messages.append({"role": "user", "content": req.message})
 
     async with httpx.AsyncClient(timeout=20) as client:
@@ -101,5 +145,13 @@ async def chat(req: ChatRequest):
         reply = data["choices"][0]["message"]["content"]
     except (KeyError, IndexError):
         raise HTTPException(status_code=502, detail="Unexpected response from the language model provider.")
+
+    session_id = req.session_id or str(uuid.uuid4())
+    try:
+        db.add(ChatLog(session_id=session_id, role="user", content=req.message))
+        db.add(ChatLog(session_id=session_id, role="assistant", content=reply))
+        db.commit()
+    except Exception:
+        db.rollback()
 
     return ChatResponse(reply=reply)

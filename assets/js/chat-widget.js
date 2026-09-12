@@ -10,6 +10,17 @@
 
   if (!CHAT_API_URL) return;
 
+  // Persisted so the admin inbox groups a visitor's whole conversation into
+  // one session instead of a separate row per message.
+  var sessionId = null;
+  try {
+    sessionId = localStorage.getItem("mh-chat-session");
+    if (!sessionId) {
+      sessionId = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+      localStorage.setItem("mh-chat-session", sessionId);
+    }
+  } catch (e) {}
+
   var history = [];
   var open = false;
   var greeted = false;
@@ -86,7 +97,7 @@
     fetch(CHAT_API_URL.replace(/\/$/, "") + "/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: message, history: history.slice(-10) }),
+      body: JSON.stringify({ message: message, history: history.slice(-10), session_id: sessionId }),
     })
       .then(function (res) {
         if (!res.ok) throw new Error("bad status");

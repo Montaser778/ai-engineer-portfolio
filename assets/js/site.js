@@ -417,6 +417,17 @@
       all.forEach(reveal);
     }
 
+    /* Lets content injected after this script ran (e.g. cards.js fetching
+       /content/projects) get the same reveal/counter treatment instead of
+       sitting there inert forever, since querySelectorAll above only ever
+       saw what existed at parse time. */
+    window.mhObserveNew = function (elements) {
+      Array.prototype.forEach.call(elements, function (el) {
+        if ('IntersectionObserver' in window) io.observe(el);
+        else reveal(el);
+      });
+    };
+
     window.addEventListener('load', function () {
       all.forEach(function (el) {
         var rect = el.getBoundingClientRect();
@@ -483,8 +494,14 @@
      ========================================================================= */
   (function filters() {
     var pills = document.querySelectorAll('.filter-pill');
-    var cards = document.querySelectorAll('[data-cats]');
-    if (!pills.length || !cards.length) return;
+    var cards = Array.prototype.slice.call(document.querySelectorAll('[data-cats]'));
+    if (!pills.length) return;
+    /* Cards fetched later (cards.js -> /content/projects) call this so the
+       filter pills know about them too -- `cards` above is a snapshot at
+       parse time and would otherwise never see anything added after. */
+    window.mhRefreshFilterCards = function () {
+      cards = Array.prototype.slice.call(document.querySelectorAll('[data-cats]'));
+    };
     pills.forEach(function (pill) {
       pill.addEventListener('click', function () {
         pills.forEach(function (p) { p.setAttribute('aria-pressed', 'false'); });
@@ -590,6 +607,25 @@
       }
 
       if (status) { status.dataset.state = 'pending'; status.textContent = 'Sending...'; }
+
+      // Mirror the submission into the dashboard inbox too, alongside
+      // Formspree below -- fire-and-forget so a slow/unreachable backend
+      // never blocks or fails the actual (Formspree) submission the visitor
+      // is waiting on.
+      (function mirrorToDashboard() {
+        var company = form.querySelector('[name="company"]');
+        var engagement = form.querySelector('[name="engagement"]');
+        var budget = form.querySelector('[name="budget"]');
+        var lines = [message.value.trim()];
+        if (company && company.value.trim()) lines.push('Company: ' + company.value.trim());
+        if (engagement && engagement.value) lines.push('Engagement type: ' + engagement.value);
+        if (budget && budget.value) lines.push('Budget range: ' + budget.value);
+        fetch('https://ai-engineer-portfolio-va7f.onrender.com/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name.value.trim(), email: '', message: lines.join('\n') })
+        }).catch(function () {});
+      })();
 
       if (!FORM_ENDPOINT || FORM_ENDPOINT.indexOf('REPLACE_') === 0) {
         // No real endpoint configured yet — go straight to mailto.
