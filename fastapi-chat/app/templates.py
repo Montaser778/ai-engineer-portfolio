@@ -65,18 +65,30 @@ BASE_STYLE = """
   h1 { color: var(--sand); font-size: 1.7rem; margin-bottom: 6px; }
   .page-eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
   h2 { color: var(--sand); font-size: 1.05rem; margin-top: 36px; margin-bottom: 12px; font-family: var(--font-mono); font-weight: 500; }
+  @property --card-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
   .card {
+    position: relative;
     background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
     margin-bottom: 16px; backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,.18);
     max-width: 100%; overflow-x: auto;
-    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    transition: box-shadow .2s ease, transform .2s ease;
     animation: card-in .5s cubic-bezier(.16,1,.3,1) both;
+    isolation: isolate;
+  }
+  .card::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+    background: conic-gradient(from var(--card-angle), transparent 0 65%, var(--violet) 82%, var(--teal) 92%, transparent 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: card-border-spin 5s linear infinite;
+    opacity: .55; pointer-events: none; z-index: -1;
   }
   .card:hover {
-    border-color: color-mix(in srgb, var(--teal) 45%, var(--line));
-    box-shadow: 0 12px 32px rgba(0,0,0,.28), 0 0 0 1px rgba(34,211,197,.08);
+    box-shadow: 0 12px 32px rgba(0,0,0,.28), 0 0 0 1px rgba(34,211,197,.1);
     transform: translateY(-2px);
   }
+  .card:hover::before { opacity: 1; }
+  @keyframes card-border-spin { to { --card-angle: 360deg; } }
   .analytics-stat {
     transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
   }
@@ -95,6 +107,7 @@ BASE_STYLE = """
   tbody tr:hover { background: rgba(255,255,255,.02); }
   @media (prefers-reduced-motion: reduce) {
     .card { animation: none; }
+    .card::before { animation: none; opacity: .3; }
     .card:hover, .analytics-stat:hover { transform: none; }
   }
   @media (max-width: 640px) { .card { padding: 16px; } }
@@ -151,6 +164,23 @@ BASE_STYLE = """
     padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--body);
   }
   .settings-integration-row:last-child { border-bottom: none; }
+  .content-key { border-bottom: 1px solid var(--line); }
+  .content-key:last-child { border-bottom: none; }
+  .content-key summary {
+    list-style: none; cursor: pointer; padding: 14px 22px; display: flex; align-items: center;
+    gap: 14px; font-size: 13.5px; transition: background-color .15s ease;
+  }
+  .content-key summary::-webkit-details-marker { display: none; }
+  .content-key summary::marker { content: ""; }
+  .content-key summary::before {
+    content: "›"; display: inline-block; font-family: var(--font-mono); color: var(--muted);
+    transition: transform .2s ease; flex-shrink: 0;
+  }
+  .content-key[open] summary::before { transform: rotate(90deg); }
+  .content-key summary:hover { background: rgba(255,255,255,.02); }
+  .content-key-name { font-family: var(--font-mono); color: var(--teal); flex-shrink: 0; }
+  .content-key-preview { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .content-key form { padding: 4px 22px 20px; }
   .badge.ok { color: var(--success); border-color: var(--success); }
   @media (max-width: 640px) { .analytics-stats { grid-template-columns: repeat(2, 1fr); } }
   .muted-link { color: var(--muted); font-size: 13px; text-decoration: none; }

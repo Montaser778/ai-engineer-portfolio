@@ -625,10 +625,13 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
         keys = [k for k in keys if q.lower() in k.lower()]
 
     rows = "".join(
-        f"""<div class="card">
+        f"""<details class="content-key">
+          <summary>
+            <span class="content-key-name">{esc(k)}</span>
+            <span class="content-key-preview">{esc((en.get(k, '') or '')[:60])}</span>
+          </summary>
           <form method="post" action="/admin/content/save">
             <input type="hidden" name="key" value="{esc(k)}">
-            <label>{esc(k)}</label>
             <label style="margin-top:0">{esc(t('content.english'))}</label><textarea name="en" rows="2" data-en-field>{esc(en.get(k, ''))}</textarea>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
               <label style="margin:0">{esc(t('content.arabic'))}</label>
@@ -637,7 +640,7 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
             <textarea name="ar" rows="2" data-ar-field>{esc(dict_.get('ar', {}).get(k, ''))}</textarea>
             <div style="margin-top:10px"><button type="submit">{esc(t('common.save'))}</button></div>
           </form>
-        </div>"""
+        </details>"""
         for k in keys[:200]
     )
     body = f"""
@@ -646,7 +649,7 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
     <form method="get" action="/admin/content" style="margin-bottom:16px">
       <input name="q" value="{esc(q)}" placeholder="{esc(t('content.search_placeholder'))}">
     </form>
-    {rows or '<p>' + esc(t('content.none_matching')) + '</p>'}
+    <div class="card" style="padding:0">{rows or '<p style="padding:22px">' + esc(t('content.none_matching')) + '</p>'}</div>
     {'<p class="badge">' + esc(t('content.showing_first_200')) + '</p>' if len(keys) > 200 else ''}
     <script>
       document.querySelectorAll('.translate-btn').forEach(function (btn) {{
