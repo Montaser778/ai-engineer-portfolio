@@ -119,6 +119,34 @@ BASE_STYLE = """
     color: var(--sand); padding: 9px 12px; font-size: 14px; font-family: inherit; transition: border-color .2s ease;
   }
   input:focus, textarea:focus, select:focus { outline: none; border-color: var(--teal); }
+  select {
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%238892a6' stroke-width='1.6'%3E%3Cpath d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; background-size: 14px;
+    padding-inline-end: 34px; cursor: pointer;
+  }
+  html[dir="rtl"] select { background-position: left 12px center; }
+  input[type="checkbox"] {
+    width: 18px; height: 18px; appearance: none; -webkit-appearance: none; flex-shrink: 0;
+    border: 1px solid var(--line); border-radius: 5px; background: rgba(255,255,255,.03);
+    cursor: pointer; position: relative; transition: background-color .15s ease, border-color .15s ease;
+  }
+  input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, var(--violet), var(--teal)); border-color: transparent;
+  }
+  input[type="checkbox"]:checked::after {
+    content: ""; position: absolute; left: 5px; top: 1px; width: 5px; height: 9px;
+    border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  input[type="file"] {
+    padding: 6px; cursor: pointer; color: var(--muted); font-size: 13px;
+  }
+  input[type="file"]::file-selector-button {
+    background: linear-gradient(135deg, var(--violet), #6a4fe0); color: #fff; border: none; border-radius: 6px;
+    padding: 8px 14px; margin-inline-end: 12px; cursor: pointer; font-size: 13px; font-family: inherit;
+    transition: filter .15s ease;
+  }
+  input[type="file"]::file-selector-button:hover { filter: brightness(1.12); }
   label { display: block; font-size: 12.5px; color: var(--muted); margin: 10px 0 4px; font-family: var(--font-mono); }
   button, .btn {
     background: linear-gradient(135deg, var(--violet), #6a4fe0); color: #fff; border: none; border-radius: 8px;

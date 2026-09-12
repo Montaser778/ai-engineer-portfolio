@@ -403,7 +403,7 @@ def _project_form_fields(item: Project | None = None, lang: str = "en") -> str:
         <textarea name="ctas" rows="2">{ctas}</textarea>
         {image_preview}
         <label>{esc(image_label)}</label><input name="image" type="file" accept="image/*">
-        <label><input style="width:auto" type="checkbox" name="published" {published_checked}> {esc(t('pf.published'))}</label>
+        <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" name="published" {published_checked}> {esc(t('pf.published'))}</label>
     """
 
 
