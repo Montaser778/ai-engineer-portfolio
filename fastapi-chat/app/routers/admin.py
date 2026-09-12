@@ -33,6 +33,7 @@ from app.auth import (
 from app.db import get_db
 from app.email_service import send_email
 from app.github_storage import public_url_for, read_file, write_file
+from app.translate_service import translate_to_arabic
 from app.models import AdminUser, ChatLog, ContactMessage, PasswordResetToken, PricingTier, Project
 from app.templates import admin_nav, auth_page, esc, page
 
@@ -527,8 +528,12 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
           <form method="post" action="/admin/content/save">
             <input type="hidden" name="key" value="{esc(k)}">
             <label>{esc(k)}</label>
-            <label style="margin-top:0">English</label><textarea name="en" rows="2">{esc(en.get(k, ''))}</textarea>
-            <label>Arabic</label><textarea name="ar" rows="2">{esc(dict_.get('ar', {}).get(k, ''))}</textarea>
+            <label style="margin-top:0">English</label><textarea name="en" rows="2" data-en-field>{esc(en.get(k, ''))}</textarea>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+              <label style="margin:0">Arabic</label>
+              <button type="button" class="btn-ghost translate-btn" style="padding:4px 10px;font-size:12px">Translate ↴</button>
+            </div>
+            <textarea name="ar" rows="2" data-ar-field>{esc(dict_.get('ar', {}).get(k, ''))}</textarea>
             <div style="margin-top:10px"><button type="submit">Save</button></div>
           </form>
         </div>"""
@@ -541,8 +546,36 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
     </form>
     {rows or '<p>No matching keys.</p>'}
     {'<p class="badge">Showing first 200 matches — refine your search.</p>' if len(keys) > 200 else ''}
+    <script>
+      document.querySelectorAll('.translate-btn').forEach(function (btn) {{
+        btn.addEventListener('click', function () {{
+          var form = btn.closest('form');
+          var enField = form.querySelector('[data-en-field]');
+          var arField = form.querySelector('[data-ar-field]');
+          if (!enField.value.trim()) return;
+          btn.disabled = true;
+          btn.textContent = 'Translating…';
+          fetch('/admin/translate', {{
+            method: 'POST',
+            headers: {{ 'Content-Type': 'application/json' }},
+            body: JSON.stringify({{ text: enField.value }})
+          }})
+            .then(function (r) {{ if (!r.ok) throw new Error('bad status'); return r.json(); }})
+            .then(function (data) {{ arField.value = data.translation; }})
+            .catch(function () {{ alert('Translation failed -- try again.'); }})
+            .finally(function () {{ btn.disabled = false; btn.textContent = 'Translate ↴'; }});
+        }});
+      }});
+    </script>
     """
     return HTMLResponse(page("Site text", body, admin_nav("content", admin.role)))
+
+
+@router.post("/translate")
+async def translate_endpoint(payload: dict, admin: AdminUser = Depends(get_current_admin)):
+    text = payload.get("text", "")
+    translation = await translate_to_arabic(text)
+    return {"translation": translation}
 
 
 @router.post("/content/save")
