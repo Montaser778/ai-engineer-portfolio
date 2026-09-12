@@ -69,6 +69,33 @@ BASE_STYLE = """
     background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
     margin-bottom: 16px; backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,.18);
     max-width: 100%; overflow-x: auto;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    animation: card-in .5s cubic-bezier(.16,1,.3,1) both;
+  }
+  .card:hover {
+    border-color: color-mix(in srgb, var(--teal) 45%, var(--line));
+    box-shadow: 0 12px 32px rgba(0,0,0,.28), 0 0 0 1px rgba(34,211,197,.08);
+    transform: translateY(-2px);
+  }
+  .analytics-stat {
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .analytics-stat:hover {
+    border-color: color-mix(in srgb, var(--violet) 55%, var(--line));
+    box-shadow: 0 12px 32px rgba(0,0,0,.28), 0 0 0 1px rgba(124,92,255,.12);
+    transform: translateY(-3px);
+  }
+  @keyframes card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  main .card:nth-of-type(1) { animation-delay: 0s; }
+  main .card:nth-of-type(2) { animation-delay: .05s; }
+  main .card:nth-of-type(3) { animation-delay: .1s; }
+  main .card:nth-of-type(4) { animation-delay: .15s; }
+  main .card:nth-of-type(n+5) { animation-delay: .2s; }
+  .settings-toggle-row, .settings-integration-row, tbody tr { transition: background-color .15s ease; }
+  tbody tr:hover { background: rgba(255,255,255,.02); }
+  @media (prefers-reduced-motion: reduce) {
+    .card { animation: none; }
+    .card:hover, .analytics-stat:hover { transform: none; }
   }
   @media (max-width: 640px) { .card { padding: 16px; } }
   table { width: 100%; border-collapse: collapse; }
