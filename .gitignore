@@ -10,6 +10,7 @@ desktop.ini
 # Secrets — never commit these
 .env
 .env.*
+!.env.example
 *.key
 *.pem
 secrets.json
@@ -18,3 +19,5 @@ secrets.json
 node_modules/
 dist/
 *.log
+__pycache__/
+*.pyc

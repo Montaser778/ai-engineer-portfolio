@@ -1,0 +1,91 @@
+/* chat-widget.js — floating AI assistant widget, backed by the FastAPI
+   service in /fastapi-chat (see its README.md for deployment). No-ops
+   entirely if CHAT_API_URL is left unset, so this is safe to ship before
+   the backend is deployed. */
+(function () {
+  // Set this to the deployed backend's base URL once it's live, e.g.
+  // "https://portfolio-chat.onrender.com". Left blank, the widget does not
+  // render at all.
+  var CHAT_API_URL = "";
+
+  if (!CHAT_API_URL) return;
+
+  var history = [];
+  var open = false;
+
+  var root = document.createElement("div");
+  root.id = "chat-widget";
+  root.innerHTML =
+    '<button id="chat-toggle" type="button" aria-label="Open chat assistant" aria-expanded="false">' +
+    '<span class="chat-toggle-icon">💬</span></button>' +
+    '<div id="chat-panel" role="dialog" aria-modal="false" aria-label="Chat assistant" hidden>' +
+    '<div class="chat-header"><span>Ask about Montaser</span>' +
+    '<button id="chat-close" type="button" aria-label="Close chat">×</button></div>' +
+    '<div id="chat-log" role="log" aria-live="polite"></div>' +
+    '<form id="chat-form">' +
+    '<input id="chat-input" type="text" maxlength="2000" autocomplete="off" placeholder="Ask a question…" aria-label="Message" />' +
+    '<button type="submit" aria-label="Send">➤</button>' +
+    "</form></div>";
+  document.body.appendChild(root);
+
+  var toggle = document.getElementById("chat-toggle");
+  var panel = document.getElementById("chat-panel");
+  var closeBtn = document.getElementById("chat-close");
+  var log = document.getElementById("chat-log");
+  var form = document.getElementById("chat-form");
+  var input = document.getElementById("chat-input");
+
+  function setOpen(next) {
+    open = next;
+    panel.hidden = !open;
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) input.focus();
+  }
+
+  toggle.addEventListener("click", function () { setOpen(!open); });
+  closeBtn.addEventListener("click", function () { setOpen(false); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && open) setOpen(false);
+  });
+
+  function addBubble(role, text) {
+    var bubble = document.createElement("div");
+    bubble.className = "chat-bubble chat-bubble-" + role;
+    bubble.textContent = text;
+    log.appendChild(bubble);
+    log.scrollTop = log.scrollHeight;
+    return bubble;
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var message = input.value.trim();
+    if (!message) return;
+    input.value = "";
+    input.disabled = true;
+    addBubble("user", message);
+    var pending = addBubble("assistant", "…");
+
+    fetch(CHAT_API_URL.replace(/\/$/, "") + "/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message, history: history.slice(-10) }),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("bad status");
+        return res.json();
+      })
+      .then(function (data) {
+        pending.textContent = data.reply;
+        history.push({ role: "user", content: message });
+        history.push({ role: "assistant", content: data.reply });
+      })
+      .catch(function () {
+        pending.textContent = "Sorry, the assistant is unavailable right now — try the contact page instead.";
+      })
+      .finally(function () {
+        input.disabled = false;
+        input.focus();
+      });
+  });
+})();
