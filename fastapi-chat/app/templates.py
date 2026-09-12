@@ -25,22 +25,37 @@ BASE_STYLE = """
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--ink); color: var(--body); font-family: var(--font-body); }
+  html { background: var(--ink); }
+  body {
+    margin: 0; color: var(--body); font-family: var(--font-body); min-height: 100vh;
+    background:
+      radial-gradient(ellipse 70% 40% at 50% 0%, rgba(124,92,255,.10), transparent 62%),
+      radial-gradient(ellipse 60% 45% at 100% 100%, rgba(34,211,197,.07), transparent 65%),
+      var(--ink);
+    background-attachment: fixed;
+  }
   a { color: var(--teal); }
   h1, h2, .brand { font-family: var(--font-display); }
   header {
     display: flex; align-items: center; justify-content: space-between; padding: 16px 24px;
     border-bottom: 1px solid var(--line);
-    background: linear-gradient(90deg, rgba(124,92,255,.08), rgba(34,211,197,.05));
+    background: color-mix(in srgb, var(--ink) 75%, transparent);
+    backdrop-filter: blur(14px);
+    position: sticky; top: 0; z-index: 100;
   }
-  header .brand { color: var(--sand); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  header .brand { color: var(--sand); font-weight: 600; display: flex; align-items: center; gap: 8px; letter-spacing: .01em; }
   header .brand svg { width: 22px; height: 22px; }
-  nav a { margin-inline-start: 16px; color: var(--body); text-decoration: none; font-size: 14px; font-family: var(--font-mono); }
+  nav { display: flex; align-items: center; flex-wrap: wrap; }
+  nav a { margin-inline-start: 16px; color: var(--body); text-decoration: none; font-size: 13.5px; font-family: var(--font-mono); transition: color .15s ease; }
   nav a:hover, nav a.active { color: var(--teal); }
-  main { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
-  h1 { color: var(--sand); font-size: 1.6rem; }
-  h2 { color: var(--sand); font-size: 1.1rem; margin-top: 32px; font-family: var(--font-mono); font-weight: 500; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  main { max-width: 960px; margin: 0 auto; padding: 40px 24px 64px; }
+  h1 { color: var(--sand); font-size: 1.7rem; margin-bottom: 6px; }
+  .page-eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+  h2 { color: var(--sand); font-size: 1.05rem; margin-top: 36px; margin-bottom: 12px; font-family: var(--font-mono); font-weight: 500; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+    margin-bottom: 16px; backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,.18);
+  }
   table { width: 100%; border-collapse: collapse; }
   th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: top; }
   th { color: var(--muted); font-size: 12px; text-transform: uppercase; font-family: var(--font-mono); }
@@ -73,6 +88,28 @@ BASE_STYLE = """
   .analytics-bar { width: 100%; max-width: 28px; background: linear-gradient(180deg, var(--violet), var(--teal)); border-radius: 4px 4px 0 0; transition: filter .15s ease; }
   .analytics-bar-col:hover .analytics-bar { filter: brightness(1.25); }
   .analytics-bar-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  .settings-toggle-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--body);
+  }
+  .settings-toggle-row:last-child { border-bottom: none; }
+  .settings-switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+  .settings-switch input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+  .settings-switch-track {
+    position: absolute; inset: 0; background: var(--line); border-radius: 999px; transition: background .2s ease;
+  }
+  .settings-switch-track::after {
+    content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--sand); transition: transform .2s cubic-bezier(.16,1,.3,1);
+  }
+  .settings-switch input:checked ~ .settings-switch-track { background: linear-gradient(135deg, var(--violet), var(--teal)); }
+  .settings-switch input:checked ~ .settings-switch-track::after { transform: translateX(18px); }
+  .settings-integration-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--body);
+  }
+  .settings-integration-row:last-child { border-bottom: none; }
+  .badge.ok { color: var(--success); border-color: var(--success); }
   @media (max-width: 640px) { .analytics-stats { grid-template-columns: repeat(2, 1fr); } }
   .muted-link { color: var(--muted); font-size: 13px; text-decoration: none; }
   .muted-link:hover { color: var(--teal); }
@@ -90,6 +127,28 @@ def esc(value) -> str:
     return html.escape(str(value), quote=True)
 
 
+FAVICON_LINK = '<link rel="icon" href="/favicon.svg" type="image/svg+xml">'
+
+# Auto-logout an idle dashboard session after this many minutes of no
+# clicks/keys/scrolls -- separate from (and shorter than) the 12h absolute
+# session-cookie expiry in auth.py, which still caps things either way.
+IDLE_LOGOUT_MINUTES = 30
+
+IDLE_LOGOUT_SCRIPT = f"""<script>
+(function () {{
+  var timeoutId;
+  function reset() {{
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {{ window.location.href = '/admin/logout'; }}, {IDLE_LOGOUT_MINUTES} * 60 * 1000);
+  }}
+  ['click', 'keydown', 'scroll', 'mousemove'].forEach(function (evt) {{
+    document.addEventListener(evt, reset, {{ passive: true }});
+  }});
+  reset();
+}})();
+</script>"""
+
+
 def page(title: str, body: str, nav: str = "") -> str:
     return f"""<!doctype html>
 <html lang="en">
@@ -98,6 +157,7 @@ def page(title: str, body: str, nav: str = "") -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>{esc(title)} — Admin</title>
+{FAVICON_LINK}
 {FONT_LINK}
 <style>{BASE_STYLE}</style>
 </head>
@@ -109,6 +169,7 @@ def page(title: str, body: str, nav: str = "") -> str:
 <main>
 {body}
 </main>
+{IDLE_LOGOUT_SCRIPT}
 </body>
 </html>"""
 
@@ -125,6 +186,7 @@ def auth_page(title: str, body: str) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>{esc(title)} — Admin</title>
+{FAVICON_LINK}
 {FONT_LINK}
 <style>
 {BASE_STYLE}
@@ -166,6 +228,7 @@ def admin_nav(active: str, role: str) -> str:
         ("projects", "/admin/projects", "Projects"),
         ("pricing", "/admin/pricing", "Pricing"),
         ("messages", "/admin/messages", "Messages"),
+        ("settings", "/admin/settings", "Settings"),
     ]
     if role == "owner":
         links.append(("users", "/admin/users", "Users"))

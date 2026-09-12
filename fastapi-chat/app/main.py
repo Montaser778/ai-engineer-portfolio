@@ -11,7 +11,7 @@ import uuid
 import httpx
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -110,6 +110,23 @@ class TrackRequest(BaseModel):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+FAVICON_SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
+    '<rect width="32" height="32" rx="7" fill="#05070d"/>'
+    '<circle cx="16" cy="16" r="4" fill="#7c5cff"/>'
+    '<circle cx="6" cy="8" r="2.4" fill="#22d3c5"/><circle cx="26" cy="8" r="2.4" fill="#22d3c5"/>'
+    '<circle cx="6" cy="24" r="2.4" fill="#22d3c5"/><circle cx="26" cy="24" r="2.4" fill="#22d3c5"/>'
+    '<path d="M16 16L6 8M16 16L26 8M16 16L6 24M16 16L26 24" stroke="#8892a6" stroke-width="1"/></svg>'
+)
+
+
+@app.get("/favicon.svg")
+def favicon():
+    """Same mark as the public site's favicon.svg -- this backend has no
+    static file serving of its own, so it's returned inline."""
+    return Response(content=FAVICON_SVG, media_type="image/svg+xml")
 
 
 @app.post("/contact")

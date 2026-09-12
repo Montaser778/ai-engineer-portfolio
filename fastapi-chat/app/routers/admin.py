@@ -181,6 +181,7 @@ def reset_password_submit(token: str = Form(...), password: str = Form(...), db:
 @router.get("/profile", response_class=HTMLResponse)
 def profile_form(admin: AdminUser = Depends(get_current_admin), saved: bool = False):
     body = f"""
+    <div class="page-eyebrow">Account</div>
     <h1>Profile</h1>
     {'<div class="flash">Saved.</div>' if saved else ''}
     <div class="card">
@@ -239,6 +240,7 @@ def dashboard_home(admin: AdminUser = Depends(get_current_admin), db: Session = 
     total_projects = db.query(func.count(Project.id)).scalar()
     total_chats = db.query(func.count(func.distinct(ChatLog.session_id))).scalar()
     body = f"""
+    <div class="page-eyebrow">Dashboard</div>
     <h1>Overview</h1>
     <div class="card">
       <p>Logged in as <strong>{esc(admin.username)}</strong> ({esc(admin.role)})</p>
@@ -295,6 +297,7 @@ def analytics(admin: AdminUser = Depends(get_current_admin), db: Session = Depen
     top_rows = "".join(f"<tr><td>{esc(p)}</td><td>{n}</td></tr>" for p, n in top_pages)
 
     body = f"""
+    <div class="page-eyebrow">Insights</div>
     <h1>Analytics</h1>
     <div class="analytics-stats">
       <div class="card analytics-stat"><div class="analytics-stat-num">{total_views}</div><div class="analytics-stat-lbl">Total views</div></div>
@@ -400,6 +403,7 @@ def list_projects(admin: AdminUser = Depends(get_current_admin), db: Session = D
         for it in items
     )
     body = f"""
+    <div class="page-eyebrow">Content</div>
     <h1>Projects</h1>
     <div class="card">
       <table><thead><tr><th>Title</th><th>Category</th><th>Published</th><th></th></tr></thead>
@@ -521,6 +525,7 @@ def list_pricing(admin: AdminUser = Depends(get_current_admin), db: Session = De
         for t in tiers
     )
     body = f"""
+    <div class="page-eyebrow">Content</div>
     <h1>Pricing</h1>
     {rows or '<p>No tiers yet.</p>'}
     <h2>Add tier</h2>
@@ -586,7 +591,7 @@ SETTING_LABELS = {
 
 
 @router.get("/content", response_class=HTMLResponse)
-async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_admin)):
     raw, _ = await read_file(I18N_PATH)
     dict_ = json.loads(raw) if raw else {"en": {}, "ar": {}}
     en = dict_.get("en", {})
@@ -594,16 +599,6 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
     if q:
         keys = [k for k in keys if q.lower() in k.lower()]
 
-    current_settings = {s.key: s.value for s in db.query(SiteSetting).all()}
-    toggle_rows = "".join(
-        f"""<label style="display:flex;align-items:center;gap:10px;margin:10px 0;font-family:var(--font-body);font-size:14px;color:var(--body)">
-          <input style="width:auto" type="checkbox" name="{esc(setting_key)}"
-            {"checked" if current_settings.get(setting_key, True) else ""}
-            onchange="fetch('/admin/settings/toggle',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{key:'{setting_key}',value:this.checked}})}})">
-          {esc(label)}
-        </label>"""
-        for setting_key, label in SETTING_LABELS.items()
-    )
     rows = "".join(
         f"""<div class="card">
           <form method="post" action="/admin/content/save">
@@ -621,10 +616,8 @@ async def content_editor(q: str = "", admin: AdminUser = Depends(get_current_adm
         for k in keys[:200]
     )
     body = f"""
+    <div class="page-eyebrow">Content</div>
     <h1>Site text</h1>
-    <h2>Homepage sections</h2>
-    <div class="card">{toggle_rows}</div>
-    <h2>Text keys</h2>
     <form method="get" action="/admin/content" style="margin-bottom:16px">
       <input name="q" value="{esc(q)}" placeholder="Search keys, e.g. hero.h1">
     </form>
@@ -720,6 +713,7 @@ def list_messages(admin: AdminUser = Depends(get_current_admin), db: Session = D
         for s in sessions
     )
     body = f"""
+    <div class="page-eyebrow">Inbox</div>
     <h1>Messages</h1>
     <h2>Contact form</h2>
     <div class="card">
@@ -768,6 +762,7 @@ def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(
         for u in users
     )
     body = f"""
+    <div class="page-eyebrow">Access</div>
     <h1>Users</h1>
     <div class="card">
       <table><thead><tr><th>Username</th><th>Email</th><th>Role</th><th></th></tr></thead>
@@ -784,6 +779,56 @@ def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(
     </div>
     """
     return HTMLResponse(page("Users", body, admin_nav("users", admin.role)))
+
+
+# ------------------------------------------------------------- settings ----
+@router.get("/settings", response_class=HTMLResponse)
+def settings_page(admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+    current_settings = {s.key: s.value for s in db.query(SiteSetting).all()}
+    toggle_rows = "".join(
+        f"""<label class="settings-toggle-row">
+          <span>{esc(label)}</span>
+          <span class="settings-switch">
+            <input type="checkbox" name="{esc(setting_key)}"
+              {"checked" if current_settings.get(setting_key, True) else ""}
+              onchange="fetch('/admin/settings/toggle',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{key:'{setting_key}',value:this.checked}})}})">
+            <span class="settings-switch-track"></span>
+          </span>
+        </label>"""
+        for setting_key, label in SETTING_LABELS.items()
+    )
+
+    integrations = [
+        ("Groq (chat + translation)", bool(os.environ.get("GROQ_API_KEY"))),
+        ("GitHub (image uploads + text edits)", bool(os.environ.get("GITHUB_TOKEN"))),
+        ("Resend (password-reset email)", bool(os.environ.get("RESEND_API_KEY"))),
+        ("Database (Neon Postgres)", not str(db.get_bind().url).startswith("sqlite")),
+    ]
+    integration_rows = "".join(
+        f"""<div class="settings-integration-row">
+          <span>{esc(name)}</span>
+          <span class="badge {'ok' if ok else 'unread'}">{'Connected' if ok else 'Not configured'}</span>
+        </div>"""
+        for name, ok in integrations
+    )
+
+    body = f"""
+    <div class="page-eyebrow">Configuration</div>
+    <h1>Settings</h1>
+
+    <h2>Homepage sections</h2>
+    <div class="card">{toggle_rows}</div>
+
+    <h2>Integrations</h2>
+    <div class="card">{integration_rows}</div>
+
+    <h2>Account</h2>
+    <div class="card">
+      <p style="margin:0 0 14px;color:var(--body);font-size:14px">Change your email or password from your profile.</p>
+      <a class="btn btn-ghost" href="/admin/profile">Go to profile</a>
+    </div>
+    """
+    return HTMLResponse(page("Settings", body, admin_nav("settings", admin.role)))
 
 
 @router.post("/users/new")
