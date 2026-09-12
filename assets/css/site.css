@@ -387,10 +387,11 @@ body.nav-open .burger span:nth-child(3) { transform: translateY(-5px) rotate(-45
   nav.main-nav {
     position: fixed;
     top: var(--nav-h); left: 0; right: 0; bottom: 0;
-    background: color-mix(in srgb, var(--ink) 98%, transparent);
+    background: var(--ink);
     flex-direction: column;
     justify-content: center;
     gap: 26px;
+    overflow-y: auto;
     transform: translateX(100%);
     visibility: hidden;
     transition: transform .3s ease, visibility 0s linear .3s;
