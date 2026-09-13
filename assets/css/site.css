@@ -357,6 +357,7 @@ header.site-header.scrolled::before {
   text-overflow: ellipsis;
 }
 .brand svg { width: 22px; height: 22px; flex-shrink: 0; }
+.verified-badge { width: 15px !important; height: 15px !important; flex-shrink: 0; }
 nav.main-nav { display: flex; align-items: center; gap: 26px; }
 nav.main-nav a {
   color: var(--body);
