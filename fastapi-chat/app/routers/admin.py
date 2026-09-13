@@ -13,7 +13,7 @@ import json
 import os
 import secrets as secrets_mod
 
-from fastapi import APIRouter, Cookie, Depends, Form, HTTPException, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Cookie, Depends, Form, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -33,7 +33,7 @@ from app.auth import (
 from app.dashboard_i18n import get_translator
 from app.db import get_db
 from app.email_service import send_email
-from app.github_storage import public_url_for, read_file, write_file
+from app.github_storage import public_url_for, read_file, touch_status_updated, write_file
 from app.translate_service import translate_to_arabic
 from app.models import AdminUser, ChatLog, ContactMessage, PageView, PasswordResetToken, PricingTier, Project, SiteSetting
 from app.templates import admin_nav, auth_page, esc, page
@@ -45,6 +45,15 @@ def get_lang(mh_admin_lang: str | None = Cookie(default=None)) -> str:
     return mh_admin_lang if mh_admin_lang in ("en", "ar") else "en"
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+
+async def _bump_status():
+    """Best-effort: a GitHub hiccup here must never break the save the
+    admin actually asked for."""
+    try:
+        await touch_status_updated()
+    except Exception as e:
+        print(f"touch_status_updated failed (non-fatal): {e}")
 
 I18N_PATH = "assets/data/i18n.json"
 RESET_TOKEN_MAX_AGE_MINUTES = 30
@@ -473,6 +482,7 @@ async def create_project(
         )
     )
     db.commit()
+    await _bump_status()
     return RedirectResponse("/admin/projects", status_code=303)
 
 
@@ -522,13 +532,15 @@ async def update_project(
     if new_image:
         item.image_path = new_image
     db.commit()
+    await _bump_status()
     return RedirectResponse("/admin/projects", status_code=303)
 
 
 @router.post("/projects/{item_id}/delete")
-def delete_project(item_id: int, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+async def delete_project(item_id: int, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
     db.query(Project).filter(Project.id == item_id).delete()
     db.commit()
+    await _bump_status()
     return RedirectResponse("/admin/projects", status_code=303)
 
 
@@ -571,7 +583,7 @@ def list_pricing(admin: AdminUser = Depends(get_current_admin), db: Session = De
 
 
 @router.post("/pricing/new")
-def create_pricing(
+async def create_pricing(
     name: str = Form(...),
     price_usd: int = Form(...),
     duration: str = Form(""),
@@ -582,11 +594,12 @@ def create_pricing(
     feature_list = [f.strip() for f in features.splitlines() if f.strip()]
     db.add(PricingTier(name=name, price_usd=price_usd, duration=duration, features=feature_list))
     db.commit()
+    await _bump_status()
     return RedirectResponse("/admin/pricing", status_code=303)
 
 
 @router.post("/pricing/{item_id}/edit")
-def update_pricing(
+async def update_pricing(
     item_id: int,
     name: str = Form(...),
     price_usd: int = Form(...),
@@ -601,13 +614,15 @@ def update_pricing(
     item.name, item.price_usd, item.duration = name, price_usd, duration
     item.features = [f.strip() for f in features.splitlines() if f.strip()]
     db.commit()
+    await _bump_status()
     return RedirectResponse("/admin/pricing", status_code=303)
 
 
 @router.post("/pricing/{item_id}/delete")
-def delete_pricing(item_id: int, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+async def delete_pricing(item_id: int, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
     db.query(PricingTier).filter(PricingTier.id == item_id).delete()
     db.commit()
+    await _bump_status()
     return RedirectResponse("/admin/pricing", status_code=303)
 
 
@@ -688,7 +703,12 @@ async def translate_endpoint(payload: dict, admin: AdminUser = Depends(get_curre
 
 
 @router.post("/settings/toggle")
-def toggle_setting(payload: dict, admin: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)):
+def toggle_setting(
+    payload: dict,
+    background_tasks: BackgroundTasks,
+    admin: AdminUser = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
     key = payload.get("key")
     value = bool(payload.get("value"))
     if key not in SETTING_LABELS:
@@ -699,6 +719,10 @@ def toggle_setting(payload: dict, admin: AdminUser = Depends(get_current_admin),
     else:
         db.add(SiteSetting(key=key, value=value))
     db.commit()
+    # Backgrounded, not awaited: this endpoint is called synchronously from
+    # the toggle switch's onchange handler, and a GitHub round-trip here
+    # would make a simple flip feel laggy.
+    background_tasks.add_task(_bump_status)
     return {"status": "ok"}
 
 
@@ -715,6 +739,7 @@ async def content_save(
     dict_.setdefault("ar", {})[key] = ar
     new_content = json.dumps(dict_, ensure_ascii=False, indent=2).encode("utf-8")
     await write_file(I18N_PATH, new_content, f"Admin: update text key {key}", sha=sha)
+    await _bump_status()
     return RedirectResponse("/admin/content", status_code=303)
 
 

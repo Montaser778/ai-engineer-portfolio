@@ -8,6 +8,8 @@ Requires GITHUB_TOKEN (a fine-grained PAT scoped to *only* this repo, with
 Contents: Read and write) and GITHUB_REPO ("owner/repo") as env vars.
 """
 import base64
+import datetime
+import json
 import os
 
 import httpx
@@ -69,6 +71,26 @@ async def write_file(path: str, content_bytes: bytes, commit_message: str, sha: 
     if resp.status_code not in (200, 201):
         raise HTTPException(status_code=502, detail=f"GitHub write failed for {path}: {resp.status_code} {resp.text[:300]}")
     return resp.json()["content"]["sha"]
+
+
+STATUS_PATH = "assets/data/status.json"
+
+
+async def touch_status_updated() -> None:
+    """Bumps assets/data/status.json's "updated" date to today whenever a
+    dashboard action changes site content (a project, pricing, site text,
+    or a homepage-section toggle) -- so the public site's "Last updated"
+    line reflects real edits instead of being hand-maintained. Best-effort:
+    callers should not let a failure here break the actual save."""
+    raw, sha = await read_file(STATUS_PATH)
+    data = json.loads(raw) if raw else {}
+    data["updated"] = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+    await write_file(
+        STATUS_PATH,
+        json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8"),
+        "Admin: bump status.updated",
+        sha=sha,
+    )
 
 
 def public_url_for(path: str) -> str:
