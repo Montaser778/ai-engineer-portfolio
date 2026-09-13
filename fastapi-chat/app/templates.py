@@ -73,7 +73,7 @@ BASE_STYLE = """
   .lang-toggle-link:hover { color: var(--teal); border-color: var(--teal); }
   .dash-burger {
     display: none; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 8px;
-    background: none; cursor: pointer; position: relative; margin-inline-start: 12px; flex-shrink: 0;
+    background: none; cursor: pointer; position: relative; z-index: 100; margin-inline-start: 12px; flex-shrink: 0;
   }
   .dash-burger span {
     position: absolute; left: 9px; right: 9px; height: 2px; background: var(--sand);
@@ -90,8 +90,8 @@ BASE_STYLE = """
     #dash-nav {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: var(--ink);
-      flex-direction: column; align-items: flex-start; justify-content: center;
-      gap: 22px; padding: 0 32px;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 22px; padding: 0 32px; text-align: center;
       transform: translateX(100%); visibility: hidden;
       transition: transform .3s ease, visibility 0s linear .3s;
       z-index: 99;
