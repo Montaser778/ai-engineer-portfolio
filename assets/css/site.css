@@ -796,6 +796,7 @@ select {
   background-repeat: no-repeat; background-position: right 14px center; background-size: 14px;
   padding-inline-end: 38px; cursor: pointer;
   color-scheme: dark;
+  border-radius: 20px;
 }
 html[dir="rtl"] select { background-position: left 14px center; }
 select option { background: var(--ink); color: var(--sand); }
