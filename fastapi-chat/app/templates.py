@@ -43,14 +43,25 @@ BASE_STYLE = """
   a { color: var(--teal); }
   h1, h2, .brand { font-family: var(--font-display); }
   header {
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
-    row-gap: 10px; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  /* The blur/background live on a pseudo-element rather than on header
+     itself: backdrop-filter creates a new containing block for any
+     position:fixed descendant, which would break the mobile nav overlay
+     (also position:fixed) once it lives inside this header -- the exact
+     bug this pattern caused on the public site (see site.css history). */
+  header::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
     border-bottom: 1px solid var(--line);
     background: color-mix(in srgb, var(--ink) 75%, transparent);
     backdrop-filter: blur(14px);
-    position: sticky; top: 0; z-index: 100;
   }
-  header .brand { color: var(--sand); font-weight: 600; display: flex; align-items: center; gap: 8px; letter-spacing: .01em; }
+  header .brand {
+    color: var(--sand); font-weight: 600; display: flex; align-items: center; gap: 8px; letter-spacing: .01em;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 auto;
+  }
   header .brand svg { width: 22px; height: 22px; }
   nav { display: flex; align-items: center; flex-wrap: wrap; }
   nav a { margin-inline-start: 16px; color: var(--body); text-decoration: none; font-size: 13.5px; font-family: var(--font-mono); transition: color .15s ease; }
@@ -60,6 +71,36 @@ BASE_STYLE = """
     border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; margin-inline-start: 16px;
   }
   .lang-toggle-link:hover { color: var(--teal); border-color: var(--teal); }
+  .dash-burger {
+    display: none; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 8px;
+    background: none; cursor: pointer; position: relative; margin-inline-start: 12px; flex-shrink: 0;
+  }
+  .dash-burger span {
+    position: absolute; left: 9px; right: 9px; height: 2px; background: var(--sand);
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .dash-burger span:nth-child(1) { top: 13px; }
+  .dash-burger span:nth-child(2) { top: 18px; }
+  .dash-burger span:nth-child(3) { top: 23px; }
+  body.dash-nav-open .dash-burger span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+  body.dash-nav-open .dash-burger span:nth-child(2) { opacity: 0; }
+  body.dash-nav-open .dash-burger span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+  @media (max-width: 860px) {
+    .dash-burger { display: block; }
+    #dash-nav {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--ink);
+      flex-direction: column; align-items: flex-start; justify-content: center;
+      gap: 22px; padding: 0 32px;
+      transform: translateX(100%); visibility: hidden;
+      transition: transform .3s ease, visibility 0s linear .3s;
+      z-index: 99;
+    }
+    body.dash-nav-open #dash-nav {
+      transform: translateX(0); visibility: visible; transition: transform .3s ease;
+    }
+    #dash-nav a { margin-inline-start: 0; font-size: 20px; }
+  }
   main { max-width: 960px; margin: 0 auto; padding: 40px 24px 64px; }
   @media (max-width: 640px) { main { padding: 28px 16px 48px; } }
   h1 { color: var(--sand); font-size: 1.7rem; margin-bottom: 6px; }
@@ -110,7 +151,23 @@ BASE_STYLE = """
     .card::before { animation: none; opacity: .3; }
     .card:hover, .analytics-stat:hover { transform: none; }
   }
-  @media (max-width: 640px) { .card { padding: 16px; } }
+  @media (max-width: 640px) {
+    .card { padding: 16px; }
+    /* Wide tables (Projects/Pricing/Messages/Users) used to force the card
+       to scroll horizontally just to reach the Edit/Delete buttons -- stack
+       each row into a labelled block instead, so nothing needs sideways
+       scrolling on a phone. */
+    .card table, .card thead, .card tbody, .card tr, .card th, .card td { display: block; width: 100%; }
+    .card thead { display: none; }
+    .card table { border: none; }
+    .card tr { border-bottom: 1px solid var(--line); padding: 12px 0; margin-bottom: 4px; }
+    .card tr:last-child { border-bottom: none; }
+    .card td { border-bottom: none; padding: 3px 0; }
+    .card td[data-label]::before {
+      content: attr(data-label); display: block; font-family: var(--font-mono); font-size: 10.5px;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px;
+    }
+  }
   table { width: 100%; border-collapse: collapse; }
   th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: top; }
   th { color: var(--muted); font-size: 12px; text-transform: uppercase; font-family: var(--font-mono); }
@@ -241,6 +298,27 @@ FAVICON_LINK = '<link rel="icon" href="/favicon.svg" type="image/svg+xml">'
 # session-cookie expiry in auth.py, which still caps things either way.
 IDLE_LOGOUT_MINUTES = 30
 
+DASH_NAV_SCRIPT = """<script>
+(function () {
+  var burger = document.querySelector('.dash-burger');
+  var nav = document.getElementById('dash-nav');
+  if (!burger || !nav) return;
+  function setOpen(open) {
+    document.body.classList.toggle('dash-nav-open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  burger.addEventListener('click', function () {
+    setOpen(!document.body.classList.contains('dash-nav-open'));
+  });
+  nav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { setOpen(false); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setOpen(false);
+  });
+})();
+</script>"""
+
 IDLE_LOGOUT_SCRIPT = f"""<script>
 (function () {{
   var timeoutId;
@@ -289,6 +367,7 @@ def page(title: str, body: str, nav: str = "", lang: str = "en", path: str = "/a
 {body}
 </main>
 {NEURAL_BG_SCRIPT}
+{DASH_NAV_SCRIPT}
 {IDLE_LOGOUT_SCRIPT}
 </body>
 </html>"""
@@ -368,4 +447,6 @@ def admin_nav(active: str, role: str, lang: str = "en") -> str:
         f'<a href="{href}" class="{"active" if key == active else ""}">{esc(label)}</a>'
         for key, href, label in links
     )
-    return f'<nav>{items}<a href="/admin/logout">{esc(t("nav.logout"))}</a></nav>'
+    nav_html = f'<nav id="dash-nav">{items}<a href="/admin/logout">{esc(t("nav.logout"))}</a></nav>'
+    burger = '<button class="dash-burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="dash-nav"><span></span><span></span><span></span></button>'
+    return nav_html + burger

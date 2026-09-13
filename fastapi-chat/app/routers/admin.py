@@ -313,7 +313,10 @@ def analytics(admin: AdminUser = Depends(get_current_admin), db: Session = Depen
         .limit(10)
         .all()
     )
-    top_rows = "".join(f"<tr><td>{esc(p)}</td><td>{n}</td></tr>" for p, n in top_pages)
+    top_rows = "".join(
+        f'<tr><td data-label="{esc(t("analytics.path"))}">{esc(p)}</td><td data-label="{esc(t("analytics.views"))}">{n}</td></tr>'
+        for p, n in top_pages
+    )
 
     body = f"""
     <div class="page-eyebrow">{esc(t('eyebrow.insights'))}</div>
@@ -413,8 +416,9 @@ def list_projects(admin: AdminUser = Depends(get_current_admin), db: Session = D
     items = db.query(Project).order_by(Project.sort_order, Project.id).all()
     rows = "".join(
         f"""<tr>
-          <td>{esc(it.title)}</td><td>{esc(it.category)}</td>
-          <td>{'✓' if it.published else '—'}</td>
+          <td data-label="{esc(t('projects.col_title'))}">{esc(it.title)}</td>
+          <td data-label="{esc(t('projects.col_category'))}">{esc(it.category)}</td>
+          <td data-label="{esc(t('projects.col_published'))}">{'✓' if it.published else '—'}</td>
           <td>
             <a class="btn btn-ghost" href="/admin/projects/{it.id}/edit">{esc(t('common.edit'))}</a>
             <form class="inline" method="post" action="/admin/projects/{it.id}/delete" onsubmit="return confirm('{esc(t('projects.confirm_delete'))}')">
@@ -721,9 +725,9 @@ def list_messages(admin: AdminUser = Depends(get_current_admin), db: Session = D
     contacts = db.query(ContactMessage).order_by(ContactMessage.received_at.desc()).limit(100).all()
     contact_rows = "".join(
         f"""<tr>
-          <td>{esc(c.received_at.strftime('%Y-%m-%d %H:%M'))}</td>
-          <td>{esc(c.name)} &lt;{esc(c.email)}&gt;</td>
-          <td>{esc(c.message[:200])}</td>
+          <td data-label="{esc(t('messages.when'))}">{esc(c.received_at.strftime('%Y-%m-%d %H:%M'))}</td>
+          <td data-label="{esc(t('messages.from'))}">{esc(c.name)} &lt;{esc(c.email)}&gt;</td>
+          <td data-label="{esc(t('messages.message'))}">{esc(c.message[:200])}</td>
           <td>{'<span class="badge unread">' + esc(t('messages.unread')) + '</span>' if not c.read else '<span class="badge">' + esc(t('messages.read')) + '</span>'}
             {'<form class="inline" method="post" action="/admin/messages/' + str(c.id) + '/read"><button class="btn-ghost" type="submit">' + esc(t('messages.mark_read')) + '</button></form>' if not c.read else ''}
           </td>
@@ -738,7 +742,8 @@ def list_messages(admin: AdminUser = Depends(get_current_admin), db: Session = D
         .all()
     )
     session_rows = "".join(
-        f'<tr><td>{esc(s.last.strftime("%Y-%m-%d %H:%M"))}</td><td><a href="/admin/messages/chat/{esc(s.session_id)}">{esc(s.session_id[:12])}…</a></td></tr>'
+        f'<tr><td data-label="{esc(t("messages.last_activity"))}">{esc(s.last.strftime("%Y-%m-%d %H:%M"))}</td>'
+        f'<td data-label="{esc(t("messages.session"))}"><a href="/admin/messages/chat/{esc(s.session_id)}">{esc(s.session_id[:12])}…</a></td></tr>'
         for s in sessions
     )
     body = f"""
@@ -787,7 +792,9 @@ def list_users(admin: AdminUser = Depends(require_owner), db: Session = Depends(
     users = db.query(AdminUser).order_by(AdminUser.id).all()
     rows = "".join(
         f"""<tr>
-          <td>{esc(u.username)}</td><td>{esc(u.email or '—')}</td><td>{esc(u.role)}</td>
+          <td data-label="{esc(t('users.col_username'))}">{esc(u.username)}</td>
+          <td data-label="{esc(t('users.col_email'))}">{esc(u.email or '—')}</td>
+          <td data-label="{esc(t('users.col_role'))}">{esc(u.role)}</td>
           <td>{'' if u.role == 'owner' else '<form class="inline" method="post" action="/admin/users/' + str(u.id) + '/delete" onsubmit="return confirm(\'' + esc(t('users.confirm_remove')) + '\')"><button class="btn-danger" type="submit">' + esc(t('users.remove')) + '</button></form>'}</td>
         </tr>"""
         for u in users
