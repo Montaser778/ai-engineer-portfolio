@@ -311,10 +311,23 @@ header.site-header {
   z-index: 500;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid transparent;
-  transition: border-color .25s ease, background .25s ease, height .25s ease;
+  transition: height .25s ease;
 }
-header.site-header.scrolled {
+/* The scrolled-state blur/background live on a ::before overlay rather than
+   on header.site-header itself: backdrop-filter (like filter) creates a new
+   containing block for any position:fixed descendant. nav.main-nav (the
+   mobile menu) is fixed and lives inside this header, so putting
+   backdrop-filter directly on the header made the menu fix itself relative
+   to the 58px-tall header instead of the viewport once scrolled -- it
+   rendered with ~0 height and nothing showed. See git history for the
+   before/after repro. */
+header.site-header::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  border-bottom: 1px solid transparent;
+  transition: border-color .25s ease, background .25s ease;
+}
+header.site-header.scrolled::before {
   border-color: var(--line);
   background: color-mix(in srgb, var(--ink) 78%, transparent);
   backdrop-filter: blur(10px);
